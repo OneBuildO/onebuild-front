@@ -3,16 +3,46 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './login/login.component';
+import { TelaCadastroComponent } from './tela-cadastro/tela-cadastro.component';
+import { TelaRecuperarSenhaComponent } from './tela-recuperar-senha/tela-recuperar-senha.component';
+import { TelaEnvioDoCodigoComponent } from './tela-envio-do-codigo/tela-envio-do-codigo.component';
+import { TemplateModule } from './template/template.module';
+import { SistemaModule } from './sistema/sistema.module';
+import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthService } from './services/services/auth.service';
+import { TokenInterceptor } from './services/security/token.interceptor';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    TelaCadastroComponent,
+    TelaRecuperarSenhaComponent,
+    TelaEnvioDoCodigoComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    TemplateModule,
+    SistemaModule,
+    FormsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
+
