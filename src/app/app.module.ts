@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { TelaCadastroComponent } from './tela-cadastro/tela-cadastro.component';
 import { TelaRecuperarSenhaComponent } from './tela-recuperar-senha/tela-recuperar-senha.component';
-import { TelaEnvioDoCodigoComponent } from './tela-envio-do-codigo/tela-envio-do-codigo.component';
 import { TemplateModule } from './template/template.module';
 import { SistemaModule } from './sistema/sistema.module';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +21,6 @@ import { LayoutComponent } from './layout/layout.component';
     LoginComponent,
     TelaCadastroComponent,
     TelaRecuperarSenhaComponent,
-    TelaEnvioDoCodigoComponent,
     LayoutComponent
   ],
   imports: [
