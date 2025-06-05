@@ -1,0 +1,149 @@
+.container-cadastro {
+    background-image: url("/assets/imgs/bg-one-b.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .card-cadastro {
+    margin-bottom: 1rem;
+    height: 100%;
+    border-radius: 0.75rem;
+    background: #ffffff;
+  }
+  
+  .header-cadastro {
+    background:  #0f1212;
+    width: 100%;
+    height: 80px;
+    padding: 0;
+    border-radius: 10px 10px 0 0; /* top-left, top-right, bottom-right, bottom-left */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-one-b {
+    width: 120px;
+    height: auto;
+  }
+  
+  .content-card {
+    padding: 32px;
+    gap: 8px;
+  }
+  
+  .title-header {
+    color: #040404;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  .forms-cadastro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* Estilo para o container do checkbox de termos de uso */
+  .terms-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .terms-container p {
+    font-size: 14px;
+    color: #040404;
+  }
+  
+  .terms-container a {
+    color:  #004590;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .terms-container input[type="checkbox"] {
+    margin-right: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .button-primary {
+    background:  linear-gradient(45deg, #cb8642, #edc245);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .button-primary span {
+    color: #040404;
+    font-weight: 600;
+  }
+  
+  .button-primary:hover {
+    background: linear-gradient(45deg, #bf7d3c, #dab139);
+  }
+  
+  .footer-login {
+    background: #0f1212;
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .text-footer {
+    color: #fafafa;
+    font-size: 14px;
+  }
+  
+  .link-primary {
+    color:  #edc245;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  
+  .label-senha {
+    display: flex;
+    align-items: baseline;
+  }
+  
+  .label-senha span {
+    margin-left: 4px;
+    font-size: 12px;
+    color: #040404;
+  }
+  
+  .suggestions-list {
+    position: absolute;
+    z-index: 12;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
+  

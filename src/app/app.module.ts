@@ -9,7 +9,7 @@ import { TelaCadastroComponent } from './tela-cadastro/tela-cadastro.component';
 import { TelaRecuperarSenhaComponent } from './tela-recuperar-senha/tela-recuperar-senha.component';
 import { TemplateModule } from './template/template.module';
 import { SistemaModule } from './sistema/sistema.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/services/auth.service';
 import { TokenInterceptor } from './services/security/token.interceptor';
@@ -30,7 +30,8 @@ import { LayoutComponent } from './layout/layout.component';
     HttpClientModule,
     TemplateModule,
     SistemaModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService,

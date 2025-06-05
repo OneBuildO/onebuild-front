@@ -246,7 +246,7 @@
   /* Active link */
   .active-link {
     color: var(--lm-primary);
-    background: #e5e8f1;
+    background: #CB8642;
     margin: 0 1rem;
     border-radius: 8px;
     margin-left: 0;
@@ -355,7 +355,7 @@
       width: 4px;
       height: 100%;
       left: 0;
-      background: var(--lm-primary);
+      background: var(--lm-sidebar-hover);
     }
   
     .header-user {

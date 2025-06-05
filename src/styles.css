@@ -28,16 +28,16 @@ html {
 }
 
 :root {
-  --lm-primary: #172973;
-  --lm-accent: #273e74;
+  --lm-primary:  #0F1212;
+  --lm-accent:  #0F1212;
   --lm-accent-02: #a9abae;
   --lm-background: #e4e5eb;
   --lm-bg-second: #fbfdfb;
   --lm-sidebar-bg: #f9f9f9;
   --lm-branco: #ffffff;
-  --lm-sidebar-primary: #002035;
-  --lm-sidebar-header: #156578;
-  --lm-sidebar-hover: #28BFB6;
+  --lm-sidebar-primary: #0F1212;
+  --lm-sidebar-header: #0F1212;
+  --lm-sidebar-hover: #CB8642;
   /* texto */
   --lm-text: #37383c;
   --lm-text02: #1a1918;
@@ -529,3 +529,4 @@ select:focus {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

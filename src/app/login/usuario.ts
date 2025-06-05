@@ -1,0 +1,20 @@
+import { Projeto } from "../sistema/servicos/cadastro-projeto/projeto";
+import { Permissao } from "./permissao";
+import { TipoFornecedor } from "./tipoFornecedor";
+
+
+export class Usuario {
+  idUsuario!: number;
+  nome!: string;
+  email!: string;
+  contato!: string;
+  cidade!: string;
+  estado!: string;
+  endereco!: string;
+  cnpj!: string;
+  senha!: string;
+  dataCadastro!: Date;
+  permissaoDoUsuario!: Permissao;
+  tipoFornecedor?: TipoFornecedor;
+  projeto!: Projeto;
+}

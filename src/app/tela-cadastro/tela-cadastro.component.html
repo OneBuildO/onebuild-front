@@ -1,1 +1,123 @@
-<p>tela-cadastro works!</p>
+<div class="container-cadastro min-h-screen flex justify-center items-center">
+    <div class="card-cadastro w-10/12 lg:w-1/3 mt-6">
+      <div class="header-cadastro">
+        <div class="logo-one-b">
+          <img src="/assets/imgs/logo-ob.svg" alt="Logo">
+        </div>
+      </div>
+      <div class="content-card relative flex flex-col">
+        <div class="flex flex-col items-center justify-center">
+          <h2 class="text-lg pb-2 title-header">Crie sua conta</h2>
+        </div>
+  
+        <form class="forms-cadastro" [formGroup]="cadastroForm" (ngSubmit)="onFormSubmitHandler($event)">
+          <!-- NOME -->
+          <div class="form-group">
+            <label class="form-label required" for="nome">Razão Social</label>
+            <input id="nome" type="text" class="form-control" formControlName="nome" placeholder="Informe o nome completo">
+          </div>
+  
+          <!-- PERMISSAO DO USUARIO -->
+          <div class="form-group">
+            <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
+            <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
+              <option value="">Selecione</option>
+              <option *ngFor="let permissao of PermissaoKeys" [value]="permissao">
+                {{ PermissaoDescricoes[permissao] }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- TIPO FORNECEDOR -->
+          <div class="form-group" *ngIf="cadastroForm.get('permissaoDoUsuario')?.value === Permissao.FORNECEDOR">
+            <label class="form-label required" for="tipoFornecedor">Tipo de Fornecedor</label>
+            <select id="tipoFornecedor" class="form-select" formControlName="tipoFornecedor">
+              <option value="">Selecione</option>
+              <option *ngFor="let tipo of TipoFornecedorKeys" [value]="tipo">
+                {{ TipoFornecedorDescricoes[tipo] }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- EMAIL -->
+          <div class="form-group">
+            <label class="form-label required" for="email">Email</label>
+            <input id="email" type="email" class="form-control" formControlName="email" placeholder="Informe o email">
+          </div>
+  
+          <!-- SENHA -->
+          <div class="form-group">
+            <label class="form-label required" for="senha">Senha</label>
+            <input id="senha" type="password" class="form-control" formControlName="senha" placeholder="Informe uma senha">
+          </div>
+  
+          <!-- CONFIRMAR SENHA -->
+          <div class="form-group">
+            <label class="form-label required" for="confirmPassword">Confirmar Senha</label>
+            <input id="confirmPassword" type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirme a senha">
+          </div>
+  
+          <!-- CONTATO -->
+          <div class="form-group">
+            <label class="form-label required" for="contato">Contato</label>
+            <input id="contato" type="text" class="form-control" formControlName="contato" placeholder="Informe o contato">
+          </div>
+  
+          <!-- CNPJ -->
+          <div class="form-group">
+            <label class="form-label required" for="cnpj">CNPJ</label>
+            <input id="cnpj" type="text" class="form-control" formControlName="cnpj" placeholder="Informe o CNPJ">
+          </div>
+  
+          <!-- ESTADO -->
+          <div class="form-group">
+            <label class="form-label required" for="estado">Estado</label>
+            <input id="estado" type="text" class="form-control" formControlName="estado" placeholder="Informe o estado">
+          </div>
+  
+          <!-- CIDADE -->
+          <div class="form-group">
+            <label class="form-label required" for="cidade">Cidade</label>
+            <input id="cidade" type="text" class="form-control" formControlName="cidade" placeholder="Informe a cidade">
+          </div>
+  
+          <!-- ENDEREÇO -->
+          <div class="form-group">
+            <label class="form-label required" for="endereco">Endereço</label>
+            <input id="endereco" type="text" class="form-control" formControlName="endereco" placeholder="Informe o endereço">
+          </div>
+  
+          <!-- TERMOS -->
+          <div class="form-group terms-container">
+            <input type="checkbox" id="terms" formControlName="terms">
+            <p for="terms">
+              Eu li e concordo com os
+              <a href="https://www.onebuild.com.br/termos-de-uso" target="_blank">termos de uso</a>
+              e
+              <a href="https://www.onebuild.com.br/politica-de-privacidade" target="_blank">política de privacidade</a>
+            </p>
+          </div>
+  
+          <!-- BOTÃO -->
+          <button type="submit" class="button-primary w-full" [disabled]="cadastroForm.invalid || isLoading">
+            <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
+              {{ isLoading ? 'Aguarde...' : 'Cadastrar' }}
+            </span>
+          </button>
+  
+          <!-- MENSAGEM -->
+          <div *ngIf="serverMessage" [ngClass]="{'text-success': tipoAlerta === 'success', 'text-danger': tipoAlerta === 'danger'}">
+            {{ serverMessage }}
+          </div>
+        </form>
+      </div>
+      <div class="footer-login">
+        <div class="text-footer">
+          <p>
+            Já possui uma conta? Faça
+            <a [routerLink]="['/login']" class="link-primary">Login</a> agora
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

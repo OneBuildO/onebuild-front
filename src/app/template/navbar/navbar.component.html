@@ -7,7 +7,7 @@
 
       <div class="header-user">
         <div class="usuario">
-          <img src="assets/imagens/user-photo.png" alt="User Photo" class="user-photo" />
+          <img src="assets/imgs/user-photo.png" alt="User Photo" class="user-photo" />
           <div class="user-info">
             <h3 class="user-name">{{ nomeUsuario }}</h3>
             <span class="user-cargo">{{ permissaoUsuario }}</span>
@@ -29,12 +29,10 @@
   <mat-drawer #sidebar class="sidebar" id="sidebar" mode="side" opened [class.show-sidebar]="isSidebarOpen">
     <div class="sidebar-container">
       <div class="sidebar-logo">
-        <div class="sidebar-img">
-          <img src="assets/imagens/Logo-LM.svg" alt="image" />
-        </div>
+        
 
         <div class="sidebar-info">
-            <img src="assets/imagens/name-logoLM.svg" alt="image" />
+            <img src="assets/imgs/logo-ob.svg" alt="image" />
         </div>
       </div>
 
@@ -43,9 +41,9 @@
           <h3 class="sidebar-title">HOME</h3>
 
           <div class="sidebar-list">
-            <a routerLink="/usuario/painel-principal-cliente" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/painel-principal-cliente')}">
-              <img src="assets/icones/home-icon.svg" alt="home icon" />
-              <span>Início</span>
+            <a routerLink="/usuario/dashboard-admin" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/dashboard-admin')}">
+              <img src="assets/icones/icone-dash.svg" alt="home icon" />
+              <span>Dashboard</span>
             </a>
 
             <a routerLink="/usuario/lista-de-notificacoes-cliente" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/lista-de-notificacoes-cliente')}">
@@ -57,27 +55,27 @@
        
 
         <div>
-            <h3 class="sidebar-title">RECURSOS</h3>
+            <h3 class="sidebar-title">Serviços</h3>
   
             <div class="sidebar-list">
-              <a routerLink="/usuario/lista-de-servicos" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/lista-de-servicos')}">
-                <img src="assets/icones/servicos-icon.svg" alt="home icon" />
-                <span>Serviços</span>
+              <a routerLink="/usuario/visualizar-clientes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-clientes')}">
+                <img src="assets/icones/icone-cliente.svg" alt="home icon" />
+                <span>Clientes</span>
               </a>
   
-              <a routerLink="/usuario/visualizacao-de-cupons" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizacao-de-cupons')}">
-                <img src="assets/icones/cupons-icon.svg" alt="home icon" />
-                <span>Cupons</span>
+              <a routerLink="/usuario/visualizar-projeto" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-projeto')}">
+                <img src="assets/icones/icone-caderno.svg" alt="home icon" />
+                <span>Projetos</span>
               </a>
 
-              <a routerLink="/usuario/lista-de-conversas-com-os-profissionais" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/lista-de-conversas-com-os-profissionais')}">
-                <img src="assets/icones/conversas-icon.svg" alt="home icon" />
-                <span>Conversas</span>
+              <a routerLink="/usuario/visualizar-fornecedores" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-fornecedores')}">
+                <img src="assets/icones/icone-loja.svg" alt="home icon" />
+                <span>Fornecedores</span>
               </a>
 
-              <a routerLink="/usuario/forum-de-noticias" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/forum-de-noticias')}">
-                <img src="assets/icones/forum-icon.svg" alt="home icon" />
-                <span>Fórum de notícias</span>
+              <a routerLink="/usuario/meu-perfil" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/meu-perfil')}">
+                <img src="assets/icones/icone-perfil.svg" alt="home icon" />
+                <span>Meu Perfil</span>
               </a>
             </div>
           </div>

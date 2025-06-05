@@ -4,9 +4,11 @@ import { LoginComponent } from './login/login.component';
 import { TelaRecuperarSenhaComponent } from './tela-recuperar-senha/tela-recuperar-senha.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PainelAdminComponent } from './sistema/dashboards/painel-admin/painel-admin.component';
+import { TelaCadastroComponent } from './tela-cadastro/tela-cadastro.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path:'cadastro-de-usuario', component: TelaCadastroComponent},
   { path: 'recuperacao-de-senha', component: TelaRecuperarSenhaComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '', component: LayoutComponent, children: [
