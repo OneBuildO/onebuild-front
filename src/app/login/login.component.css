@@ -73,6 +73,10 @@
   text-decoration: underline;
 }
 
+.link-primary:hover {
+  cursor: pointer;
+}
+
 /* Garante que o botão seja um bloco e fique centralizado */
 .forms-login .button-primary {
   display: block;

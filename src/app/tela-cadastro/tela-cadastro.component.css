@@ -9,7 +9,8 @@
     padding: 0;
     margin: 0;
   }
-  
+
+
   .card-cadastro {
     margin-bottom: 1rem;
     height: 100%;
@@ -49,16 +50,31 @@
     flex-direction: column;
     gap: 12px;
   }
+
+  /* Faz todo label dentro de .form-group ficar acima do respectivo input/select */
+  .forms-cadastro .form-group > label {
+    display: block;
+    margin-bottom: 0.5rem; /* ajuste a distância se quiser mais/menos espaço */
+  }
   
+  .forms-cadastro .form-control,
+  .forms-cadastro .form-select {
+  width: 100%;
+  box-sizing: border-box; /* inclui padding e borda no cálculo da largura */
+  display: block;         /* força bloco se não estiver */
+}
+
   /* Estilo para o container do checkbox de termos de uso */
   .terms-container {
     display: flex;
-    flex-direction: row;
     align-items: center;
     margin-bottom: 1rem;
+    gap: 0.5rem;
   }
   
   .terms-container p {
+    margin: 0;         /* elimina a margem padrão do <p> */
+    display: inline;   /* faz o texto fluir na mesma linha */
     font-size: 14px;
     color: #040404;
   }
@@ -114,36 +130,14 @@
     text-decoration: underline;
   }
   
-  .label-senha {
-    display: flex;
-    align-items: baseline;
+  label.required::after {
+    content: " *";
+    color: red;
   }
+
+  .form-label{
+    font-weight: 500;
+  }
+
   
-  .label-senha span {
-    margin-left: 4px;
-    font-size: 12px;
-    color: #040404;
-  }
-  
-  .suggestions-list {
-    position: absolute;
-    z-index: 12;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 90%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .suggestion-item {
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .suggestion-item:hover {
-    background-color: #f0f0f0;
-  }
   
