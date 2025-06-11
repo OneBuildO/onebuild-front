@@ -1,4 +1,8 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap");
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 html,
 body {
@@ -28,10 +32,14 @@ html {
 }
 
 :root {
+  --primary-color: #edc245;
+  --gradient-primary: linear-gradient(45deg, #cb8642, #edc245);
+  --gradient-secondary: linear-gradient(45deg, #bf7d3c, #dab139);
   --lm-primary:  #0F1212;
   --lm-accent:  #0F1212;
   --lm-accent-02: #a9abae;
   --lm-background: #e4e5eb;
+  --bg-color-dark: #0f1212;
   --lm-bg-second: #fbfdfb;
   --lm-sidebar-bg: #f9f9f9;
   --lm-branco: #ffffff;
@@ -41,9 +49,12 @@ html {
   /* texto */
   --lm-text: #37383c;
   --lm-text02: #1a1918;
+  --font-color-dark: #040404;
+  --font-color-light: #fdfdfd;
   /* sistema */
   --success: #5ea828;
   --info: #177ab8;
+  --color-info: #004590;
   --warning: #ffc107;
   --danger: #b72130;
   --info-hover: #1b88cc;
