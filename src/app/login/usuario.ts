@@ -4,7 +4,7 @@ import { TipoFornecedor } from "./tipoFornecedor";
 
 
 export class Usuario {
-  idUsuario!: number;
+  idUsuario!: string;
   nome!: string;
   email!: string;
   contato!: string;
