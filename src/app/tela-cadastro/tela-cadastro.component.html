@@ -14,7 +14,7 @@
           <!-- NOME -->
           <div class="form-group">
             <label class="form-label required" for="nome">Razão Social</label>
-            <input id="nome" type="text" class="form-control" formControlName="nome" placeholder="Informe o nome completo">
+            <input id="nome" type="text" class="form-control" formControlName="nome" placeholder="Informe o seu nome completo">
           </div>
   
           <!-- PERMISSAO DO USUARIO -->
@@ -99,9 +99,9 @@
           </div>
   
           <!-- BOTÃO -->
-          <button type="submit" class="button-primary w-full" [disabled]="cadastroForm.invalid || isLoading">
+          <button type="submit" class="button-primary">
             <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
-              {{ isLoading ? 'Aguarde...' : 'Cadastrar' }}
+              {{ isLoading ? 'Aguarde...' : 'Cadastrar-se' }}
             </span>
           </button>
   

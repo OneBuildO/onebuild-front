@@ -1,0 +1,83 @@
+<div [@pageTransition] class="container-login min-h-screen flex justify-center items-center ">
+    <div class="card-login w-10/12 lg:w-1/3 md:w-10/12">
+        <div class="header-login">
+            <div class="logo-one-b">
+                <img src="/assets/imgs/logo-ob.svg" alt="Logo">
+            </div>
+        </div>
+        <div class="content-card relative flex flex-col">
+            <div class="flex flex-col items-center justify-center">
+                <h2 class="text-lg pb-2 title-header">
+                    Acesse sua conta
+                </h2>
+            </div>
+
+            <!--<app-alert
+                (hideAlert)="onAlertCloseHandler($event)"
+                [dismissible]="true"
+                [messages]="serverMessages"
+                [show]="serverMessages.length > 0"
+                [type]="tipoAlerta"
+            ></app-alert>-->
+
+            <form class="forms-login" [formGroup]="loginForm" (ngSubmit)="onFormSubmitHandler($event)">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="relative">
+                        <input type="email" id="email" class="form-control w-full ps-10" formControlName="username"
+                            placeholder="Informe seu e-mail">
+                        <span class="absolute top-2 left-0 ps-3 text-gray-400">
+                            <i class="bi bi-envelope-at"></i>
+                        </span>
+                    </div>
+                    <!--<validation-error
+                        [submited]="submited"
+                        [valueValidation]="loginForm.get('username')?.value?.toString()"
+                    ></validation-error>-->
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="password-container relative">
+                      <input [type]="passwordFieldType" id="password" class="form-control w-full ps-10"
+                             formControlName="password" placeholder="Informe sua senha">
+                      <span class="absolute top-2 left-0 ps-3 text-gray-400">
+                        <i class="bi bi-shield-lock"></i>
+                      </span>
+                      <button type="button" (click)="togglePasswordVisibility()">
+                        <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+                      </button>
+                    </div>
+                    <!--<validation-error
+                      [submited]="submited"
+                      [valueValidation]="loginForm.get('password')?.value?.toString()"
+                    ></validation-error>-->
+                  </div>
+
+                <button type="submit" class="button-primary" [disabled]="isLoading" (click)="onLoginClick()">
+                    <!-- <btn-spinner *ngIf="isLoading" [show]="isLoading"></btn-spinner> -->
+                    <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
+                        Login
+                    </span>
+                </button>
+
+                <div class="text-sm my-4 esqueci-senha">
+                    <p>Esqueceu sua senha?
+                        <a [routerLink]="'/recuperacao-de-senha'">
+                            Recuperar senha
+                        </a>
+                    </p>
+                </div>
+            </form>          
+        </div>
+
+        <div class="footer-login">
+            <div class="text-footer">
+                <p>Não possui uma conta? 
+                    <a [routerLink]="'/cadastro-de-usuario'" class="link-primary">
+                        Cadastrar-se
+                    </a> agora!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
