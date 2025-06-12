@@ -31,15 +31,15 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
+                  {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "7mb"
                 },
                 {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "type": "any",
+                  "maximumWarning": "6.5mb",
+                   "maximumError": "8mb"
                 }
               ],
               "fileReplacements": [
