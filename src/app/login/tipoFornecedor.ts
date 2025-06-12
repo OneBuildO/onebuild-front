@@ -12,5 +12,5 @@ export enum TipoFornecedor {
     ILUMINACAO = 'ILUMINACAO',
     REVESTIMENTOS = 'REVESTIMENTOS',
     FERRAGEM = 'FERRAGEM',
-    OUTROS = 'OUTROS'
+    OUTROS = 'OUTROS',
 }

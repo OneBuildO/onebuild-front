@@ -86,7 +86,6 @@ export class LoginComponent implements OnInit {
             usuario.permissaoDoUsuario === 'ROLE_ADMIN' ||
             usuario.permissaoDoUsuario === 'ROLE_ARQUITETO' ||
             usuario.permissaoDoUsuario === 'ROLE_CONSTRUTORA' ||
-            usuario.permissaoDoUsuario === 'ROLE_CLIENTE' ||
             usuario.permissaoDoUsuario === 'ROLE_DESIGN_INTERIORES' ||
             usuario.permissaoDoUsuario === 'ROLE_FORNECEDOR'
           ) {

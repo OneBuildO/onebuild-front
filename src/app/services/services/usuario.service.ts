@@ -20,19 +20,15 @@ export class UsuarioService {
   ) {}
 
 
-
   saveUser(newUser : CadastroUsuarioDTO){
-    return this.httpClient.post(`${this._apiBaseUrl}/usuario/novoUsuario`, newUser, {responseType: "text"})
+    return this.httpClient.post(`${this._apiBaseUrl}/api/usuarios/novo`, newUser, {responseType: "text"})
       .pipe(first())
   }
 
   resendCodeValidationEmail(email: string){
-    return this.httpClient.get(`${this._apiBaseUrl}/usuario/envioEmail/reenviarCodigoValidacaoEmail?email=${email}`,
+    return this.httpClient.get(`${this._apiBaseUrl}/api/usuarios/envioEmail/reenviarCodigoValidacaoEmail?email=${email}`,
       {responseType: "text"})
       .pipe(first())
   }
-
-
-
 
 }
