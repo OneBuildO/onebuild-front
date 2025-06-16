@@ -6,7 +6,7 @@
   
     <div class="breadcrumb-container">
         <div class="breadcrumb">
-            <a >Dashboard &gt; </a> <span class="breadcrumb-highlight"> Clientes</span>
+            <a (click)="onVoltarClick()" >Dashboard &gt; </a> <span class="breadcrumb-highlight"> Clientes</span>
         </div>
         <div class="actions">
             <div class="search-container">
@@ -86,8 +86,8 @@
         </ng-container>
         <ng-template #semLojas>
             <div class="no-data-message">
-            <img src="assets/imgs/empty-images/no-data.svg" alt="Sem dados">
-            <p>Não há lojas cadastradas.</p>
+            <img src="assets/imgs/no-data.svg" alt="Sem dados">
+            <p>Não há clientes cadastrados.</p>
             </div>
         </ng-template>
     </div>

@@ -55,6 +55,51 @@ export class AuthService {
     }
   }
 
+  getRoleUsuarioFromToken(): string | null{
+    const token = this.obterToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = this.jwtHelper.decodeToken(token);
+      const authorities = decoded?.authorities;
+      
+      // Se vier um array e não estiver vazio, retorna a primeira role
+      if (Array.isArray(authorities) && authorities.length > 0) {
+        return authorities[0];
+      }
+      
+      return null;
+    } catch (e) {
+      console.warn('Não foi possível decodificar o token para obter roles:', e);
+      return null;
+    }
+  }
+
+  getHomeRouteForRole(): string {
+    const role = this.getRoleUsuarioFromToken();
+    switch (role) {
+      case 'ROLE_ADMIN':
+        return '/usuario/dashboard-admin';
+      case 'ROLE_ARQUITETO':
+        return '/usuario/dashboard-arquiteto';
+      // case 'ROLE_CONSTRUTORA':
+      //   return '/usuario/painel-construtora';
+      // case 'ROLE_DESIGN_INTERIORES':
+      //   return '/usuario/painel-design';
+      case 'ROLE_FORNECEDOR':
+        return '/usuario/dashboard-fornecedor';
+      case 'ROLE_CLIENTE':
+        return '/usuario/dashboard-cliente';
+      default:
+        return '/forbidden';
+    }
+  }
+
+
+
+
+
+
   isAuthenticated() : boolean {
     const token = this.obterToken();
     if(token){
