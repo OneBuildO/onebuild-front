@@ -48,14 +48,37 @@
           <!-- SENHA -->
           <div class="form-group">
             <label class="form-label required" for="senha">Senha</label>
-            <input id="senha" type="password" class="form-control" formControlName="senha" placeholder="Informe uma senha">
+            <div class="password-container relative">
+              <input
+                id="senha"
+                [type]="passwordFieldType"
+                class="form-control w-full ps-10"
+                formControlName="senha"
+                placeholder="Informe uma senha"
+              />
+              <button type="button" (click)="togglePasswordVisibility()">
+                <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+              </button>
+            </div>
           </div>
-  
+
           <!-- CONFIRMAR SENHA -->
           <div class="form-group">
             <label class="form-label required" for="confirmPassword">Confirmar Senha</label>
-            <input id="confirmPassword" type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirme a senha">
+            <div class="password-container relative">
+              <input
+                id="confirmPassword"
+                [type]="confirmPasswordFieldType"
+                class="form-control w-full ps-10"
+                formControlName="confirmPassword"
+                placeholder="Confirme a senha"
+              />
+              <button type="button" (click)="toggleConfirmPasswordVisibility()">
+                <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+              </button>
+            </div>
           </div>
+
   
           <!-- CONTATO -->
           <div class="form-group">

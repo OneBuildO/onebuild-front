@@ -1,1 +1,144 @@
-<p>meu-perfil works!</p>
+<div [@pageTransition]>
+  <div class="container-principal">
+    <div class="title-header">
+      <h1><span>|</span>{{ isEditing ? 'Editar perfil' : 'Meu perfil' }}</h1>
+    </div>
+
+    <app-alert
+      (hideAlert)="onAlertCloseHandler($event)"
+      [dismissible]="true"
+      [messages]="serverErrors"
+      [show]="serverErrors.length > 0"
+      [type]="tipoAlerta"
+    ></app-alert>
+
+    <div class="container-perfil w-full">
+
+      <div class="container-photo">
+        <div class="image-container" (click)="isEditing && fileInput.click()">
+          <img [src]="selectedImageUrl || defaultImageUrl" class="profile-photo" alt="Foto de perfil"/>
+          <!-- Ícone de lápis visível apenas no modo de edição -->
+          <span *ngIf="isEditing" class="edit-icon">
+            <img src="./assets/icones/pencil-edit.svg" alt="Editar" />
+          </span>
+          <input #fileInput type="file" accept="image/*" (change)="onImageSelected($event)" style="display: none;"/>
+        </div>
+        <!-- Botão para alterar foto de perfil visível no modo edição -->
+        <div *ngIf="isEditing" class="edit-profile-photo">
+          <button (click)="fileInput.click()">Altere sua foto de perfil</button>
+        </div>
+      </div>
+
+      <div class="container-form p-5 w-10/12">
+        <form class="my-5 space-y-6" [formGroup]="cadastroForm" (submit)="onFormSubmitHandler($event)">
+          <!-- RAZAO SOCIAL -->
+          <div class="form-group">
+            <label class="form-label" for="nome" *ngIf="tipoCadastro === ETipoUsuario.ARQUITETO">Razão Social</label>
+            <label class="form-label" for="nome" *ngIf="tipoCadastro !== ETipoUsuario.ARQUITETO">Nome Empresa</label>
+            <div class="relative">
+              <input type="text" id="nome" class="form-control w-full ps-10"
+                     formControlName="nome" [placeholder]="tipoCadastro === ETipoUsuario.ARQUITETO ? 'Nome completo' : 'Nome da empresa'"
+                     [disabled]="!isEditing">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-person"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('nome')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+          <!-- EMAIL -->
+          <div class="form-group">
+            <label class="form-label" for="email">E-mail</label>
+            <div class="relative">
+              <input type="email" id="email" class="form-control w-full ps-10"
+                     formControlName="email" placeholder="Digite seu e-mail"
+                     [disabled]="!isEditing">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-envelope-at"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('email')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+          <!-- CONTATO -->
+          <div class="form-group">
+            <label class="form-label" for="contato">Contato</label>
+            <div class="relative">
+              <input type="text" id="contato" class="form-control w-full ps-10 no-spinners"
+                     formControlName="contato" placeholder="Digite seu contato"
+                     [disabled]="!isEditing">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-phone"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('contato')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+          <!-- CNPJ -->
+          <div class="form-group">
+            <label class="form-label" for="cnpj">CNPJ</label>
+            <div class="relative">
+              <input type="text" id="cnpj" class="form-control w-full ps-10"
+                     formControlName="cnpj" placeholder="Digite seu CNPJ"
+                     [disabled]="!isEditing">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-person-vcard"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('cnpj')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+          <!-- SENHA -->
+          <div class="form-group">
+            <label class="form-label" for="senha">Senha <small>(mínimo de 8 caracteres)</small></label>
+            <div class="relative">
+              <input type="password" id="senha" class="form-control w-full ps-10"
+                     formControlName="senha" placeholder="Digite sua senha"
+                     [disabled]="!isEditing" (change)="handleChange()">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('senha')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+          <!-- CONFIRMAR SENHA -->
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirmar Senha</label>
+            <div class="relative">
+              <input type="password" id="confirmPassword" class="form-control w-full ps-10"
+                     formControlName="confirmPassword" placeholder="Confirme sua senha"
+                     [disabled]="!isEditing" (change)="handleChange()">
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
+            </div>
+            <validation-error
+              [submited]="submited"
+              [valueValidation]="cadastroForm.get('confirmPassword')?.value?.toString()"
+            ></validation-error>
+          </div>
+    
+    
+          <div *ngIf="isEditing" class="button-container">
+            <button type="submit" class="btn button-confirm" [disabled]="isLoading">
+              <btn-spinner *ngIf="isLoading" [show]="isLoading"></btn-spinner>
+              <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
+                Atualizar
+              </span>
+            </button>
+            <button type="button" class="btn button-cancel" (click)="onCancel()">
+              Cancelar
+            </button>
+          </div>
+          <button *ngIf="!isEditing" type="button" class="btn w-full button-primary" (click)="onEdit()">
+            Editar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

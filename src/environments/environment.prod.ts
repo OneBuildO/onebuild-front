@@ -1,8 +1,7 @@
 export const environment = {
   production: false,
 //  apiUrl: 'https://back-onebuild.onrender.com',
-  apiUrl: 'http://localhost:8083',
-  webUrl: 'http://localhost:4200',
+  apiURLBase: 'http://localhost:8083',
   tokenUrl: '/oauth/token',
   clientId: 'onebuild-app',
   clientSecret: '@2027',

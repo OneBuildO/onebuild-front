@@ -12,16 +12,18 @@ import { VisualizarFornecedoresComponent } from './servicos/visualizar-fornecedo
 import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportunidades/visualizar-oportunidades.component';
 import { VisualizarProjetoComponent } from './servicos/visualizar-projeto/visualizar-projeto.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-arquiteto.component';
 
 const routes: Routes = [
   {
     path: 'usuario',
     component: LayoutComponent,
-    canActivate: [AuthGuard],  
+     
     children: [
       {path:'dashboard-admin', component:PainelAdminComponent},
       {path:'dashboard-cliente', component: PainelClientesComponent},
       {path:'dashboard-fornecedor', component: PainelFornecedorComponent},
+      {path:'dashboard-arquiteto', component: PainelArquitetoComponent},
 
       {path:'meu-perfil', component: MeuPerfilComponent},
       // servicos

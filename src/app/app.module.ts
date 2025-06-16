@@ -14,6 +14,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/services/auth.service';
 import { TokenInterceptor } from './services/security/token.interceptor';
 import { LayoutComponent } from './layout/layout.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 
 
@@ -33,7 +34,8 @@ import { LayoutComponent } from './layout/layout.component';
     TemplateModule,
     SistemaModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgApexchartsModule
   ],
   providers: [
     AuthService,

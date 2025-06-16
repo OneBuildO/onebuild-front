@@ -1,4 +1,4 @@
-import { HttpParams } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { Injectable } from '@angular/core';
@@ -12,8 +12,8 @@ import { LoginDTO } from 'src/app/sistema/LoginDTO';
 })
 export class AuthService {
   
-  apiUrl: string = environment.apiUrl + "/api/usuarios";
-  tokenUrl: string = environment.apiUrl + environment.tokenUrl;
+  apiUrl: string = environment.apiURLBase + "/api/usuarios";
+  tokenUrl: string = environment.apiURLBase + environment.tokenUrl;
   clientId: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();
@@ -42,7 +42,7 @@ export class AuthService {
     const token = this.obterToken();
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
-      return decodedToken?.sub || null; 
+      return decodedToken?.sub || null; //revisar isso aqui, não tem sub.
     }
     return null;
   }

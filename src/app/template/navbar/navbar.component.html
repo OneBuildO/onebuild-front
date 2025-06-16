@@ -17,7 +17,7 @@
           <img src="assets/icones/seta-down-icon.svg" alt="Dropdown Icon" class="dropdown-icon" />
         </button>
         <div class="dropdown-menu" id="dropdown-menu" [ngClass]="{ 'show': isDropdownOpen }">
-          <button routerLink="/usuario/meu-perfil-cliente" class="dropdown-item">Meu perfil</button>
+          <button routerLink="/usuario/meu-perfil" class="dropdown-item">Meu perfil</button>
           <button class="dropdown-item" (click)="logout()">Sair</button>
         </div>
       </div>
@@ -30,6 +30,7 @@
     <div class="sidebar-container">
       <div class="sidebar-logo">
         
+        
 
         <div class="sidebar-info">
             <img src="assets/imgs/logo-ob.svg" alt="image" />
@@ -41,7 +42,7 @@
           <h3 class="sidebar-title">HOME</h3>
 
           <div class="sidebar-list">
-            <a routerLink="/usuario/dashboard-admin" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/dashboard-admin')}">
+            <a routerLink="/usuario/dashboard-arquiteto" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/dashboard-arquiteto')}">
               <img src="assets/icones/icone-dash.svg" alt="home icon" />
               <span>Dashboard</span>
             </a>
@@ -55,7 +56,7 @@
        
 
         <div>
-            <h3 class="sidebar-title">Serviços</h3>
+            <h3 class="sidebar-title">Gerenciamento</h3>
   
             <div class="sidebar-list">
               <a routerLink="/usuario/visualizar-clientes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-clientes')}">

@@ -1,0 +1,93 @@
+<div class="main-container">
+  <div class="banner">
+    <div class="welcome">
+      <h1> 👋 Bem-vindo, {{ usuario }}</h1>
+      <div class="motivational-message">
+        <p>"{{ motivationalMessage.quote }}"</p>
+        <span class="author">{{ motivationalMessage.author }}</span>
+      </div>
+    </div>
+
+    <div class="climate">
+      <div class="title-clima">
+        <h3>Clima de {{ weatherData.name }} </h3>
+      </div>
+      <div class="temperatura">
+        <img [src]="iconUrl" alt="Ícone do clima">
+        <span>{{ temperature | number:'1.0-0' }} °C</span>
+      </div>
+      <div class="descricao">
+        <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+      </div>
+    </div>
+  </div>
+
+    <div class="containers-dashboard">
+    <div class="cards-container">
+      <div class="card info-card">
+          <span> {{ totalDeClientes }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/users.svg" alt="Loja icone">
+              </div>
+              <p>Total de Clientes</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span> {{ projetosEmCotacao }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/clipboard-pen.svg" alt="Gerente icone">
+              </div>
+              <p>Projetos em Cotação</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span> {{ projetosEmAndamento }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/clipboard-user.svg" alt="Colaborador icone">
+              </div>
+              <p>Projetos em Andamento</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span>{{ projetosFinalizados }}</span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/prancheta-check.svg" alt="Curso icone">
+              </div>
+              <p>Projetos Finalizados</p>
+          </div>
+      </div>
+    </div>
+
+            <!-- GRÁFICOS LADO A LADO -->
+        <div class="duo-graficos">
+        <!-- Gráfico 1: Clientes por Mês -->
+        <div class="grafico">
+            <apx-chart 
+            [series]="clientesPorMesChart.series"
+            [chart]="clientesPorMesChart.chart"
+            [xaxis]="clientesPorMesChart.xaxis"
+            [dataLabels]="clientesPorMesChart.dataLabels"
+            [title]="clientesPorMesChart.title">
+            </apx-chart>
+        </div>
+
+        <!-- Gráfico 2: Projetos por Status -->
+        <div class="grafico">
+            <apx-chart 
+             [series]="projetosPorStatusChart.series"
+                [chart]="projetosPorStatusChart.chart"
+                [labels]="projetosPorStatusChart.labels"
+                [dataLabels]="projetosPorStatusChart.dataLabels"
+                [legend]="projetosPorStatusChart.legend"
+                [title]="projetosPorStatusChart.title">
+            </apx-chart>
+        </div>
+        </div>
+
+
+  </div>
+</div>

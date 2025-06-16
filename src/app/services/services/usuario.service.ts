@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "src/environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {first} from "rxjs";
+import {first, Observable} from "rxjs";
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
 import {AuthService} from "./auth.service";
 import { Usuario } from 'src/app/login/usuario';
@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
 
-  private readonly _apiBaseUrl = `${environment.apiUrl}`;
+  private readonly _apiBaseUrl = `${environment.apiURLBase}`;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -31,4 +31,7 @@ export class UsuarioService {
       .pipe(first())
   }
 
+  getUserLogged(): Observable<Usuario | null>{
+    return of(this.authService.getUsuarioAutenticado());
+  }
 }
