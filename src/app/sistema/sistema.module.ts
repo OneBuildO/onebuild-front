@@ -11,6 +11,9 @@ import { CadastroProjetoComponent } from './servicos/cadastro-projeto/cadastro-p
 import { VisualizarProjetoComponent } from './servicos/visualizar-projeto/visualizar-projeto.component';
 import { VisualizarFornecedoresComponent } from './servicos/visualizar-fornecedores/visualizar-fornecedores.component';
 import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportunidades/visualizar-oportunidades.component';
+import { SharedModule } from '../shared/shared.module';
+import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -24,10 +27,13 @@ import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportuni
     VisualizarProjetoComponent,
     VisualizarFornecedoresComponent,
     VisualizarOportunidadesComponent,
+    MeuPerfilComponent
   ],
   imports: [
     CommonModule,
-    SistemaRoutingModule
+    SistemaRoutingModule,
+    SharedModule,
+    ReactiveFormsModule,
   ]
 })
 export class SistemaModule { }

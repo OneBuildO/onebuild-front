@@ -1,4 +1,4 @@
-import { HttpParams } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { Injectable } from '@angular/core';
@@ -42,7 +42,7 @@ export class AuthService {
     const token = this.obterToken();
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
-      return decodedToken?.sub || null; 
+      return decodedToken?.sub || null; //revisar isso aqui, não tem sub.
     }
     return null;
   }

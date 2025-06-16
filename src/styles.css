@@ -35,6 +35,7 @@ html {
   --primary-color: #edc245;
   --gradient-primary: linear-gradient(45deg, #cb8642, #edc245);
   --gradient-secondary: linear-gradient(45deg, #bf7d3c, #dab139);
+  --accent-color: #cb8642;
   --lm-primary:  #0F1212;
   --lm-accent:  #0F1212;
   --lm-accent-02: #a9abae;
@@ -53,6 +54,7 @@ html {
   --font-color-light: #fdfdfd;
   /* sistema */
   --success: #5ea828;
+  --color-sucess: #3F991B;
   --info: #177ab8;
   --color-info: #004590;
   --warning: #ffc107;
@@ -68,7 +70,7 @@ html {
   --primary-btnHover: #1d7206;
   /* container background */
   --form-background: #ffffff;
-  --container-background: #ffffff;
+  --container-background: #e6e6e6;
   --container-modal: #ffffff;
   /* inputs */
   --bg-input: #ffffff;
