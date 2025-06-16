@@ -1,7 +1,7 @@
 .container-principal {
   margin: 120px 32px 24px;
   max-width: 100%;
-  background: var(--container-background);
+  background: #c7c3c3;
   border-radius: 24px;
   padding: 40px 64px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

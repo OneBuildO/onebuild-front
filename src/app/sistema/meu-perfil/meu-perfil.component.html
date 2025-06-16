@@ -25,7 +25,7 @@
         </div>
         <!-- Botão para alterar foto de perfil visível no modo edição -->
         <div *ngIf="isEditing" class="edit-profile-photo">
-          <button (click)="fileInput.click()">Alterar foto de perfil</button>
+          <button (click)="fileInput.click()">Altere sua foto de perfil</button>
         </div>
       </div>
 
@@ -37,7 +37,7 @@
             <label class="form-label" for="nome" *ngIf="tipoCadastro !== ETipoUsuario.ARQUITETO">Nome Empresa</label>
             <div class="relative">
               <input type="text" id="nome" class="form-control w-full ps-10"
-                     formControlName="nome" [placeholder]="tipoCadastro === ETipoUsuario.ARQUITETO ? 'informe seu nome completo' : 'informe o nome da empresa'"
+                     formControlName="nome" [placeholder]="tipoCadastro === ETipoUsuario.ARQUITETO ? 'Nome completo' : 'Nome da empresa'"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-person"></i></span>
             </div>
@@ -52,7 +52,7 @@
             <label class="form-label" for="email">E-mail</label>
             <div class="relative">
               <input type="email" id="email" class="form-control w-full ps-10"
-                     formControlName="email" placeholder="informe seu email"
+                     formControlName="email" placeholder="Digite seu e-mail"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-envelope-at"></i></span>
             </div>
@@ -67,7 +67,7 @@
             <label class="form-label" for="contato">Contato</label>
             <div class="relative">
               <input type="text" id="contato" class="form-control w-full ps-10 no-spinners"
-                     formControlName="contato" placeholder="informe seu contato"
+                     formControlName="contato" placeholder="Digite seu contato"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-phone"></i></span>
             </div>
@@ -82,7 +82,7 @@
             <label class="form-label" for="cnpj">CNPJ</label>
             <div class="relative">
               <input type="text" id="cnpj" class="form-control w-full ps-10"
-                     formControlName="cnpj" placeholder="informe seu CNPJ"
+                     formControlName="cnpj" placeholder="Digite seu CNPJ"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-person-vcard"></i></span>
             </div>
@@ -97,7 +97,7 @@
             <label class="form-label" for="senha">Senha <small>(mínimo de 8 caracteres)</small></label>
             <div class="relative">
               <input type="password" id="senha" class="form-control w-full ps-10"
-                     formControlName="senha" placeholder="informe uma senha"
+                     formControlName="senha" placeholder="Digite sua senha"
                      [disabled]="!isEditing" (change)="handleChange()">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
             </div>
@@ -112,7 +112,7 @@
             <label class="form-label" for="confirmPassword">Confirmar Senha</label>
             <div class="relative">
               <input type="password" id="confirmPassword" class="form-control w-full ps-10"
-                     formControlName="confirmPassword" placeholder="confirme sua senha"
+                     formControlName="confirmPassword" placeholder="Confirme sua senha"
                      [disabled]="!isEditing" (change)="handleChange()">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
             </div>

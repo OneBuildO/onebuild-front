@@ -14,6 +14,8 @@ import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportuni
 import { SharedModule } from '../shared/shared.module';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-arquiteto.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 
 @NgModule({
@@ -27,13 +29,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     VisualizarProjetoComponent,
     VisualizarFornecedoresComponent,
     VisualizarOportunidadesComponent,
-    MeuPerfilComponent
+    MeuPerfilComponent,
+    PainelArquitetoComponent
   ],
   imports: [
     CommonModule,
     SistemaRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    NgApexchartsModule
   ]
 })
 export class SistemaModule { }

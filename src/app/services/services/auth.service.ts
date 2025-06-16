@@ -12,8 +12,8 @@ import { LoginDTO } from 'src/app/sistema/LoginDTO';
 })
 export class AuthService {
   
-  apiUrl: string = environment.apiUrl + "/api/usuarios";
-  tokenUrl: string = environment.apiUrl + environment.tokenUrl;
+  apiUrl: string = environment.apiURLBase + "/api/usuarios";
+  tokenUrl: string = environment.apiURLBase + environment.tokenUrl;
   clientId: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();

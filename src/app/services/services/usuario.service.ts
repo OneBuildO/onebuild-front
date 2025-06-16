@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
 
-  private readonly _apiBaseUrl = `${environment.apiUrl}`;
+  private readonly _apiBaseUrl = `${environment.apiURLBase}`;
 
   constructor(
     private readonly httpClient: HttpClient,

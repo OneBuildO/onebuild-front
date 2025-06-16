@@ -28,6 +28,9 @@ export class TelaCadastroComponent implements OnInit {
   isLoading: boolean = false;
   submited: boolean = false;
 
+  passwordFieldType: string = 'password';
+  confirmPasswordFieldType: string = 'password';
+
   serverMessage: string = '';
   tipoAlerta: 'success' | 'danger' = 'success';
 
@@ -116,6 +119,14 @@ export class TelaCadastroComponent implements OnInit {
   handleChange() {
     this.serverMessage = '';
     this.isSenhaValida();
+  }
+
+  togglePasswordVisibility() {
+  this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.confirmPasswordFieldType = this.confirmPasswordFieldType === 'password' ? 'text' : 'password';
   }
 
   isSenhaValida() {
