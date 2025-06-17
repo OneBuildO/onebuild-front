@@ -1,0 +1,169 @@
+.main-container {
+    margin: 120px 32px 24px;
+    max-width: 100%;
+    background: var(--lm-branco);
+    border-radius: 24px;
+    padding: 40px 64px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.cadastro-titulo {
+    margin-top: 0;
+}
+
+.cadastro-titulo h1 {
+    display: flex;
+    color: var(--lm-text02);
+    font-weight: bold;
+    font-size: 2rem;
+    gap: 12px; /* espaço entre ícone e texto */
+    margin: 0; /* zera margem padrão do h1 */
+}
+
+.cadastro-titulo img {
+    height: auto;
+    width: 25px;
+}
+
+/* Espaçamento padrão entre cada div (campo) */
+.inputs-cadastro>div,
+.inputs-cadastro>form,
+.inputs-cadastro>section,
+.container-form > div,
+.container-form > section{
+    margin-top: 30px;
+}
+
+
+
+/* Faça o input esticar por toda a largura do pai */
+input,
+select{
+    width: 100%;
+    box-sizing: border-box;
+    /* inclui padding/border no cálculo de 100% */
+    padding: 15px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+
+label {
+    font-size: 1rem;
+}
+
+label.required::after {
+    content: " *";
+    color: red;
+}
+
+.campos-tipo-valor,
+.campos-data {
+    display: flex;
+    gap: 20px;
+}
+
+.campos-tipo-valor>div,
+.campos-data>div {
+    flex: 1;
+    /* cada filha ocupa 50% do container (menos o gap) */
+    display: flex;
+    flex-direction: column;
+    /* label fica acima do select/input */
+}
+
+.campos-tipo-valor input,
+.campos-tipo-valor select,
+.campos-data input,
+.campos-data select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-label span {
+  color: var(--lm-accent-02);
+  font-size: 10px;
+}
+
+#btn-cadastrar-cupom {
+    background: var(--gradient-primary);
+    color: var(--color-text-dark);
+    display: block; /* faz o botão se comportar como bloco */
+    margin-left: auto; /* empurra para a direita, sem quebrar */
+    margin-top: 20px;
+    border-radius: 10px;
+    box-sizing: border-box; /* garante que padding não cause overflow */
+    max-width: 100%;        /* nunca excede 100% da largura disponível */
+    cursor: pointer;
+}
+
+
+
+/* ==============================
+   MEDIA QUERIES (RESPONSIVIDADE)
+   ============================== */
+
+/* 1) Tela pequena: até 800px */
+@media screen and (max-width: 800px) {
+    .main-container {
+        margin: 80px 16px 16px;
+        padding: 24px 32px;
+        border-radius: 16px;
+    }
+
+    .cadastro-titulo h1 {
+        font-size: 1.6rem;
+        gap: 8px;
+    }
+
+    /* Faz com que “Tipo” e “Valor” fiquem empilhados em vez de lado a lado */
+    .campos-tipo-valor,
+    .campos-data {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Torna o botão um bloco com largura ajustável, sem float */
+    #btn-cadastrar-cupom {
+        float: none;
+        width: 100%;
+        text-align: center;
+        margin-top: 24px;
+    }
+}
+
+/* 2) Tela muito pequena: até 500px */
+@media screen and (max-width: 500px) {
+    .main-container {
+        margin: 90px 8px 8px;
+        padding: 16px 16px;
+        border-radius: 12px;
+    }
+
+    .cadastro-titulo h1 {
+        font-size: 1.4rem;
+        gap: 6px;
+    }
+
+    /* Diminuir padding interno de inputs para caber melhor em telas bem pequenas */
+    input,
+    select,
+    textarea {
+        padding: 10px 8px;
+        font-size: 0.9rem;
+    }
+
+    /* Ajusta o espaçamento entre campos empilhados */
+    .inputs-cadastro>div,
+    .inputs-cadastro>section {
+        margin-top: 20px;
+    }
+
+    #btn-cadastrar-cupom {
+        margin-left: auto; /* continua alinhado à direita no container */
+        width: 100%; /* ocupa 100% da largura disponível em telas pequenas */
+        text-align: center; /* texto centralizado dentro do botão */
+    }
+}

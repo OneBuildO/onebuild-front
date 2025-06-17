@@ -1,1 +1,86 @@
-<p>cadastro-clientes works!</p>
+<section class="main-container">
+    <div class="cadastro-titulo">
+        <h1>
+            <a [routerLink]="['/usuario/visualizar-clientes']"><img src="/assets/icones/voltar-icon.svg"></a>
+            Cadastrar Cliente
+        </h1>
+    </div>
+
+    <section class="inputs-cadastro">
+        <form [formGroup]="clienteForm" class="container-form" autocomplete="off">
+            <!--NOME-->
+            <div id="campo-titulo">
+                <label class="form-label required" for="titulo">Nome</label>
+                <input type="text" id="input-titulo" formControlName="nome" placeholder="Ex: Caio Fonseca">
+
+            </div>
+
+            <section class="campos-tipo-valor">
+                <!--PROJETO-->
+                <div id="campo-tipo">
+                    <label class="form-label required" for="tipo">Projeto</label>
+                    <input type="text" id="input-titulo" formControlName="projeto" placeholder="Ex: Casa Alphaville">
+
+                </div>
+                <!--CONTATO-->
+                <div id="campo-valor">
+                    <label class="form-label" for="valor">Contato <span>(opcional)</span></label>
+                    <input type="text" id="input-titulo" formControlName="contato" placeholder="Ex: (xx) xxxxx-xxxx">
+                </div>
+            </section>
+
+            <section class="campos-tipo-valor">
+                <!--ESTADO-->
+                <div id="campo-tipo">
+                    <label class="form-label required" formControlName="estado" for="estado"
+                        (change)="onEstadoChange($event)">Estado</label>
+                    <select formControlName="estado" name="estado" id="tipo">
+                        <option [value]="''">Selecione</option>
+                        <option *ngFor="let estado of listaEstados" [value]="estado.sigla">{{ estado.nome }}</option>
+                    </select>
+
+                </div>
+                <!--CIDADE-->
+                <div id="campo-valor">
+                    <label class="form-label required" for="cidade">Cidade</label>
+                    <select name="cidade" formControlName="cidade" id="tipo">
+                        <option value="">Selecione</option>
+                        <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">{{ cidade.nome }}</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="campos-data">
+                <!--EMAIL-->
+                <div id="campo-data-inicial">
+                    <label class="form-label required" for="email">Email</label>
+                    <input type="email" id="input-data-termino" formControlName="email" name="email"
+                        placeholder="Ex: onebuild@gmail.com" autocomplete="off">
+                </div>
+                <!--SENHA-->
+                <div id="campo-data-termino">
+                    <label class="form-label required" for="data-termino">Senha</label>
+                    <input type="password" id="input-data-termino" formControlName="senha" name="senha" placeholder="" autocomplete="new-password">
+                </div>
+            </section>
+        </form>
+    </section>
+
+    <small *ngIf="submited && !clienteForm.get('nome')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+    <small *ngIf="submited && !clienteForm.get('projeto')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !clienteForm.get('estado')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !clienteForm.get('cidade')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !clienteForm.get('email')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !clienteForm.get('senha')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+    <button id="btn-cadastrar-cupom" type="submit">Cadastrar Cliente</button>
+</section>

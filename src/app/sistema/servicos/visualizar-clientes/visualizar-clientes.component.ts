@@ -114,6 +114,11 @@ totalItens: number = 0;
     if (this.messageTimeout) clearTimeout(this.messageTimeout);
   }
 
+  onVoltarClick() {
+    const rota = this.authService.getHomeRouteForRole();
+    this.router.navigate([rota]);
+  }
   
+
 
 }
