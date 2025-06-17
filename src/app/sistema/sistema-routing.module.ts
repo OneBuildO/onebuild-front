@@ -13,6 +13,9 @@ import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportuni
 import { VisualizarProjetoComponent } from './servicos/visualizar-projeto/visualizar-projeto.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-arquiteto.component';
+import { PainelConstrutorasComponent } from './dashboards/painel-construtoras/painel-construtoras.component';
+import { PainelDesignsDeInterioresComponent } from './dashboards/painel-designs-de-interiores/painel-designs-de-interiores.component';
+import { NotificacoesComponent } from './servicos/notificacoes/notificacoes.component';
 
 const routes: Routes = [
   {
@@ -24,8 +27,11 @@ const routes: Routes = [
       {path:'dashboard-cliente', component: PainelClientesComponent},
       {path:'dashboard-fornecedor', component: PainelFornecedorComponent},
       {path:'dashboard-arquiteto', component: PainelArquitetoComponent},
+      {path:'dashboard-contrutora', component: PainelConstrutorasComponent},
+      {path:'dashboard-design-de-interior', component: PainelDesignsDeInterioresComponent},
 
       {path:'meu-perfil', component: MeuPerfilComponent},
+      {path:'notificacoes', component: NotificacoesComponent},
       // servicos
       {path:'cadastro-cliente', component: CadastroClientesComponent},
       {path:'cadastro-cliente/:id', component: CadastroClientesComponent},

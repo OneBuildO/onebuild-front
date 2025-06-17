@@ -1,1 +1,184 @@
-<p>visualizar-fornecedores works!</p>
+<div class="main-container">
+    <div class="banner">
+        <h1>Fornecedores</h1>
+        <p>Um espaço onde você pode ver fornecedores.</p>
+    </div>
+  
+    <div class="breadcrumb-container">
+        <div class="breadcrumb">
+            <a (click)="onVoltarClick()" >Dashboard &gt; </a> <span class="breadcrumb-highlight"> Fornecedores</span>
+        </div>
+        <div class="actions">
+            <button class="btn-cadastrar" (click)="mostrarFiltro = !mostrarFiltro">
+                Filtro de Fornecedores
+            </button>
+            <button class="btn-cadastrar">
+                Convidar Fornecedor
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Filtro de Fornecedores -->
+    <div class="modal-overlay" *ngIf="mostrarFiltro">
+    <div class="modal-content">
+        <button class="close-btn" (click)="mostrarFiltro = false">&times;</button>
+        <h4>Filtrar por Segmento</h4>
+        <div class="checkbox-list">
+        <div class="checkbox-item" *ngFor="let tipo of tiposDeFornecedores">
+            <label>
+            <input type="checkbox" [(ngModel)]="tipo.selecionado" />
+            {{ tipo.descricao }}
+            </label>
+        </div>
+        </div>
+        <div class="modal-actions">
+        <button class="btn-limpar" (click)="limparFiltro()">Limpar Filtro</button>
+        <button class="btn-aplicar" (click)="aplicarFiltro()">Aplicar Filtro</button>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Fornecedores Filtrados -->
+<section class="secao-fornecedores" *ngIf="fornecedoresFiltrados.length > 0">
+  <h2> Fornecedores Filtrados</h2>
+  <div class="fornecedores-grid">
+    <div class="fornecedor-card" *ngFor="let fornecedor of fornecedoresFiltrados">
+      <div class="fornecedor-avatar">
+        <img src="assets/icones/user-placeholder.svg" alt="Avatar" />
+      </div>
+      <div class="fornecedor-info">
+        <h4>{{ fornecedor.nome }}</h4>
+        <p>{{ fornecedor.cidade }} - {{ fornecedor.estado }}</p>
+        <div class="fornecedor-rating">
+          <span>{{ fornecedor.nota.toFixed(1) }}</span>
+          <ng-container *ngFor="let estrela of [1,2,3,4,5]; let i = index">
+            <i class="estrela" [class.ativa]="i < fornecedor.nota" class="fa fa-star"></i>
+          </ng-container>
+        </div>
+        <button class="btn-saiba-mais" (click)="abrirDetalhes(fornecedor)">Saiba mais</button>
+      </div>
+    </div>
+  </div>
+    <div class="pagination">
+    <button (click)="paginaLocais = paginaLocais - 1" [disabled]="paginaLocais === 1">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <span>{{ paginaLocais }} de {{ totalPaginasLocais }}</span>
+    <button (click)="paginaLocais = paginaLocais + 1" [disabled]="paginaLocais === totalPaginasLocais">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    </div>
+</section>
+
+
+
+    <!-- Fornecedores Recomendados -->
+<section class="secao-fornecedores">
+  <h2> Fornecedores Recomendados</h2>
+  <div class="fornecedores-grid">
+    <div class="fornecedor-card" *ngFor="let fornecedor of fornecedoresRecomendadosPaginados">
+      <div class="fornecedor-avatar">
+        <img src="assets/icones/user-placeholder.svg" alt="Avatar" />
+      </div>
+      <div class="fornecedor-info">
+        <h4>{{ fornecedor.nome }}</h4>
+        <p>{{ fornecedor.cidade }} - {{ fornecedor.estado }}</p>
+        <div class="fornecedor-rating">
+          <span>{{ fornecedor.nota.toFixed(1) }}</span>
+          <ng-container *ngFor="let estrela of [1,2,3,4,5]; let i = index">
+            <i class="estrela"
+               [class.ativa]="i < fornecedor.nota"
+               class="fa fa-star"></i>
+          </ng-container>
+        </div>
+       <button class="btn-saiba-mais" (click)="abrirDetalhes(fornecedor)">Saiba mais</button>
+      </div>
+    </div>
+  </div>
+     <div class="pagination">
+  <button (click)="paginaLocais = paginaLocais - 1" [disabled]="paginaLocais === 1">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <span>{{ paginaLocais }} de {{ totalPaginasLocais }}</span>
+  <button (click)="paginaLocais = paginaLocais + 1" [disabled]="paginaLocais === totalPaginasLocais">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  </div>
+
+</section>
+
+<!-- Fornecedores da sua Cidade -->
+<section class="secao-fornecedores">
+  <h2> Fornecedores da sua Cidade</h2>
+  <div class="fornecedores-grid">
+    <div class="fornecedor-card" *ngFor="let fornecedor of fornecedoresLocaisPaginados">
+      <div class="fornecedor-avatar">
+        <img src="assets/icones/user-placeholder.svg" alt="Avatar" />
+      </div>
+      <div class="fornecedor-info">
+        <h4>{{ fornecedor.nome }}</h4>
+        <p>{{ fornecedor.cidade }} - {{ fornecedor.estado }}</p>
+        <div class="fornecedor-rating">
+          <span>{{ fornecedor.nota.toFixed(1) }}</span>
+          <ng-container *ngFor="let estrela of [1,2,3,4,5]; let i = index">
+            <i class="estrela"
+               [class.ativa]="i < fornecedor.nota"
+               class="fa fa-star"></i>
+          </ng-container>
+        </div>
+        <button class="btn-saiba-mais" (click)="abrirDetalhes(fornecedor)">Saiba mais</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagination">
+  <button (click)="paginaLocais = paginaLocais - 1" [disabled]="paginaLocais === 1">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <span>{{ paginaLocais }} de {{ totalPaginasLocais }}</span>
+  <button (click)="paginaLocais = paginaLocais + 1" [disabled]="paginaLocais === totalPaginasLocais">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  </div>
+</section>
+
+
+<!-- Modal Detalhe do Fornecedor -->
+<div class="modal-overlay" *ngIf="fornecedorSelecionado">
+  <div class="modal-content-detalhe">
+    <button class="close-btn" (click)="fornecedorSelecionado = null">&times;</button>
+
+    <div class="detalhe-header">
+      <img src="assets/icones/user-placeholder.svg" alt="Avatar" class="detalhe-avatar" />
+      <h3>{{ fornecedorSelecionado.nome }}</h3>
+      <p>{{ fornecedorSelecionado.cidade }} - {{ fornecedorSelecionado.estado }}</p>
+    </div>
+
+    <div class="fornecedor-rating detalhe-rating">
+      <span>{{ fornecedorSelecionado.nota.toFixed(1) }}</span>
+      <ng-container *ngFor="let estrela of [1,2,3,4,5]; let i = index">
+        <i class="estrela" [class.ativa]="i < fornecedorSelecionado.nota" class="fa fa-star"></i>
+      </ng-container>
+    </div>
+
+    <div class="detalhe-corpo">
+      <h4>Descrição do Fornecedor</h4>
+      <p>{{ fornecedorSelecionado.descricao }}</p>
+
+      <h4>Categoria</h4>
+      <p>{{ fornecedorSelecionado.categoria }}</p>
+
+      <h4>Endereço</h4>
+      <p>{{ fornecedorSelecionado.endereco }}</p>
+
+      <h4>Contato</h4>
+      <p>E-mail: {{ fornecedorSelecionado.email }}</p>
+      <p>CNPJ: {{ fornecedorSelecionado.cnpj }}</p>
+      <p>Telefone: {{ fornecedorSelecionado.telefone }}</p>
+    </div>
+  </div>
+</div>
+
+
+</div>

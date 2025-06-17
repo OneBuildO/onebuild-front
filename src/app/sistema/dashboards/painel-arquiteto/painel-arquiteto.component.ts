@@ -156,12 +156,12 @@ clientesPorMesChart: BarChartOptions = {
 };
 
 projetosPorStatusChart: DonutChartOptions = {
-  series: [5, 10, 7],
+  series: [5, 2, 10, 3, 7],
   chart: {
     type: 'donut' as ChartType,
     height: 350
   },
-  labels: ["Em Cotação", "Em Andamento", "Finalizado"],
+  labels: ["Novo Projeto","Em Cotação", "Em Andamento", "Pausado", "Finalizado"],
   dataLabels: {
     enabled: true
   },
@@ -178,6 +178,39 @@ projetosPorStatusChart: DonutChartOptions = {
     }
   }
 };
+
+
+projetosPorMesChart: BarChartOptions = {
+  series: [
+    {
+      name: "Projetos",
+      data: [5, 8, 6, 12, 14, 10, 9, 15, 11, 13, 7, 16] // dados mockados
+    }
+  ],
+  chart: {
+    type: 'bar' as ChartType,
+    height: 350
+  },
+  dataLabels: {
+    enabled: false
+  },
+  xaxis: {
+    categories: [
+      "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+      "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+    ]
+  },
+  title: {
+    text: 'Projetos por Mês',
+    align: 'center',
+    style: {
+      fontSize: '18px',
+      fontWeight: 'bold',
+      color: '#4b504b'
+    }
+  }
+};
+
 
 
 
