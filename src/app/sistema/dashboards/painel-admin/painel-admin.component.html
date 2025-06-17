@@ -1,1 +1,94 @@
-<p>painel-admin works!</p>
+<div class="main-container">
+  <div class="banner">
+    <div class="welcome">
+      <h1> 👋 Bem-vindo, {{ usuario }}</h1>
+      <div class="motivational-message">
+        <p>"{{ motivationalMessage.quote }}"</p>
+        <span class="author">{{ motivationalMessage.author }}</span>
+      </div>
+    </div>
+
+    <div class="climate">
+      <div class="title-clima">
+        <h3>Clima de {{ weatherData.name }} </h3>
+      </div>
+      <div class="temperatura">
+        <img [src]="iconUrl" alt="Ícone do clima">
+        <span>{{ temperature | number:'1.0-0' }} °C</span>
+      </div>
+      <div class="descricao">
+        <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+      </div>
+    </div>
+  </div>
+
+    <div class="containers-dashboard">
+    <div class="cards-container">
+      <div class="card info-card">
+          <span> {{ totalDeArquitetos }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/users.svg" alt="Loja icone">
+              </div>
+              <p>Total de Arquitetos</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span> {{ totalDeConstrutoras }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/clipboard-pen.svg" alt="Gerente icone">
+              </div>
+              <p>Total de Construtoras</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span> {{ totalDeDesignsDeInteriores }} </span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/clipboard-user.svg" alt="Colaborador icone">
+              </div>
+              <p>Total de Designs de Interiores</p>
+          </div>
+      </div>
+      <div class="card info-card">
+          <span>{{ totalDeFornecedores }}</span>
+          <div class="categoria-card">
+              <div class="icone-card">
+                  <img src="assets/icones/prancheta-check.svg" alt="Curso icone">
+              </div>
+              <p>Total de Fornecedores</p>
+          </div>
+      </div>
+    </div>
+
+    <div class="duo-graficos">
+        <!-- Donut: Fornecedores por segmento -->
+        <div class="grafico">
+            <apx-chart 
+            [series]="donutChartFornecedores.series"
+            [chart]="donutChartFornecedores.chart"
+            [labels]="donutChartFornecedores.labels"
+            [dataLabels]="donutChartFornecedores.dataLabels"
+            [legend]="donutChartFornecedores.legend"
+            [title]="donutChartFornecedores.title">
+            </apx-chart>
+        </div>
+
+        <!-- Bar: Projetos por cidade -->
+        <div class="grafico">
+            <apx-chart 
+            [series]="barChartProjetosPorCidade.series"
+            [chart]="barChartProjetosPorCidade.chart"
+            [xaxis]="barChartProjetosPorCidade.xaxis"
+            [dataLabels]="barChartProjetosPorCidade.dataLabels"
+            [title]="barChartProjetosPorCidade.title">
+            </apx-chart>
+        </div>
+        </div>
+
+
+
+
+  </div>
+</div>

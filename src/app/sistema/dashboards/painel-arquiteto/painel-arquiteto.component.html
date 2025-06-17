@@ -61,32 +61,42 @@
           </div>
       </div>
     </div>
+<div class="trio-graficos">
+  <!-- Gráfico 1: Clientes por Mês -->
+  <div class="grafico">
+    <apx-chart 
+      [series]="clientesPorMesChart.series"
+      [chart]="clientesPorMesChart.chart"
+      [xaxis]="clientesPorMesChart.xaxis"
+      [dataLabels]="clientesPorMesChart.dataLabels"
+      [title]="clientesPorMesChart.title">
+    </apx-chart>
+  </div>
 
-            <!-- GRÁFICOS LADO A LADO -->
-        <div class="duo-graficos">
-        <!-- Gráfico 1: Clientes por Mês -->
-        <div class="grafico">
-            <apx-chart 
-            [series]="clientesPorMesChart.series"
-            [chart]="clientesPorMesChart.chart"
-            [xaxis]="clientesPorMesChart.xaxis"
-            [dataLabels]="clientesPorMesChart.dataLabels"
-            [title]="clientesPorMesChart.title">
-            </apx-chart>
-        </div>
+  <!-- Gráfico 2: Projetos por Status -->
+  <div class="grafico">
+    <apx-chart 
+      [series]="projetosPorStatusChart.series"
+      [chart]="projetosPorStatusChart.chart"
+      [labels]="projetosPorStatusChart.labels"
+      [dataLabels]="projetosPorStatusChart.dataLabels"
+      [legend]="projetosPorStatusChart.legend"
+      [title]="projetosPorStatusChart.title">
+    </apx-chart>
+  </div>
 
-        <!-- Gráfico 2: Projetos por Status -->
-        <div class="grafico">
-            <apx-chart 
-             [series]="projetosPorStatusChart.series"
-                [chart]="projetosPorStatusChart.chart"
-                [labels]="projetosPorStatusChart.labels"
-                [dataLabels]="projetosPorStatusChart.dataLabels"
-                [legend]="projetosPorStatusChart.legend"
-                [title]="projetosPorStatusChart.title">
-            </apx-chart>
-        </div>
-        </div>
+  <!-- Gráfico 3: Projetos por Mês -->
+  <div class="grafico">
+    <apx-chart 
+      [series]="projetosPorMesChart.series"
+      [chart]="projetosPorMesChart.chart"
+      [xaxis]="projetosPorMesChart.xaxis"
+      [dataLabels]="projetosPorMesChart.dataLabels"
+      [title]="projetosPorMesChart.title">
+    </apx-chart>
+  </div>
+</div>
+
 
 
   </div>

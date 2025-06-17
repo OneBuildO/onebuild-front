@@ -13,9 +13,12 @@ import { VisualizarFornecedoresComponent } from './servicos/visualizar-fornecedo
 import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportunidades/visualizar-oportunidades.component';
 import { SharedModule } from '../shared/shared.module';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-arquiteto.component';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { NotificacoesComponent } from './servicos/notificacoes/notificacoes.component';
+import { PainelConstrutorasComponent } from './dashboards/painel-construtoras/painel-construtoras.component';
+import { PainelDesignsDeInterioresComponent } from './dashboards/painel-designs-de-interiores/painel-designs-de-interiores.component';
 
 
 @NgModule({
@@ -30,14 +33,18 @@ import { NgApexchartsModule } from "ng-apexcharts";
     VisualizarFornecedoresComponent,
     VisualizarOportunidadesComponent,
     MeuPerfilComponent,
-    PainelArquitetoComponent
+    PainelArquitetoComponent,
+    NotificacoesComponent,
+    PainelConstrutorasComponent,
+    PainelDesignsDeInterioresComponent
   ],
   imports: [
     CommonModule,
     SistemaRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    FormsModule
   ]
 })
 export class SistemaModule { }
