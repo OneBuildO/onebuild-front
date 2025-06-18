@@ -7,7 +7,6 @@ import { VisibilidadeProjeto } from './visibilidade-projeto.enum';
 import { StatusDoProjetoDescricoes } from './statusDoProjetoDescricoes';
 import { CidadesService, listaEstados } from 'src/app/services/services/cidade.service';
 import { EMensagemAviso } from './mensagem-aviso.enum';
-import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-cadastro-projeto',
@@ -18,7 +17,6 @@ export class CadastroProjetoComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private serviceLocalidade: CidadesService,
-    private toastr:ToastrService
   ) { }
   
     idClienteSelecionado: number = 0;
@@ -164,16 +162,16 @@ export class CadastroProjetoComponent implements OnInit {
           this.plantaBaixa.push(file);
         }
       } else {
-        this.toastr.error(
-          EMensagemAviso.TAMANHO_ARQUIVO_NAO_VALIDADO,
-          EMensagemAviso.ATENCAO
-        );
+        // this.toastr.error(
+        //   EMensagemAviso.TAMANHO_ARQUIVO_NAO_VALIDADO,
+        //   EMensagemAviso.ATENCAO
+        // );
       }
-    } else {
-      this.toastr.error(
-        EMensagemAviso.TIPO_ARQUIVO_NAO_VALIDADO,
-        EMensagemAviso.ATENCAO
-      );
+    } else { //JAMAIS USAR TOASTR DE NOVO, PLMDS
+      // this.toastr.error(
+      //   EMensagemAviso.TIPO_ARQUIVO_NAO_VALIDADO,
+      //   EMensagemAviso.ATENCAO
+      // );
     }
   }
 

@@ -15,7 +15,6 @@ import { AuthService } from './services/services/auth.service';
 import { TokenInterceptor } from './services/security/token.interceptor';
 import { LayoutComponent } from './layout/layout.component';
 import { NgApexchartsModule } from "ng-apexcharts";
-//import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,6 @@ import { NgApexchartsModule } from "ng-apexcharts";
     FormsModule,
     ReactiveFormsModule,
     NgApexchartsModule,
-   // ToastrModule.forRoot()
   ],
   providers: [
     AuthService,
