@@ -21,19 +21,16 @@
           </div>
         </div>
 
-        <!-- PERMISSÃO DO USUÁRIO -->
-        <div class="form-group">
-          <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
-          <div class="relative">
-            <i class="bi bi-briefcase-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <select id="permissaoDoUsuario" class="form-select pl-10" formControlName="permissaoDoUsuario">
-              <option value="">Selecione</option>
-              <option *ngFor="let permissao of PermissaoKeys" [value]="permissao">
+            <!-- PERMISSAO DO USUARIO -->
+          <div class="form-group">
+            <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
+            <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
+              <option value="" disabled selected hidden>Selecione</option>
+              <option *ngFor="let permissao of permissoesDisponiveis" [value]="permissao">
                 {{ PermissaoDescricoes[permissao] }}
               </option>
             </select>
           </div>
-        </div>
 
         <!-- TIPO FORNECEDOR -->
         <div class="form-group" *ngIf="cadastroForm.get('permissaoDoUsuario')?.value === Permissao.FORNECEDOR">

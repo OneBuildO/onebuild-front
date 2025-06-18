@@ -59,7 +59,9 @@ export class TelaCadastroComponent implements OnInit {
   );
 
   ngOnInit() {
-  
+      this.permissoesDisponiveis = this.PermissaoKeys.filter(p =>
+      p !== Permissao.ADMIN && p !== Permissao.CLIENTE
+    );
   }
 
   onFormSubmitHandler(event?: Event) {
@@ -174,6 +176,7 @@ export class TelaCadastroComponent implements OnInit {
   }
 
   public readonly PermissaoKeys = Object.values(Permissao);
+  public permissoesDisponiveis: Permissao[] = null!;
   public readonly PermissaoDescricoes = PermissaoDescricoes;
 
   public readonly Permissao = Permissao;

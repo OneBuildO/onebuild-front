@@ -19,25 +19,33 @@ export class CadastroProjetoComponent implements OnInit {
     private serviceLocalidade: CidadesService,
   ) { }
   
-    idClienteSelecionado: number = 0;
-    arquivosProjeto: File[] = [];
-    isLoading: boolean = false;
-    isLoadingFile: boolean = false;
-    tipoAlerta = AlertType.Warning;
-    plantaBaixa: File[] = [];
-    successMessage: string | null = null; 
-    
-    submited:boolean = false;
+  arquivosProjeto: (
+    | File
+    | { documentoUrl: string; id: number; name: string }
+  )[] = [];
 
-    protected readonly listaEstados = listaEstados;
-    public listaCidades: any[] = [];
+  plantaBaixa: (
+    | File
+    | { documentoUrl: string; id: number; name: string }
+  )[] = [];
 
-    categoriasProjeto = []; //tem que pegar la do back-end.
-    statusProjeto = StatusDoProjeto; // Adicione o enum ao contexto do componente
-    
-    visibilidadeProjetoArr: VisibilidadeProjeto[] = Object.values(VisibilidadeProjeto) as VisibilidadeProjeto[];
-    statusProjetoArr: StatusDoProjeto[] = Object.values(StatusDoProjeto) as StatusDoProjeto[];
-    protected readonly StatusDoProjetoDescricoes = StatusDoProjetoDescricoes;
+  idClienteSelecionado: number = 0;
+  isLoading: boolean = false;
+  isLoadingFile: boolean = false;
+  tipoAlerta = AlertType.Warning;
+  successMessage: string | null = null; 
+  
+  submited:boolean = false;
+
+  protected readonly listaEstados = listaEstados;
+  public listaCidades: any[] = [];
+
+  categoriasProjeto = []; //tem que pegar la do back-end.
+  statusProjeto = StatusDoProjeto; // Adicione o enum ao contexto do componente
+  
+  visibilidadeProjetoArr: VisibilidadeProjeto[] = Object.values(VisibilidadeProjeto) as VisibilidadeProjeto[];
+  statusProjetoArr: StatusDoProjeto[] = Object.values(StatusDoProjeto) as StatusDoProjeto[];
+  protected readonly StatusDoProjetoDescricoes = StatusDoProjetoDescricoes;
 
   protected readonly ERROR_MESSAGES = ERROR_MESSAGES;
 
@@ -47,12 +55,16 @@ export class CadastroProjetoComponent implements OnInit {
   projetoForm = this.formBuilder.group({
     id: new FormControl(0, { validators: [Validators.required] }),
     cliente: new FormControl(''),
-    arquivos: [''],
+    arquivos: new FormControl<
+      Array<File | { documentoUrl: string; id: number; name: string }>
+    >([]),
+    plantaBaixa: new FormControl<
+      Array<File | { documentoUrl: string; id: number; name: string }>
+    >([]),
     categoria: new FormControl('', { validators: [Validators.required] }),
     dataLimiteOrcamento: new FormControl('', {
       validators: [Validators.required],
     }),
-    plantaBaixa: [''],
     observacoes: new FormControl(''),
     estado: new FormControl(''),
     cidade: new FormControl(''),
@@ -81,29 +93,6 @@ export class CadastroProjetoComponent implements OnInit {
       );
     } else {
       this.listaCidades = [];
-    }
-  }
-
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    (event.currentTarget as HTMLElement).classList.add('drag-over');
-  }
-
-  onDragLeave(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    (event.currentTarget as HTMLElement).classList.remove('drag-over');
-  }
-
-  onDrop(event: DragEvent, tipo: string) {
-    event.preventDefault();
-    event.stopPropagation();
-    (event.currentTarget as HTMLElement).classList.remove('drag-over');
-    const files = event.dataTransfer?.files;
-    if (files) {
-      this.processFiles(files, tipo);
     }
   }
 
@@ -138,8 +127,21 @@ export class CadastroProjetoComponent implements OnInit {
     }
   }  
 
+  onArquivosSelecionados(
+    arquivos: (File|{ id: number; name: string; documentoUrl: string })[]
+  ): void {
+    this.arquivosProjeto = arquivos;
+    this.projetoForm.get('arquivos')?.setValue(arquivos);
+    console.log('Arquivos selecionados:', arquivos);
+  }
 
-
+  onPlantaBaixaSelecionados(
+    arquivos: Array<File | { documentoUrl: string; id: number; name: string }>
+  ) {
+    this.plantaBaixa = arquivos;
+    this.projetoForm.get('plantaBaixa')?.setValue(this.plantaBaixa);
+      console.log('PlantaBaixa selecionados:', arquivos);
+  }
 
   handleFilesProject(event: any, tipo: string) {
     const file = event.target.files[0];
