@@ -1,1 +1,196 @@
-<p>cadastro-projeto works!</p>
+<section class="main-container">
+    <div class="cadastro-titulo">
+        <h1>
+            <a [routerLink]="['/usuario/visualizar-projeto']"><img src="/assets/icones/voltar-icon.svg"></a>
+            Cadastrar Projeto
+        </h1>
+    </div>
+
+    <section class="inputs-cadastro">
+        <form [formGroup]="projetoForm" class="container-form" autocomplete="off">
+
+            <!-- CLIENTE -->
+            <div id="campo-titulo">
+                <label class="form-label required" for="cliente">Cliente</label>
+                    <select formControlName="cliente" name="cliente" id="tipo">
+                        <option>Selecione o cliente</option>
+                    </select>            
+            </div>
+
+            <!--INPUT - ARQUIVO-->
+            <div class="input-arquivo" id="campo-titulo">
+                <label class="form-label" for="arquivo">
+                    Arquivos
+                </label>
+                <div class="col-span-full">
+                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-8"
+                    (dragover)="onDragOver($event)"
+                     (dragleave)="onDragLeave($event)"
+                     (drop)="onDrop($event, 'tipo')">
+                        <label for="arquivos" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                            <img id="imagem-download" src="assets/icones/download-icon.svg" alt="">
+                            <input id="arquivos" name="arquivos" type="file" class="sr-only" formControlName="arquivos" (change)="handleFilesProject($event, 'arquivosProjeto')" >
+                            <p class="text-xs leading-5 text-gray-600 mt-2">
+                            Clique ou arraste para fazer upload até 10MB.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ARQUIVOS -->
+            <div class="col-span-12 md:col-span-6">
+              <div class="flex my-2 py-2 border rounded justify-between items-center"
+                   *ngFor="let file of arquivosProjeto; let i = index">
+                <i class="bi bi-file-earmark-check text-3xl text-left mx-2 flex justify-center items-center">
+                  <small class="text-sm ml-1">{{ file?.name }}</small>
+                </i>
+                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2" (click)="handleRemoveFile(file.name, 'arquivosProjeto')">
+                  Remover
+                </button>
+              </div>
+            </div>
+
+
+
+            <section class="campos-tipo-valor">
+                <!--CATEGORIA-->
+                <div id="campo-tipo">
+                    <label class="form-label required" for="categoria">Categoria</label>
+                    <select formControlName="categoria" id="tipo">
+                        <option [value]="''">Selecione uma categoria</option>
+                    </select>                       
+                </div>
+
+                <!--DATA LIMITE DE ORÇAMENTO-->
+                <div id="campo-valor">
+                    <label class="form-label required" for="dataLimiteOrcamento">Receber orçamento até</label>
+                    <input type="date" id="input-titulo" name="dataLimiteOrcamento" formControlName="dataLimiteOrcamento">
+                </div>
+            </section>
+
+            <!--input - PLANTA BAIXA-->
+            <div class="input-arquivo" id="campo-titulo">
+                <label class="form-label" for="arquivo">
+                    Planta baixa
+                </label>
+                <div class="col-span-full">
+                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-8"
+                    (dragover)="onDragOver($event)"
+                     (dragleave)="onDragLeave($event)"
+                     (drop)="onDrop($event, 'plantaBaixa')">
+                        <label for="plantaBaixa" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                            <img id="imagem-download" src="assets/icones/download-icon.svg" alt="">
+                            <input id="plantaBaixa" name="plantaBaixa" type="file" class="sr-only" formControlName="plantaBaixa" (change)="handleFilesProject($event, 'plantaBaixa')" >
+                            <p class="text-xs leading-5 text-gray-600 mt-2">
+                            Clique ou arraste para fazer upload até 10MB.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLANTA BAIXA -->
+            <div class="col-span-12 md:col-span-6">
+              <div class="flex my-2 py-2 border rounded justify-between items-center"
+                   *ngFor="let file of plantaBaixa; let i = index">
+                <i class="bi bi-file-earmark-check text-3xl text-left mx-2 flex justify-center items-center">
+                  <small class="text-sm ml-1">{{ file?.name }}</small>
+                </i>
+                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2" (click)="handleRemoveFile(file.name, 'plantaBaixa')">
+                  Remover
+                </button>
+              </div>
+            </div>
+
+
+            <!--OBSERVAÇÕES-->
+            <div id="campo-titulo">
+                <label class="form-label" for="observacoes">Observações <span>(Opcional)</span></label>
+                <textarea name="observacoes" formControlName="observacoes"  id="input-titulo" placeholder="Ex: O material deve ser..." rows="4"></textarea>
+            </div>
+
+            <section class="campos-tipo-valor">
+
+                <!--ESTADO-->
+                <div id="campo-tipo">
+                    <label class="form-label required" for="estado" >Estado</label>
+                    <select formControlName="estado" name="estado" id="tipo" (change)="onEstadoChange($event)">
+                        <option [value]="''">Selecione seu estado</option>
+                        <option *ngFor="let estado of listaEstados" [value]="estado.nome">{{ estado.nome }}</option>                    </select>
+
+                </div>
+
+                <!--CIDADE-->
+                <div id="campo-valor">
+                    <label class="form-label required" for="cidade">Cidade</label>
+                    <select name="cidade" formControlName="cidade" id="tipo">
+                        <option [value]="''">Selecione sua cidade</option>
+                        <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">{{ cidade.nome }}</option>                    </select>
+                </div>
+            </section>
+
+            <!-- ENDEREÇO -->
+            <div id="campo-valor">
+                <label class="form-label required" for="endereco">Endereço</label>
+                <input type="text" id="input-titulo" formControlName="endereco" placeholder="Digite o endereço">
+            </div>
+
+            <section class="campos-data">
+
+                <!--STATUS DO PROJETO-->
+                <div id="campo-data-inicial">
+                    <label class="form-label" for="status">Status do Projeto</label>
+                    <select formControlName="status" id="tipo">
+                        <option [value]="''" disabled selected hidden>Selecione</option>
+                        <option *ngFor="let status of statusProjetoArr" [value]="status">{{ StatusDoProjetoDescricoes[status] }}</option>
+                    </select>
+                </div>
+
+                <!--VISIBILIDADE-->
+                <div id="campo-data-termino">
+                    <label class="form-label required" for="visibilidade">Visibilidade</label>
+                    <select name="visibilidade" formControlName="visibilidade" id="tipo">
+                        <option *ngFor="let vis of visibilidadeProjetoArr" [value]="vis">
+                            {{ vis }}
+                        </option>
+                    </select>
+                </div>
+            </section>
+        </form>
+    </section>
+
+   <small *ngIf="submited && !projetoForm.get('cliente')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+    <small *ngIf="submited && !projetoForm.get('arquivos')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('dataLimiteOrcamento')?.value?.toString()" class="text-red-500 text-left">{{
+    ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('categoria')?.value?.toString()" class="text-red-500 text-left">{{
+    ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('plantaBaixa')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('observacoes')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('estado')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('cidade')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('endereco')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('status')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <small *ngIf="submited && !projetoForm.get('visibilidade')?.value?.toString()" class="text-red-500 text-left">{{
+        ERROR_MESSAGES.required() }}</small>
+
+    <button id="btn-cadastrar-cupom" type="submit">Cadastrar Projeto</button>
+</section>

@@ -16,8 +16,6 @@ import { TokenInterceptor } from './services/security/token.interceptor';
 import { LayoutComponent } from './layout/layout.component';
 import { NgApexchartsModule } from "ng-apexcharts";
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +33,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
     SistemaModule,
     FormsModule,
     ReactiveFormsModule,
-    NgApexchartsModule
+    NgApexchartsModule,
   ],
   providers: [
     AuthService,
