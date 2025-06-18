@@ -21,8 +21,8 @@
           <div class="form-group">
             <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
             <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
-              <option value="">Selecione</option>
-              <option *ngFor="let permissao of PermissaoKeys" [value]="permissao">
+              <option value="" disabled selected hidden>Selecione</option>
+              <option *ngFor="let permissao of permissoesDisponiveis" [value]="permissao">
                 {{ PermissaoDescricoes[permissao] }}
               </option>
             </select>

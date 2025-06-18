@@ -19,38 +19,14 @@
 
             <!--INPUT - ARQUIVO-->
             <div class="input-arquivo" id="campo-titulo">
-                <label class="form-label" for="arquivo">
+                <label class="form-label" for="arquivos">
                     Arquivos
                 </label>
-                <div class="col-span-full">
-                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-8"
-                    (dragover)="onDragOver($event)"
-                     (dragleave)="onDragLeave($event)"
-                     (drop)="onDrop($event, 'tipo')">
-                        <label for="arquivos" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                            <img id="imagem-download" src="assets/icones/download-icon.svg" alt="">
-                            <input id="arquivos" name="arquivos" type="file" class="sr-only" formControlName="arquivos" (change)="handleFilesProject($event, 'arquivosProjeto')" >
-                            <p class="text-xs leading-5 text-gray-600 mt-2">
-                            Clique ou arraste para fazer upload até 10MB.
-                            </p>
-                        </label>
-                    </div>
-                </div>
+                <app-input-arquivos
+                    (arquivosSelecionados)="onArquivosSelecionados($event)"
+                    formControlName="arquivos">
+                </app-input-arquivos>
             </div>
-
-            <!-- ARQUIVOS -->
-            <div class="col-span-12 md:col-span-6">
-              <div class="flex my-2 py-2 border rounded justify-between items-center"
-                   *ngFor="let file of arquivosProjeto; let i = index">
-                <i class="bi bi-file-earmark-check text-3xl text-left mx-2 flex justify-center items-center">
-                  <small class="text-sm ml-1">{{ file?.name }}</small>
-                </i>
-                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2" (click)="handleRemoveFile(file.name, 'arquivosProjeto')">
-                  Remover
-                </button>
-              </div>
-            </div>
-
 
 
             <section class="campos-tipo-valor">
@@ -71,38 +47,14 @@
 
             <!--input - PLANTA BAIXA-->
             <div class="input-arquivo" id="campo-titulo">
-                <label class="form-label" for="arquivo">
+                <label class="form-label" for="plantaBaixa">
                     Planta baixa
                 </label>
-                <div class="col-span-full">
-                    <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-8"
-                    (dragover)="onDragOver($event)"
-                     (dragleave)="onDragLeave($event)"
-                     (drop)="onDrop($event, 'plantaBaixa')">
-                        <label for="plantaBaixa" class="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                            <img id="imagem-download" src="assets/icones/download-icon.svg" alt="">
-                            <input id="plantaBaixa" name="plantaBaixa" type="file" class="sr-only" formControlName="plantaBaixa" (change)="handleFilesProject($event, 'plantaBaixa')" >
-                            <p class="text-xs leading-5 text-gray-600 mt-2">
-                            Clique ou arraste para fazer upload até 10MB.
-                            </p>
-                        </label>
-                    </div>
-                </div>
+                <app-input-arquivos 
+                    (arquivosSelecionados)="onPlantaBaixaSelecionados($event)"
+                    formControlName="plantaBaixa">
+                </app-input-arquivos>
             </div>
-
-            <!-- PLANTA BAIXA -->
-            <div class="col-span-12 md:col-span-6">
-              <div class="flex my-2 py-2 border rounded justify-between items-center"
-                   *ngFor="let file of plantaBaixa; let i = index">
-                <i class="bi bi-file-earmark-check text-3xl text-left mx-2 flex justify-center items-center">
-                  <small class="text-sm ml-1">{{ file?.name }}</small>
-                </i>
-                <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2" (click)="handleRemoveFile(file.name, 'plantaBaixa')">
-                  Remover
-                </button>
-              </div>
-            </div>
-
 
             <!--OBSERVAÇÕES-->
             <div id="campo-titulo">

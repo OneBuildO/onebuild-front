@@ -1,0 +1,42 @@
+<!-- Input para upload de PDF -->
+<!-- input-arquivos.component.html -->
+<div class="cont-arquivos">
+  <label class="arquivo-upload" 
+         (drop)="onDrop($event)" 
+         (dragover)="onDragOver($event)">
+    
+    <!-- input SEM id/for -->
+    <input 
+      type="file" 
+      accept="application/pdf"
+      (change)="onPdfSelected($event)"
+      style="opacity:0; position:absolute; width:100%; height:100%; top:0; left:0;" 
+    />
+
+    <div class="arquivo-preview">
+      <span class="upload-placeholder">
+        <img src="assets/icones/upload-icon.svg" class="upload-icon">
+        Clique ou arraste o arquivo para fazer upload
+      </span>
+    </div>
+  </label>
+</div>
+
+  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="form-group" *ngIf="arquivos.length > 0">
+    <label>Arquivos para envio:</label>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let arquivo of arquivos; let i = index">
+        <ng-container *ngIf="arquivoHasDocumentoUrl(arquivo); else fileName">
+          <span>{{ arquivo.name }}</span>
+        </ng-container>
+        <ng-template #fileName>
+          {{ arquivo.name }}
+        </ng-template>
+        <button type="button" class="btn btn-danger btn-sm float-right" (click)="removeArquivo(i)">Remover</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- colocar no botão quando tiver o Service: (click)="removePdf(i)" -->
