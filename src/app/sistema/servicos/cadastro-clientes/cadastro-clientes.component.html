@@ -36,8 +36,7 @@
                         (change)="onEstadoChange($event)">Estado</label>
                     <select formControlName="estado" name="estado" id="tipo">
                         <option [value]="''">Selecione</option>
-                        <option *ngFor="let estado of listaEstados" [value]="estado.sigla">{{ estado.nome }}</option>
-                    </select>
+                        <option *ngFor="let estado of listaEstados" [value]="estado.sigla">{{ estado.nome }}</option>                    </select>
 
                 </div>
                 <!--CIDADE-->
@@ -45,8 +44,7 @@
                     <label class="form-label required" for="cidade">Cidade</label>
                     <select name="cidade" formControlName="cidade" id="tipo">
                         <option value="">Selecione</option>
-                        <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">{{ cidade.nome }}</option>
-                    </select>
+                        <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">{{ cidade.nome }}</option>                    </select>
                 </div>
             </section>
 

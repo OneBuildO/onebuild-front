@@ -24,6 +24,7 @@
 .cadastro-titulo img {
     height: auto;
     width: 25px;
+    cursor: pointer;
 }
 
 /* Espaçamento padrão entre cada div (campo) */
