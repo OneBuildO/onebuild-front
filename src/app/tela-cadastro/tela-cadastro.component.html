@@ -11,13 +11,16 @@
         </div>
   
         <form class="forms-cadastro" [formGroup]="cadastroForm" (ngSubmit)="onFormSubmitHandler($event)">
-          <!-- NOME -->
-          <div class="form-group">
-            <label class="form-label required" for="nome">Razão Social</label>
-            <input id="nome" type="text" class="form-control" formControlName="nome" placeholder="Informe o seu nome completo">
+
+        <!-- NOME -->
+        <div class="form-group">
+          <label class="form-label required" for="nome">Razão Social</label>
+          <div class="relative">
+            <i class="bi bi-person-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="nome" type="text" class="form-control pl-10" formControlName="nome" placeholder="Informe sua razão social">
           </div>
-  
-          <!-- PERMISSAO DO USUARIO -->
+
+            <!-- PERMISSAO DO USUARIO -->
           <div class="form-group">
             <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
             <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
@@ -27,112 +30,123 @@
               </option>
             </select>
           </div>
-  
-          <!-- TIPO FORNECEDOR -->
-          <div class="form-group" *ngIf="cadastroForm.get('permissaoDoUsuario')?.value === Permissao.FORNECEDOR">
-            <label class="form-label required" for="tipoFornecedor">Tipo de Fornecedor</label>
-            <select id="tipoFornecedor" class="form-select" formControlName="tipoFornecedor">
+
+        <!-- TIPO FORNECEDOR -->
+        <div class="form-group" *ngIf="cadastroForm.get('permissaoDoUsuario')?.value === Permissao.FORNECEDOR">
+          <label class="form-label required" for="tipoFornecedor">Tipo de Fornecedor</label>
+          <div class="relative">
+            <i class="bi bi-truck absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <select id="tipoFornecedor" class="form-select pl-10" formControlName="tipoFornecedor">
               <option value="">Selecione</option>
               <option *ngFor="let tipo of TipoFornecedorKeys" [value]="tipo">
                 {{ TipoFornecedorDescricoes[tipo] }}
               </option>
             </select>
           </div>
-  
-          <!-- EMAIL -->
-          <div class="form-group">
-            <label class="form-label required" for="email">Email</label>
-            <input id="email" type="email" class="form-control" formControlName="email" placeholder="Informe o email">
-          </div>
-  
-          <!-- SENHA -->
-          <div class="form-group">
-            <label class="form-label required" for="senha">Senha</label>
-            <div class="password-container relative">
-              <input
-                id="senha"
-                [type]="passwordFieldType"
-                class="form-control w-full ps-10"
-                formControlName="senha"
-                placeholder="Informe uma senha"
-              />
-              <button type="button" (click)="togglePasswordVisibility()">
-                <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
-              </button>
-            </div>
-          </div>
+        </div>
 
-          <!-- CONFIRMAR SENHA -->
-          <div class="form-group">
-            <label class="form-label required" for="confirmPassword">Confirmar Senha</label>
-            <div class="password-container relative">
-              <input
-                id="confirmPassword"
-                [type]="confirmPasswordFieldType"
-                class="form-control w-full ps-10"
-                formControlName="confirmPassword"
-                placeholder="Confirme a senha"
-              />
-              <button type="button" (click)="toggleConfirmPasswordVisibility()">
-                <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
-              </button>
-            </div>
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label class="form-label required" for="email">E-mail</label>
+          <div class="relative">
+            <i class="bi bi-envelope-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="email" type="email" class="form-control pl-10" formControlName="email" placeholder="Informe o e-mail">
           </div>
+        </div>
 
-  
-          <!-- CONTATO -->
-          <div class="form-group">
-            <label class="form-label required" for="contato">Contato</label>
-            <input id="contato" type="text" class="form-control" formControlName="contato" placeholder="Informe o contato">
+        <!-- SENHA -->
+        <div class="form-group">
+          <label class="form-label required" for="senha">Senha</label>
+          <div class="password-container relative">
+            <i class="bi bi-lock-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="senha" [type]="passwordFieldType" class="form-control w-full pl-10" formControlName="senha" placeholder="Informe uma senha" />
+            <button type="button" (click)="togglePasswordVisibility()" class="eye-icon-button">
+              <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
           </div>
-  
-          <!-- CNPJ -->
-          <div class="form-group">
-            <label class="form-label required" for="cnpj">CNPJ</label>
-            <input id="cnpj" type="text" class="form-control" formControlName="cnpj" placeholder="Informe o CNPJ">
+        </div>
+
+        <!-- CONFIRMAR SENHA -->
+        <div class="form-group">
+          <label class="form-label required" for="confirmPassword">Confirmar Senha</label>
+          <div class="password-container relative">
+            <i class="bi bi-lock-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="confirmPassword" [type]="confirmPasswordFieldType" class="form-control w-full pl-10" formControlName="confirmPassword" placeholder="Confirme a senha" />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()" class="eye-icon-button">
+              <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
           </div>
-  
-          <!-- ESTADO -->
-          <div class="form-group">
-            <label class="form-label required" for="estado">Estado</label>
-            <input id="estado" type="text" class="form-control" formControlName="estado" placeholder="Informe o estado">
+        </div>
+
+        <!-- CONTATO -->
+        <div class="form-group">
+          <label class="form-label required" for="contato">Telefone</label>
+          <div class="relative">
+            <i class="bi bi-telephone-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="contato" type="text" class="form-control pl-10" formControlName="contato" placeholder="Informe o seu telefone">
           </div>
-  
-          <!-- CIDADE -->
-          <div class="form-group">
-            <label class="form-label required" for="cidade">Cidade</label>
-            <input id="cidade" type="text" class="form-control" formControlName="cidade" placeholder="Informe a cidade">
+        </div>
+
+        <!-- CNPJ -->
+        <div class="form-group">
+          <label class="form-label required" for="cnpj">CNPJ</label>
+          <div class="relative">
+            <i class="bi bi-building-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="cnpj" type="text" class="form-control pl-10" formControlName="cnpj" placeholder="Informe o CNPJ">
           </div>
-  
-          <!-- ENDEREÇO -->
-          <div class="form-group">
-            <label class="form-label required" for="endereco">Endereço</label>
-            <input id="endereco" type="text" class="form-control" formControlName="endereco" placeholder="Informe o endereço">
+        </div>
+
+        <!-- ESTADO -->
+        <div class="form-group">
+          <label class="form-label required" for="estado">Estado</label>
+          <div class="relative">
+            <i class="bi bi-geo-alt-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="estado" type="text" class="form-control pl-10" formControlName="estado" placeholder="Informe o estado">
           </div>
-  
-          <!-- TERMOS -->
-          <div class="form-group terms-container">
-            <input type="checkbox" id="terms" formControlName="terms">
-            <p for="terms">
-              Eu li e concordo com os
-              <a href="https://www.onebuild.com.br/termos-de-uso" target="_blank">termos de uso</a>
-              e
-              <a href="https://www.onebuild.com.br/politica-de-privacidade" target="_blank">política de privacidade</a>
-            </p>
+        </div>
+
+        <!-- CIDADE -->
+        <div class="form-group">
+          <label class="form-label required" for="cidade">Cidade</label>
+          <div class="relative">
+            <i class="bi bi-geo-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="cidade" type="text" class="form-control pl-10" formControlName="cidade" placeholder="Informe a cidade">
           </div>
-  
-          <!-- BOTÃO -->
-          <button type="submit" class="button-primary">
-            <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
-              {{ isLoading ? 'Aguarde...' : 'Cadastrar-se' }}
-            </span>
-          </button>
-  
-          <!-- MENSAGEM -->
-          <div *ngIf="serverMessage" [ngClass]="{'text-success': tipoAlerta === 'success', 'text-danger': tipoAlerta === 'danger'}">
-            {{ serverMessage }}
+        </div>
+
+        <!-- ENDEREÇO -->
+        <div class="form-group">
+          <label class="form-label required" for="endereco">Endereço</label>
+          <div class="relative">
+            <i class="bi bi-house-door-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input id="endereco" type="text" class="form-control pl-10" formControlName="endereco" placeholder="Informe o endereço">
           </div>
-        </form>
+        </div>
+
+        <!-- TERMOS -->
+        <div class="form-group terms-container">
+          <input type="checkbox" id="terms" formControlName="terms">
+          <p for="terms">
+            Eu li e concordo com os
+            <a href="https://www.onebuild.com.br/termos-de-uso" target="_blank">termos de uso</a>
+            e
+            <a href="https://www.onebuild.com.br/politica-de-privacidade" target="_blank">política de privacidade</a>
+          </p>
+        </div>
+
+        <!-- BOTÃO -->
+        <button type="submit" class="button-primary">
+          <span class="text-branco" [ngClass]="{'translate-x-0.5': isLoading}">
+            {{ isLoading ? 'Aguarde...' : 'Cadastrar-se' }}
+          </span>
+        </button>
+
+        <!-- MENSAGEM -->
+        <div *ngIf="serverMessage" [ngClass]="{'text-success': tipoAlerta === 'success', 'text-danger': tipoAlerta === 'danger'}">
+          {{ serverMessage }}
+        </div>
+      </form>
+
       </div>
       <div class="footer-login">
         <div class="text-footer">

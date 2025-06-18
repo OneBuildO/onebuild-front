@@ -139,5 +139,28 @@
     font-weight: 500;
   }
 
-  
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input {
+  padding-right: 40px; /* Cria o espaço para o ícone dentro do input */
+}
+
+.eye-icon-button {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Ajuste da posição do ícone */
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #040404; /* Cor do ícone */
+}
+
+.eye-icon-button i {
+  font-size: 18px; /* Tamanho do ícone */
+}
+
   
