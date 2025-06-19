@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { CidadesService, listaEstados } from '../services/services/cidade.service';
 import { Permissao } from '../login/permissao';
 import { TipoFornecedorDescricoes } from '../login/tipoFornecedorDescricoes';
 import { TipoFornecedor } from '../login/tipoFornecedor';
@@ -20,7 +20,8 @@ export class TelaCadastroComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private serviceLocalidade: CidadesService
   ) {}
 
   public listaCidades: any[] = [];
@@ -37,6 +38,8 @@ export class TelaCadastroComponent implements OnInit {
   enderecoCompleto: string = '';
   enderecoSelecionado: boolean = false;
   enderecosSugestoes: any[] = [];
+
+
 
   cadastroForm = this.formBuilder.group(
     {
@@ -175,6 +178,24 @@ export class TelaCadastroComponent implements OnInit {
     };
   }
 
+  onEstadoChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const estadoSigla = selectElement.value;
+    this.obterCidadePorEstado(estadoSigla);
+  }
+
+  obterCidadePorEstado(estadoSigla: string) {
+    if (estadoSigla) {
+      this.serviceLocalidade.getCidadesByEstado(estadoSigla).subscribe(data => {
+        this.listaCidades = data;
+      });
+    } else {
+      this.listaCidades = [];
+    }
+  }
+
+
+
   public readonly PermissaoKeys = Object.values(Permissao);
   public permissoesDisponiveis: Permissao[] = null!;
   public readonly PermissaoDescricoes = PermissaoDescricoes;
@@ -183,5 +204,5 @@ export class TelaCadastroComponent implements OnInit {
 
   public readonly TipoFornecedorKeys = Object.keys(TipoFornecedor) as TipoFornecedor[];
   public readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes;
-
+  protected readonly listaEstados = listaEstados;
 }
