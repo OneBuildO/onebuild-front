@@ -14,7 +14,8 @@ export class Usuario {
   cnpj!: string;
   senha!: string;
   dataCadastro!: Date;
-  permissaoDoUsuario!: Permissao;
+  fotoUsuario?: { documentoUrl: string; id: number; name: string } | null;
+  tipoUsuario!: Permissao;
   tipoFornecedor?: TipoFornecedor;
   projeto!: Projeto;
 }

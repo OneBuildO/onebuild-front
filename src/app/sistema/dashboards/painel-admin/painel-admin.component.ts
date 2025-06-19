@@ -57,6 +57,7 @@ interface FornecedorPorTipo {
 export class PainelAdminComponent implements OnInit {
 
     usuario: Usuario | null = null;
+    nomeUsuario: string = '';
     weatherDescription: string = 'Carregando...';
     temperature: number = 0;
     iconUrl: string = '';
@@ -90,6 +91,17 @@ export class PainelAdminComponent implements OnInit {
       this.motivationalMessage =
       this.motivationalMessagesService.getRandomMessage();
       this.carregarDistribuicaoMock();
+       this.usuarioService.obterPerfilUsuario().subscribe(
+    (usuario) => {
+      this.usuario = usuario;
+      this.nomeUsuario = usuario.nome;
+      this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
+      console.log('Usuário logado:', this.nomeUsuario);
+    },
+    (err) => {
+      console.error('Erro ao carregar o perfil do usuário:', err);
+    }
+  );
     }
 
     carregarDistribuicaoMock(): void {

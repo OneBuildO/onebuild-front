@@ -39,73 +39,87 @@ export class LoginComponent implements OnInit {
   });
 
   protected onFormSubmitHandler = (event: SubmitEvent) => {
-      event.preventDefault();
-      this.submited = true;
-      // this.serverMessages = [];
+  event.preventDefault();
+  this.submited = true;
 
-      if (this.loginForm.invalid) return;
+  if (this.loginForm.invalid) return;
 
-      this.isLoading = true;
-      const email = this.loginForm.controls.username.value ?? ''
-      const senha = this.loginForm.controls.password.value ?? ''
+  this.isLoading = true;
+  const email = this.loginForm.controls.username.value ?? '';
+  const senha = this.loginForm.controls.password.value ?? '';
 
-      const dadosLogin: LoginDTO = {
-        email: email,
-        senha: senha
+  const dadosLogin: LoginDTO = {
+    email: email,
+    senha: senha
+  };
+
+  this.authService.login(dadosLogin).subscribe({
+    next: (data: any) => {
+      this.tipoAlerta = AlertType.Success;
+      const access_token = data.access_token;
+      localStorage.setItem('access_token', access_token);
+
+      const userId = this.authService.getUserIdFromToken() ?? '';
+      localStorage.setItem('user_id', userId);
+
+      const role = data.authorities.length > 0 ? data.authorities[0] : null;
+
+      const usuario: Usuario = {
+        idUsuario: userId,
+        nome: data.nome ?? '',
+        senha: '',
+        cidade: data.cidade ?? '',
+        email: data.email ?? '',
+        cnpj: data.cnpj ?? '',
+        contato: data.contato ?? '',
+        dataCadastro: data.dataCadastro ?? '',
+        endereco: data.endereco ?? '',
+        estado: data.estado ?? '',
+        tipoUsuario: role,
+        projeto: data.projeto ?? '',
+        tipoFornecedor: data.tipoFornecedor ?? '',
+        fotoUsuario: data.fotoUsuario ?? null
       };
 
-      this.authService.login(dadosLogin).subscribe({
-        next: (data: any) => {
-          this.tipoAlerta = AlertType.Success;
-          const access_token = data.access_token;
-          localStorage.setItem('access_token', access_token);
-          
-          const userId = this.authService.getUserIdFromToken() ?? '';
-          localStorage.setItem('user_id', userId);
-          
-          const usuario: Usuario = {
-            idUsuario: userId,
-            nome: data.nome ?? '',
-            senha: '',
-            cidade: data.cidade ?? '',
-            email: data.email ?? '',
-            cnpj: data.cnjpj ?? '',
-            contato: data.contato ?? '',
-            dataCadastro: data.dataCadasto ?? '',
-            endereco: data.endereco ?? '', 
-            estado: data.estado ?? '',
-            permissaoDoUsuario: data.authorities.length > 0 ? data.authorities[0] : null,
-            projeto: data.projeto ?? '',
-            tipoFornecedor: data.tipoFornecedor ?? ''
-          }
-          
-          console.log(usuario);
-          localStorage.setItem('usuario', JSON.stringify(usuario));
+      console.log(usuario);
+      localStorage.setItem('usuario', JSON.stringify(usuario));
 
-          if(
-            usuario.permissaoDoUsuario === 'ROLE_ADMIN' ||
-            usuario.permissaoDoUsuario === 'ROLE_ARQUITETO' ||
-            usuario.permissaoDoUsuario === 'ROLE_CONSTRUTORA' ||
-            usuario.permissaoDoUsuario === 'ROLE_DESIGN_INTERIORES' ||
-            usuario.permissaoDoUsuario === 'ROLE_FORNECEDOR'
-          ) {
-            this.router.navigate(['/usuario/painel-principal-admin']);
+      switch (usuario.tipoUsuario) {
+        case 'ROLE_ADMIN':
+          this.router.navigate(['/usuario/dashboard-admin']);
+          break;
+        case 'ROLE_CLIENTE':
+          this.router.navigate(['/usuario/dashboard-cliente']);
+          break;
+        case 'ROLE_FORNECEDOR':
+          this.router.navigate(['/usuario/dashboard-fornecedor']);
+          break;
+        case 'ROLE_ARQUITETO':
+          this.router.navigate(['/usuario/dashboard-arquiteto']);
+          break;
+        case 'ROLE_CONSTRUTORA':
+          this.router.navigate(['/usuario/dashboard-contrutora']);
+          break;
+        case 'ROLE_DESIGN_INTERIORES':
+          this.router.navigate(['/usuario/dashboard-design-de-interior']);
+          break;
+        default:
+          this.router.navigate(['/forbidden']);
+          break;
+      }
 
-          } else {
-            this.router.navigate(['/forbidden']);
-          }
+      this.isLoading = false;
+    },
+    error: (err) => {
+      this.tipoAlerta = AlertType.Danger;
+      this.serverMessages.push(err.error);
+      this.isLoading = false;
+    }
+  });
 
-          this.isLoading = false;
-        },
-        error: (err) => {
-          this.tipoAlerta = AlertType.Danger;
-          this.serverMessages.push(err.error);
-          this.isLoading = false;
-        }
-      });
+  this.scrollTop();
+};
 
-      this.scrollTop();
-  };
 
   protected onAlertCloseHandler = (e: any) => {
     this.serverMessages = [];

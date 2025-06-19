@@ -1,27 +1,45 @@
 <!-- HEADER -->
 <header #header class="header" id="header" [class.left-pd]="isSidebarOpen">
-    <div class="header-container">
-      <button (click)="toggleSidebar()" class="header-toggle" id="header-toggle">
-        <img src="assets/icones/menu-icon.svg" alt="image" />
-      </button>
+  <div class="header-container">
+    <button (click)="toggleSidebar()" class="header-toggle" id="header-toggle">
+      <img src="assets/icones/menu-icon.svg" alt="image" />
+    </button>
 
-      <div class="header-user">
-        <div class="usuario">
-          <img src="assets/imgs/user-photo.png" alt="User Photo" class="user-photo" />
-          <div class="user-info">
-            <h3 class="user-name">{{ nomeUsuario }}</h3>
-            <span class="user-cargo">{{ permissaoUsuario }}</span>
-          </div>
+    <div class="header-user">
+      <div class="usuario">
+        <!-- Foto do usuário, ou fallback com inicial e cor -->
+        <div class="user-photo" *ngIf="fotoUsuario; else fallbackPhoto">
+          <img [src]="fotoUsuario" alt="Foto do Usuário" />
         </div>
-        <button #dropdownToggle (click)="toggleDropdown()" class="dropdown-toggle" id="dropdown-toggle">
-          <img src="assets/icones/seta-down-icon.svg" alt="Dropdown Icon" class="dropdown-icon" />
-        </button>
-        <div class="dropdown-menu" id="dropdown-menu" [ngClass]="{ 'show': isDropdownOpen }">
-          <button routerLink="/usuario/meu-perfil" class="dropdown-item">Meu perfil</button>
-          <button class="dropdown-item" (click)="logout()">Sair</button>
+
+        <ng-template #fallbackPhoto>
+          <div
+            class="user-initial"
+            [style.background-color]="getRandomColor(nomeUsuario)"
+          >
+            {{ getInitial(nomeUsuario) }}
+          </div>
+        </ng-template>
+
+        <div class="user-info">
+          <h3 class="user-name">{{ nomeUsuario }}</h3>
+          <span class="user-cargo">{{ permissaoUsuario }}</span>
         </div>
       </div>
+
+      <!-- Botão de dropdown -->
+      <button #dropdownToggle (click)="toggleDropdown()" class="dropdown-toggle" id="dropdown-toggle">
+        <img src="assets/icones/seta-down-icon.svg" alt="Dropdown Icon" class="dropdown-icon" />
+      </button>
+
+      <!-- Menu de opções -->
+      <div class="dropdown-menu" id="dropdown-menu" [ngClass]="{ 'show': isDropdownOpen }">
+        <button routerLink="/usuario/meu-perfil" class="dropdown-item">Meu perfil</button>
+        <button class="dropdown-item" (click)="logout()">Sair</button>
+      </div>
     </div>
+  </div>
+
   </header>
 
   <mat-drawer-container>
@@ -42,9 +60,9 @@
           <h3 class="sidebar-title">HOME</h3>
 
           <div class="sidebar-list">
-            <a routerLink="/usuario/dashboard-arquiteto" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/dashboard-arquiteto')}">
-              <img src="assets/icones/icone-dash.svg" alt="home icon" />
-              <span>Dashboard</span>
+           <a *ngIf="dashboardLink" [routerLink]="dashboardLink" class="sidebar-link" [ngClass]="{'active-link': isActive(dashboardLink)}">
+            <img src="assets/icones/icone-dash.svg" alt="home icon" />
+            <span>Dashboard</span>
             </a>
 
             <a routerLink="/usuario/lista-de-notificacoes-cliente" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/lista-de-notificacoes-cliente')}">

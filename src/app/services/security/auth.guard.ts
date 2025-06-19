@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
     const usuario = this.authService.getUsuarioAutenticado();
 
     if (usuario) {
-      const role = usuario.permissaoDoUsuario;
+      const role = usuario.tipoUsuario;
       if (permissoesValidas.has(role)) {
         return true;
       } else {

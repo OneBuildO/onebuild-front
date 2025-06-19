@@ -493,4 +493,17 @@
       margin-left: 0;
     }
   }
+
+.user-initial {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   

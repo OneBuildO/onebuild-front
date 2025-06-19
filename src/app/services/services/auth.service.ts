@@ -1,5 +1,5 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -37,6 +37,27 @@ export class AuthService {
     }
     return null; 
   }
+
+    obterPerfilUsuario(): Observable<Usuario> {
+    const token = this.obterToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    return this.http.get<Usuario>(`${this.apiUrl}/token`, { headers }).pipe(
+      map((response) => {
+        console.log('Resposta do endpoint /token:', response);
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao obter perfil do usuário:', error);
+        return throwError(
+          'Erro ao obter perfil do usuário. Por favor, tente novamente.'
+        );
+      })
+    );
+  }
+
 
   getUserIdFromToken(): string | null {
     const token = this.obterToken();
@@ -82,10 +103,10 @@ export class AuthService {
         return '/usuario/dashboard-admin';
       case 'ROLE_ARQUITETO':
         return '/usuario/dashboard-arquiteto';
-      // case 'ROLE_CONSTRUTORA':
-      //   return '/usuario/painel-construtora';
-      // case 'ROLE_DESIGN_INTERIORES':
-      //   return '/usuario/painel-design';
+       case 'ROLE_CONSTRUTORA':
+         return '/usuario/painel-construtora';
+       case 'ROLE_DESIGN_INTERIORES':
+         return '/usuario/painel-design';
       case 'ROLE_FORNECEDOR':
         return '/usuario/dashboard-fornecedor';
       case 'ROLE_CLIENTE':
