@@ -92,10 +92,29 @@ export class PainelAdminComponent implements OnInit {
   
     ngOnInit(): void {
       this.noticiaService.getNoticias().subscribe({
-      next: (data) => {this.noticias = data; console.log(this.noticias);},
+      next: (data) => {
+        const imagensDisponiveis = [
+          'arquitetura01.jpg',
+          'arquitetura02.jpg',
+          'fornecedores01.jpg',
+          'construtora01.jpg',
+          'backgroundhome.jpg',
+          'backgroundhome_clean00.png',
+          'backgroundhome_clean.png',
+          'backgroundhome.png',
+          'predios01.png',
+          'predios02.png',
+          'predios03.png',
+          'predios04.png'
+        ];
+
+        this.noticias = data.map((noticia, index) => ({
+          ...noticia,
+          imagem: 'assets/imagens/' + imagensDisponiveis[index % imagensDisponiveis.length]
+        }));
+      },
       error: () => this.noticias = []
       });
-
       this.getWeatherForCurrentLocation();
       this.motivationalMessage =
       this.motivationalMessagesService.getRandomMessage();
@@ -230,6 +249,6 @@ export class PainelAdminComponent implements OnInit {
     }
   };
 
-  
+
 
 }
