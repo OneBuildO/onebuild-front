@@ -32,13 +32,13 @@
             <section class="campos-tipo-valor">
                 <!--ESTADO-->
                 <div id="campo-tipo">
-                    <label class="form-label required" formControlName="estado" for="estado"
-                        (change)="onEstadoChange($event)">Estado</label>
-                    <select formControlName="estado" name="estado" id="tipo">
+                    <label class="form-label required" for="estado">Estado</label>
+                    <select formControlName="estado" name="estado" id="tipo" (change)="onEstadoChange($event)">
                         <option [value]="''">Selecione</option>
-                        <option *ngFor="let estado of listaEstados" [value]="estado.sigla">{{ estado.nome }}</option>                    </select>
-
+                        <option *ngFor="let estado of listaEstados" [value]="estado.sigla">{{ estado.nome }}</option>
+                    </select>
                 </div>
+
                 <!--CIDADE-->
                 <div id="campo-valor">
                     <label class="form-label required" for="cidade">Cidade</label>

@@ -45,8 +45,8 @@ export class CadastroClientesComponent implements OnInit {
   popularClienteForm(cliente?: ClienteResumoDTO) {
     if(cliente) {
       // Garantir que os valores não são null
-      const estado = cliente.estado || '';
-      const cidade = cliente.cidade || '';
+      const estado = cliente.estado ?? '';
+      const cidade = cliente.cidade ?? '';
   
       this.clienteForm.setValue({
         id: cliente.id,
@@ -74,7 +74,6 @@ export class CadastroClientesComponent implements OnInit {
       this.listaCidades = []; // Limpar a lista de cidades
     }
   }
-
 
 
 
