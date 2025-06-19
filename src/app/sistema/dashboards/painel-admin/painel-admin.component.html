@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="banner">
     <div class="welcome">
-      <h1> 👋 Bem-vindo, {{ nomeUsuario }}</h1>
+      <h1>  Bem-vindo, {{ nomeUsuario }}</h1>
       <div class="motivational-message">
         <p>"{{ motivationalMessage.quote }}"</p>
         <span class="author">{{ motivationalMessage.author }}</span>
@@ -21,6 +21,21 @@
       </div>
     </div>
   </div>
+
+  <div class="noticias-feed">
+  <h3> Notícias sobre Arquitetura e Construção Civil</h3>
+  <div class="noticias-cards">
+    <div class="noticia-card" *ngFor="let noticia of noticias.slice(0, 4)">
+      <img *ngIf="noticia.imagem" [src]="noticia.imagem" alt="Imagem da notícia" />
+      <div class="noticia-info">
+        <h4>{{ noticia.titulo }}</h4>
+        <p class="data">{{ noticia.data | date: 'dd/MM/yyyy' }}</p>
+        <a [href]="noticia.link" target="_blank" class="botao-link">Notícia Completa</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <div class="containers-dashboard">
     <div class="cards-container">

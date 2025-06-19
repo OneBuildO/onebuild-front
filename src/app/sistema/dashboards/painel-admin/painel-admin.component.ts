@@ -35,6 +35,8 @@ import { ClimaService } from 'src/app/services/services/clima.service';
 import { MotivationalMessagesService } from 'src/app/services/services/MotivationalMessagesService';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
+import { Noticia } from './noticia';
+import { NoticiasService } from 'src/app/services/services/noticias.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -56,6 +58,7 @@ interface FornecedorPorTipo {
 })
 export class PainelAdminComponent implements OnInit {
 
+    noticias: Noticia[] = [];
     usuario: Usuario | null = null;
     nomeUsuario: string = '';
     weatherDescription: string = 'Carregando...';
@@ -80,6 +83,7 @@ export class PainelAdminComponent implements OnInit {
   
     constructor(
       private apiService: ClimaService,
+      private noticiaService: NoticiasService,
       private motivationalMessagesService: MotivationalMessagesService,
       private cdr: ChangeDetectorRef,
       private usuarioService: AuthService,
@@ -87,6 +91,11 @@ export class PainelAdminComponent implements OnInit {
   
   
     ngOnInit(): void {
+      this.noticiaService.getNoticias().subscribe({
+      next: (data) => {this.noticias = data; console.log(this.noticias);},
+      error: () => this.noticias = []
+      });
+
       this.getWeatherForCurrentLocation();
       this.motivationalMessage =
       this.motivationalMessagesService.getRandomMessage();
