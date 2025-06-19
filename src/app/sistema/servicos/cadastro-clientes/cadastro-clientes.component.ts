@@ -3,7 +3,8 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { CidadesService, listaEstados } from 'src/app/services/services/cidade.service';
 import { AlertType } from 'src/app/shared/components/alert/alert.type';
 import { ERROR_MESSAGES } from 'src/app/shared/components/validation-error/error-messages';
-import { ClienteResumoDTO } from './cliente-resumo-dto';
+import { ClienteCadastroDTO } from './cliente-cadastro-dto';
+import { ClienteService } from 'src/app/services/services/cliente.service';
 
 
 @Component({
@@ -22,13 +23,14 @@ export class CadastroClientesComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private serviceLocalidade: CidadesService,
+    private clienteService: ClienteService
   ) {}
 
   clienteForm = this.formBuilder.group({
-    id: new FormControl(0,),
     nome: new FormControl('', {validators: [Validators.required]}),
     email: new FormControl('', {validators: [Validators.required]}),
     senha: new FormControl('', {validators: [Validators.required]}),
+    confirmarSenha: new FormControl('', {validators: [Validators.required]}),
     projeto: new FormControl('', {validators: [Validators.required]}),
     contato: new FormControl('',),  // Contato é opcional, sem Validators.required
     estado: new FormControl('', {validators: [Validators.required]}),
@@ -42,39 +44,39 @@ export class CadastroClientesComponent implements OnInit {
   }
 
 
-  popularClienteForm(cliente?: ClienteResumoDTO) {
+  popularClienteForm(cliente?: ClienteCadastroDTO) {
     if(cliente) {
       // Garantir que os valores não são null
       const estado = cliente.estado ?? '';
       const cidade = cliente.cidade ?? '';
   
       this.clienteForm.setValue({
-        id: cliente.id,
         nome: cliente.nome,
         projeto: cliente.projeto,
         contato: cliente.contato,
         estado: estado,
         cidade: cidade,
         email: cliente.email,
-        senha: cliente.senha
+        senha: cliente.senha,
+        confirmarSenha: cliente.confirmarSenha
       });
   
       // Atualizar a lista de cidades com base no estado atual
       this.obterCidadePorEstado(estado);
     } else {
       this.clienteForm.reset({
-        id: 0,
         nome: '',
         projeto: '',
         contato: '',
         estado: '',
-        cidade: ''
+        cidade: '',
+        senha: '',
+        confirmarSenha: ''
       });
 
       this.listaCidades = []; // Limpar a lista de cidades
     }
   }
-
 
 
   onEstadoChange(event: Event) {
@@ -92,8 +94,24 @@ export class CadastroClientesComponent implements OnInit {
       this.listaCidades = [];
     }
   }
-  
 
+    onSubmit() {
+    this.submited = true;
+
+    if (this.clienteForm.invalid) {
+      return;
+    }
+
+    const dados = this.clienteForm.value;
+
+    if (dados.senha !== dados.confirmarSenha) {
+      return;
+    }
+
+    console.log('Dados enviados:', dados);
+    // Aqui você pode chamar um serviço para enviar os dados para o backend
+  }
+  
 
   // protected onFormSubmitHandler = () => {
   //   this.submited = true;
