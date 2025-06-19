@@ -7,7 +7,8 @@ import {AuthService} from "./auth.service";
 import { Usuario } from 'src/app/login/usuario';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { AdminEstatisticaDTO } from 'src/app/sistema/dashboards/painel-admin/AdminEstatisticaDTO';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
@@ -31,7 +32,18 @@ export class UsuarioService {
       .pipe(first())
   }
 
-  getUserLogged(): Observable<Usuario | null>{
-    return of(this.authService.getUsuarioAutenticado());
+  getUserLogged(): Observable<Usuario>{
+    return this.authService.obterPerfilUsuario();
   }
+
+  getDadosEstatisticasAdmin(): Observable<AdminEstatisticaDTO> {
+    return this.httpClient
+      // <-- usamos any aqui pra não precisar declarar ApiResponse<T> no front
+      .get<any>(`${this._apiBaseUrl}/api/usuarios/obter-dados-estatistica-usuario-admin`)
+      .pipe(
+        // descarta tudo menos o campo .response
+        map(data => data.response as AdminEstatisticaDTO),
+      );
+  }
+
 }
