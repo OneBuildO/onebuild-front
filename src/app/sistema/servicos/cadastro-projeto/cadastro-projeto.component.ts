@@ -7,6 +7,9 @@ import { VisibilidadeProjeto } from './visibilidade-projeto.enum';
 import { StatusDoProjetoDescricoes } from './statusDoProjetoDescricoes';
 import { CidadesService, listaEstados } from 'src/app/services/services/cidade.service';
 import { EMensagemAviso } from './mensagem-aviso.enum';
+import { ProjetoService } from 'src/app/services/services/projeto.service';
+import { ProjetoUsuarioDTO } from './projeto-usuario-dto';
+import { Projeto } from './projeto';
 
 @Component({
   selector: 'app-cadastro-projeto',
@@ -17,6 +20,7 @@ export class CadastroProjetoComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private serviceLocalidade: CidadesService,
+    private projetoService: ProjetoService
   ) { }
   
   arquivosProjeto: (
@@ -37,6 +41,10 @@ export class CadastroProjetoComponent implements OnInit {
   
   submited:boolean = false;
 
+  clientes: ProjetoUsuarioDTO[] = [];
+  //arquivos: File[] = [];
+  //plantaBaixaArquivos: File[] = [];
+
   protected readonly listaEstados = listaEstados;
   public listaCidades: any[] = [];
 
@@ -50,6 +58,7 @@ export class CadastroProjetoComponent implements OnInit {
   protected readonly ERROR_MESSAGES = ERROR_MESSAGES;
 
   ngOnInit(): void {
+    this.carregarClientes();
   }
 
   projetoForm = this.formBuilder.group({
@@ -95,6 +104,53 @@ export class CadastroProjetoComponent implements OnInit {
       this.listaCidades = [];
     }
   }
+
+  carregarClientes(): void {
+    this.projetoService.obterClientes().subscribe({
+      next: (res) => {
+        this.clientes = res.response;
+        console.log('Clientes carregados:', this.clientes);
+      },
+      error: (err) => {
+        console.error('Erro ao obter clientes:', err);
+      }
+    });
+  }
+
+  enviarProjeto(): void {
+    const formValue = this.projetoForm.value;
+    const arquivos: File[] = (formValue.arquivos ?? []).filter(
+      (a): a is File => a instanceof File)
+
+    const plantaBaixaArquivos: File[] = (formValue.plantaBaixa ?? []).filter(
+    (a): a is File => a instanceof File);
+
+
+    const projeto: Projeto = {
+      idUsuario: formValue.cliente ?? '',
+      observacoes: formValue.observacoes ?? '',
+      categoria: formValue.categoria ?? '',
+      estado: formValue.estado ?? '',
+      cidade: formValue.cidade ?? '', 
+      endereco: formValue.endereco ?? '',
+      dataLimiteOrcamento: formValue.dataLimiteOrcamento ?? '',
+      publico: formValue.visibilidade === VisibilidadeProjeto.PUBLICO, 
+      status: formValue.status ?? StatusDoProjeto.EM_ANDAMENTO
+      };
+
+      console.log(projeto);
+
+      this.projetoService.novoProjeto(projeto, arquivos, plantaBaixaArquivos).subscribe({
+        next: (res) => {
+          console.log('Projeto cadastrado com sucesso!', res);
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar projeto:', err);
+        }
+      });
+  }
+
+
 
   processFiles(files: FileList, tipo: string) {
     for (let i = 0; i < files.length; i++) {

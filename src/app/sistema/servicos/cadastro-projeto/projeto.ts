@@ -1,9 +1,13 @@
 import { StatusDoProjeto } from "./statusDoProjeto";
 
-
-export class Projeto {
-  id!: number;
-  categoria!: string;
-  statusDoProjeto!: StatusDoProjeto;
-  dataCadastro!: Date;
+export interface Projeto {
+  idUsuario: string;
+  observacoes: string;
+  categoria: string;
+  endereco: string;
+  dataLimiteOrcamento: string; 
+  publico: boolean;
+  status: StatusDoProjeto;
+  cidade: string;
+  estado: string;
 }
