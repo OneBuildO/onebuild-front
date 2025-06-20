@@ -102,7 +102,20 @@
           <label class="form-label required" for="estado">Estado</label>
           <div class="relative">
             <i class="bi bi-geo-alt-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input id="estado" type="text" class="form-control pl-10" formControlName="estado" placeholder="Informe o estado">
+            <select
+            class="form-control pl-10"
+            formControlName="estado"
+            id="estado"
+            (change)="onEstadoChange($event)"
+          >
+            <option [value]="''">Selecione</option>
+            <option
+              *ngFor="let estado of listaEstados"
+              [value]="estado.sigla"
+            >
+              {{ estado.nome }}
+            </option>
+          </select>
           </div>
         </div>
 
@@ -111,7 +124,15 @@
           <label class="form-label required" for="cidade">Cidade</label>
           <div class="relative">
             <i class="bi bi-geo-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input id="cidade" type="text" class="form-control pl-10" formControlName="cidade" placeholder="Informe a cidade">
+            <select class="form-control pl-10" formControlName="cidade" id="cidade">
+            <option value="">Selecione</option>
+            <option
+              *ngFor="let cidade of listaCidades"
+              [value]="cidade.nome"
+            >
+              {{ cidade.nome }}
+            </option>
+          </select>
           </div>
         </div>
 
