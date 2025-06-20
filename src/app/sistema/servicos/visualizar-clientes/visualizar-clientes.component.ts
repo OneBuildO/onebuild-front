@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
+import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
+import { ClienteService } from 'src/app/services/services/cliente.service';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -19,21 +21,24 @@ export class VisualizarClientesComponent implements OnInit {
   itensPorPagina = 6;
   paginaAtual = 1;
   
-  lojasPaginados: any[] = []; // ou tipo correto se souber
-totalItens: number = 0;
+  clientesPaginados: ClienteCadastroDTO[] = []; 
+  erro: string | null = null;
+
+  totalItens: number = 0;
 
   selectedLoja: any = null;
 
  
   constructor(
     private router: Router,
+    private clienteService: ClienteService,
    // private modalDeleteService: ModalDeleteService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.exibirMensagemDeSucesso();
-    this.fetchLojas();
+    this.fetchClientes();
     this.atualizarPaginacao();
   }
 
@@ -42,7 +47,7 @@ totalItens: number = 0;
   }
 
   onSearch(searchTerm: string) {
-  
+    
   }
 
   atualizarPaginacao(): void {
@@ -55,19 +60,34 @@ totalItens: number = 0;
     this.atualizarPaginacao();
   }
 
-  fetchLojas(): void {
- 
-  }
+  fetchClientes(): void {
+  this.clienteService.obterTodosClientes().subscribe({
+    next: (res) => {
+      if (res && res.statusCode === 200) {
+        this.clientesPaginados = res.response ?? [];
+        this.erro = null;
+      } else {
+        this.erro = 'Erro ao buscar clientes.';
+        this.clientesPaginados = [];
+      }
+    },
+    error: (err) => {
+      console.error('Erro na API:', err);
+      this.erro = 'Erro ao conectar com o servidor.';
+      this.clientesPaginados = [];
+    }
+  });
+}
 
-  visualizarLoja(id: string): void {
+  visualizarCliente(id: string): void {
     this.router.navigate(['/usuario/detalhes-loja', id]);
   }
 
-  editarLoja(id: string): void {
+  editarCliente(id: string): void {
     this.router.navigate(['/usuario/cadastro-de-lojas', id]);
   }
 
-  deleteLoja(id: string): void {
+  deleteCliente(id: string): void {
  
   }
 

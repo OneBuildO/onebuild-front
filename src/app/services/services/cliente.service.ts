@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { environment } from "../../../environments/environment";
+import { HttpClient } from "@angular/common/http";
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
 import { Observable } from 'rxjs';
+import { ApiResponse } from './api-response-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,10 @@ export class ClienteService {
   cadastrarCliente(cliente: ClienteCadastroDTO): Observable<any> {
     const url = `${this.apiUrl}/novo`;
     return this.httpCliente.post(url, cliente);
+  }
+
+  obterTodosClientes(): Observable<ApiResponse<ClienteCadastroDTO[]>> {
+    const url = `${this.apiUrl}/obter-todos-clientes`;
+    return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 }

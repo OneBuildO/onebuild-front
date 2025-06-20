@@ -19,6 +19,7 @@ export class CadastroClientesComponent implements OnInit {
   serverMessages: string[] = [];
   tipoAlerta = AlertType.Warning;
   isEmailValidado : boolean = true;
+  apiErrors: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,6 +28,7 @@ export class CadastroClientesComponent implements OnInit {
   ) {}
 
   clienteForm = this.formBuilder.group({
+    id: new FormControl<string | null>(null), 
     nome: new FormControl('', {validators: [Validators.required]}),
     email: new FormControl('', {validators: [Validators.required]}),
     senha: new FormControl('', {validators: [Validators.required]}),
@@ -43,7 +45,6 @@ export class CadastroClientesComponent implements OnInit {
 
   }
 
-
   popularClienteForm(cliente?: ClienteCadastroDTO) {
     if(cliente) {
       // Garantir que os valores não são null
@@ -51,6 +52,7 @@ export class CadastroClientesComponent implements OnInit {
       const cidade = cliente.cidade ?? '';
   
       this.clienteForm.setValue({
+        id: cliente.id ?? null,
         nome: cliente.nome,
         projeto: cliente.projeto,
         contato: cliente.contato,
@@ -58,7 +60,7 @@ export class CadastroClientesComponent implements OnInit {
         cidade: cidade,
         email: cliente.email,
         senha: cliente.senha,
-        confirmarSenha: cliente.confirmarSenha
+        confirmarSenha: cliente.confirmarSenha ?? '' 
       });
   
       // Atualizar a lista de cidades com base no estado atual
@@ -95,76 +97,47 @@ export class CadastroClientesComponent implements OnInit {
     }
   }
 
-    onSubmit() {
+  onSubmit() {
     this.submited = true;
 
     if (this.clienteForm.invalid) {
+      console.warn('Formulário inválido');
       return;
     }
 
     const dados = this.clienteForm.value;
 
     if (dados.senha !== dados.confirmarSenha) {
+      alert('As senhas não coincidem.');
       return;
     }
 
-    console.log('Dados enviados:', dados);
-    // Aqui você pode chamar um serviço para enviar os dados para o backend
+    const cadastroCliente: ClienteCadastroDTO = {
+      nome: dados.nome ?? '',
+      email: dados.email ?? '',
+      senha: dados.senha ?? '',
+      confirmarSenha: dados.confirmarSenha ?? '',
+      projeto: dados.projeto ?? '',
+      contato: dados.contato ?? '',
+      cidade: dados.cidade ?? '',
+      estado: dados.estado ?? '',
+    };
+
+
+    this.clienteService.cadastrarCliente(cadastroCliente).subscribe({
+      next: () => {
+        alert('Cadastro realizado com sucesso!');
+        console.log('Cliente cadastrado:', cadastroCliente);
+
+        this.clienteForm.reset();        
+        this.submited = false;           
+      },
+      error: (err) => {
+        console.error('Erro ao cadastrar cliente:', err);
+        alert('Erro ao cadastrar. Tente novamente.');
+      }
+    });
   }
-  
-
-  // protected onFormSubmitHandler = () => {
-  //   this.submited = true;
-  //   this.serverMessages = []
-
-  //   if (this.clienteForm.invalid) return
-
-  //   const cadastroCliente: ClienteResumoDTO = {
-  //     id: this.clienteForm.controls?.id?.value,
-  //     idUsuario: this.servicesetShared.getUserSharedData().id,
-  //     nome: this.clienteForm.controls?.nome?.value,
-  //     projeto: this.clienteForm.controls?.projeto?.value,
-  //     contato: this.clienteForm.controls?.contato?.value,
-  //     estado: this.clienteForm.controls?.estado?.value,
-  //     cidade: this.clienteForm.controls?.cidade?.value,
-  //     token: null,
-  //   }
-
-  //   if (cadastroCliente.id && cadastroCliente.id != 0) {
-  //     this.serviceCliente.editClient(cadastroCliente)
-  //       .subscribe({
-  //         next: (data: any) => {
-  //           this.isLoading = false;
-  //           this.handleModal()
-  //           localStorage.setItem('successMessage', `Cliente ${cadastroCliente.nome} editado com sucesso!`);
-  //           window.location.reload();
-  //         },
-  //         error: (err) => {
-  //           this.tipoAlerta = AlertType.Danger
-  //           this.serverMessages.push(err.error)
-  //           this.isLoading = false;
-  //         }
-  //       });
-  //   } else {
-  //     this.serviceCliente.saveNewClient(cadastroCliente)
-  //       .subscribe({
-  //         next: (data: any) => {
-  //           this.tipoAlerta = AlertType.Success
-  //           this.isLoading = false;
-  //           this.handleModal()
-  //           localStorage.setItem('successMessage', `Cliente ${cadastroCliente.nome} salvo com sucesso!`);
-  //           window.location.reload();
-  //         },
-  //         error: (err) => {
-  //           this.tipoAlerta = AlertType.Danger
-  //           this.serverMessages.push(err.error)
-  //           this.isLoading = false;
-  //         }
-  //       });
-  //   }
-  // };
-
-
 
   protected onAlertCloseHandler = (e: any) => {
     this.serverMessages = [];

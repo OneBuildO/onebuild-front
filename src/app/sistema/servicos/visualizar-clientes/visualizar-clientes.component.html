@@ -1,96 +1,86 @@
 <div class="main-container">
-    <div class="banner">
-        <h1>Clientes</h1>
-        <p>Um espaço onde você pode administrar seus clientes.</p>
+  <div class="banner">
+    <h1>Clientes</h1>
+    <p>Um espaço onde você pode administrar seus clientes.</p>
+  </div>
+
+  <div class="breadcrumb-container">
+    <div class="breadcrumb">
+      <a (click)="onVoltarClick()">Dashboard &gt; </a> 
+      <span class="breadcrumb-highlight"> Clientes</span>
     </div>
-  
-    <div class="breadcrumb-container">
-        <div class="breadcrumb">
-            <a (click)="onVoltarClick()" >Dashboard &gt; </a> <span class="breadcrumb-highlight"> Clientes</span>
+    <div class="actions">
+      <div class="search-container">
+        <!-- Campo de busca pode ficar aqui -->
+      </div>
+      <button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    <span>{{ successMessage }}</span>
+    <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
+    <div class="progress-bar-sucess" [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"></div>
+  </div>
+
+  <div class="progress-bar-container" *ngIf="isLoading">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="tabela-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Projeto</th>
+          <th>Contato</th>
+          <th>Cidade</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientesPaginados">
+          <td>
+            <div class="perfil">
+              <span>{{ cliente.nome || '-' }}</span>
+            </div>
+          </td>
+          <td>{{ cliente.projeto || '-' }}</td>
+          <td>{{ cliente.contato || '-' }}</td>
+          <td>{{ cliente.cidade || '-' }}</td>
+          <td>{{ cliente.estado || '-' }}</td>
+          <td>
+            <div class="acoes">
+              <button class="btn-acao visualizar">
+                <img src="assets/icones/See.png" alt="Visualizar" />
+              </button>
+              <button class="btn-acao edit" >
+                <img src="assets/icones/Edit.png" alt="Editar" />
+              </button>
+              <button class="btn-acao delete">
+                <img src="assets/icones/Delete.png" alt="Excluir" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="clientesPaginados.length === 0">
+    <ng-container *ngIf="mensagemBusca; else semClientes">
+      <div>
+        <div class="alert alert-warning text-center">
+          {{ mensagemBusca }}
         </div>
-        <div class="actions">
-            <div class="search-container">
-                
-            </div>
-            <button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
-        </div>
-    </div>
-
-    <div *ngIf="successMessage" class="alert alert-success">
-        <span>{{ successMessage }}</span>
-        <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
-        <div class="progress-bar-sucess" [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"></div>
-    </div>
-
-    <div class="progress-bar-container" *ngIf="isLoading">
-        <div class="progress-bar"></div>
-    </div>
-
-    <div class="tabela-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Projeto</th>
-                    <th>Contato</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let loja of lojasPaginados">
-                    <td>
-                        <div class="perfil">
-                            <span>{{ loja.nome || '-' }}</span>
-                        </div>
-                    </td>
-                    <td>{{ loja.endereco.rua }}, {{ loja.endereco.numero }} - {{ loja.endereco.bairro }}, {{ loja.endereco.cidade }} - {{ loja.endereco.estado }}, {{ loja.endereco.cep }}</td>
-                    <td>
-                        <div class="perfil">
-                            <div class="avatar" [ngStyle]="{'background-color': getRandomColor(loja.supervisor?.username || '')}">
-                                <img [src]="loja.supervisor?.foto?.documentoUrl" alt="Foto do supervisor" *ngIf="loja.supervisor?.foto?.documentoUrl; else defaultAvatar" />
-                                <ng-template #defaultAvatar>
-                                    <span>{{ getInitial(loja.supervisor?.username || '') }}</span>
-                                </ng-template>
-                            </div>
-                            <span>{{ loja.supervisor?.username || '-' }}</span>
-                        </div>
-                    </td>
-                    <td>{{ loja.quantidadeFuncionarios }}</td>
-                    <td>
-                        <div class="acoes">
-                            <button class="btn-acao visualizar" (click)="visualizarLoja(loja.id)">
-                                <img src="assets/icones/See.png" alt="Visualizar">
-                            </button>
-                            <button class="btn-acao edit" (click)="editarLoja(loja.id)">
-                                <img src="assets/icones/Edit.png" alt="Editar">
-                            </button>
-                            <button class="btn-acao delete" (click)="openModalDeletar(loja)">
-                                <img src="assets/icones/Delete.png" alt="Excluir">
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
- 
-    <div *ngIf="lojasPaginados.length === 0">
-        <ng-container *ngIf="mensagemBusca; else semLojas">
-            <div>
-            <div class="alert alert-warning text-center">
-                {{ mensagemBusca }}
-            </div>
-            </div>
-        </ng-container>
-        <ng-template #semLojas>
-            <div class="no-data-message">
-            <img src="assets/imgs/no-data.svg" alt="Sem dados">
-            <p>Não há clientes cadastrados.</p>
-            </div>
-        </ng-template>
-    </div>
-
-  
+      </div>
+    </ng-container>
+    <ng-template #semClientes>
+      <div class="no-data-message">
+        <img src="assets/imgs/no-data.svg" alt="Sem dados" />
+        <p>Não há clientes cadastrados.</p>
+      </div>
+    </ng-template>
+  </div>
 </div>
