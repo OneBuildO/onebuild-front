@@ -16,6 +16,11 @@ import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-a
 import { PainelConstrutorasComponent } from './dashboards/painel-construtoras/painel-construtoras.component';
 import { PainelDesignsDeInterioresComponent } from './dashboards/painel-designs-de-interiores/painel-designs-de-interiores.component';
 import { NotificacoesComponent } from './servicos/notificacoes/notificacoes.component';
+import { AgendaDeProcessosComponent } from './servicos/agenda-de-processos/agenda-de-processos.component';
+import { AtividadesComponent } from './servicos/atividades/atividades.component';
+import { AquivosDoProjetoClienteComponent } from './servicos/cliente/aquivos-do-projeto-cliente/aquivos-do-projeto-cliente.component';
+import { HistoricoDeStatusComponent } from './servicos/cliente/historico-de-status/historico-de-status.component';
+import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-projeto/apresentacao-projeto.component';
 
 const routes: Routes = [
   {
@@ -29,6 +34,15 @@ const routes: Routes = [
       {path:'dashboard-arquiteto', component: PainelArquitetoComponent},
       {path:'dashboard-contrutora', component: PainelConstrutorasComponent},
       {path:'dashboard-design-de-interior', component: PainelDesignsDeInterioresComponent},
+
+      // arquiteto
+      {path:'agenda-de-processos', component: AgendaDeProcessosComponent},
+      {path:'atividades-da-obra', component: AtividadesComponent},
+
+      // cliente
+      {path:'arquivos-da-obra', component: AquivosDoProjetoClienteComponent},
+      {path:'historico-de-movimentacao', component: HistoricoDeStatusComponent},
+      {path:'apresentacao-do-projeto', component: ApresentacaoProjetoComponent},
 
       {path:'meu-perfil', component: MeuPerfilComponent},
       {path:'notificacoes', component: NotificacoesComponent},

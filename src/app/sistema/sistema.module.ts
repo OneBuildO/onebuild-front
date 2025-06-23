@@ -19,6 +19,11 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { NotificacoesComponent } from './servicos/notificacoes/notificacoes.component';
 import { PainelConstrutorasComponent } from './dashboards/painel-construtoras/painel-construtoras.component';
 import { PainelDesignsDeInterioresComponent } from './dashboards/painel-designs-de-interiores/painel-designs-de-interiores.component';
+import { AgendaDeProcessosComponent } from './servicos/agenda-de-processos/agenda-de-processos.component';
+import { AtividadesComponent } from './servicos/atividades/atividades.component';
+import { AquivosDoProjetoClienteComponent } from './servicos/cliente/aquivos-do-projeto-cliente/aquivos-do-projeto-cliente.component';
+import { HistoricoDeStatusComponent } from './servicos/cliente/historico-de-status/historico-de-status.component';
+import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-projeto/apresentacao-projeto.component';
 
 
 @NgModule({
@@ -36,7 +41,12 @@ import { PainelDesignsDeInterioresComponent } from './dashboards/painel-designs-
     PainelArquitetoComponent,
     NotificacoesComponent,
     PainelConstrutorasComponent,
-    PainelDesignsDeInterioresComponent
+    PainelDesignsDeInterioresComponent,
+    AgendaDeProcessosComponent,
+    AtividadesComponent,
+    AquivosDoProjetoClienteComponent,
+    HistoricoDeStatusComponent,
+    ApresentacaoProjetoComponent
   ],
   imports: [
     CommonModule,

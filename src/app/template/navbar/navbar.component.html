@@ -77,25 +77,68 @@
             <h3 class="sidebar-title">Gerenciamento</h3>
   
             <div class="sidebar-list">
-              <a routerLink="/usuario/visualizar-clientes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-clientes')}">
+              
+              <ng-container *ngIf="cargoUsuario === 'ROLE_ADMIN' || cargoUsuario === 'ROLE_ARQUITETO'">
+              <a routerLink="/usuario/visualizar-clientes"
+                class="sidebar-link"
+                [ngClass]="{'active-link': isActive('/usuario/visualizar-clientes')}">
                 <img src="assets/icones/icone-cliente.svg" alt="home icon" />
                 <span>Clientes</span>
               </a>
-  
-              <a routerLink="/usuario/visualizar-projeto" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-projeto')}">
+
+              <a routerLink="/usuario/visualizar-projeto"
+                class="sidebar-link"
+                [ngClass]="{'active-link': isActive('/usuario/visualizar-projeto')}">
                 <img src="assets/icones/icone-caderno.svg" alt="home icon" />
                 <span>Projetos</span>
               </a>
 
-              <a routerLink="/usuario/visualizar-fornecedores" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/visualizar-fornecedores')}">
+              <a routerLink="/usuario/visualizar-fornecedores"
+                class="sidebar-link"
+                [ngClass]="{'active-link': isActive('/usuario/visualizar-fornecedores')}">
                 <img src="assets/icones/icone-loja.svg" alt="home icon" />
                 <span>Fornecedores</span>
               </a>
 
-              <a routerLink="/usuario/meu-perfil" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/meu-perfil')}">
-                <img src="assets/icones/icone-perfil.svg" alt="home icon" />
-                <span>Meu Perfil</span>
+              <a routerLink="/usuario/agenda-de-processos"
+                class="sidebar-link"
+                [ngClass]="{'active-link': isActive('/usuario/agenda-de-processos')}">
+                <img src="assets/icones/agenda.svg" alt="home icon" />
+                <span>Agenda</span>
               </a>
+
+              <a routerLink="/usuario/atividades-da-obra"
+                class="sidebar-link"
+                [ngClass]="{'active-link': isActive('/usuario/atividades-da-obra')}">
+                <img src="assets/icones/ati.svg" alt="home icon" />
+                <span>Atividades</span>
+              </a>
+            </ng-container>
+
+
+               <ng-container *ngIf="cargoUsuario === 'ROLE_CLIENTE' || cargoUsuario === 'ROLE_ADMIN'">
+                <a routerLink="/usuario/apresentacao-do-projeto"
+                  class="sidebar-link"
+                  [ngClass]="{'active-link': isActive('/usuario/apresentacao-do-projeto')}">
+                  <img src="assets/icones/apre.svg" alt="home icon" />
+                  <span>Apresentação</span>
+                </a>
+
+                <a routerLink="/usuario/arquivos-da-obra"
+                  class="sidebar-link"
+                  [ngClass]="{'active-link': isActive('/usuario/arquivos-da-obra')}">
+                  <img src="assets/icones/arquivos.svg" alt="home icon" />
+                  <span>Arquivos</span>
+                </a>
+
+                <a routerLink="/usuario/historico-de-movimentacao"
+                  class="sidebar-link"
+                  [ngClass]="{'active-link': isActive('/usuario/historico-de-movimentacao')}">
+                  <img src="assets/icones/historico.svg" alt="home icon" />
+                  <span>Histórico</span>
+                </a>
+              </ng-container>
+         
             </div>
           </div>
       </mat-nav-list>

@@ -1,1 +1,69 @@
-<p>painel-clientes works!</p>
+<div class="main-container">
+  <div class="banner">
+    <div class="welcome">
+      <h1>  Bem-vindo, {{ nomeUsuario }}</h1>
+      <div class="motivational-message">
+        <p>"{{ motivationalMessage.quote }}"</p>
+        <span class="author">{{ motivationalMessage.author }}</span>
+      </div>
+    </div>
+
+    <div class="climate">
+      <div class="title-clima">
+        <h3>Clima de {{ weatherData.name }} </h3>
+      </div>
+      <div class="temperatura">
+        <img [src]="iconUrl" alt="Ícone do clima">
+        <span>{{ temperature | number:'1.0-0' }} °C</span>
+      </div>
+      <div class="descricao">
+        <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SECTION DOS CARDS FUNCIONAIS -->
+<section class="cards-container">
+  <!-- Card 1 -->
+  <div class="card">
+    <h3>Veja o ambiente de apresentação do seu projeto</h3>
+    <button class="botao-link" routerLink="/usuario/apresentacao-do-projeto">Visualizar</button>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card">
+    <h3>Arquivos do seu projeto</h3>
+    <button class="botao-link" routerLink="/usuario/arquivos-da-obra">Visualizar</button>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card">
+    <h3>Histórico de movimentação da sua obra</h3>
+    <button class="botao-link" routerLink="/usuario/historico-de-movimentacao">Visualizar</button>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card">
+    <h3>Quantidade de projetos em andamento</h3>
+    <div class="info-card">
+      <span>{{ quantidadeProjetosEmAndamento }}</span>
+    </div>
+  </div>
+</section>
+
+
+    <div class="noticias-feed">
+  <h3> Notícias sobre Arquitetura e Construção Civil</h3>
+  <div class="noticias-cards">
+    <div class="noticia-card" *ngFor="let noticia of noticias.slice(0, 4)">
+      <img [src]="noticia.imagem" alt="Imagem da notícia" />
+      <div class="noticia-info">
+        <h4>{{ noticia.titulo }}</h4>
+        <p class="data">{{ noticia.data | date: 'dd/MM/yyyy' }}</p>
+        <a [href]="noticia.link" target="_blank" class="botao-link">Notícia Completa</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
