@@ -65,7 +65,7 @@
             <span>Dashboard</span>
             </a>
 
-            <a routerLink="/usuario/lista-de-notificacoes-cliente" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/lista-de-notificacoes-cliente')}">
+            <a routerLink="/usuario/notificacoes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/notificacoes')}">
               <img src="assets/icones/notificacao.svg" alt="home icon" />
               <span>Notificações</span>
             </a>
@@ -78,7 +78,7 @@
   
             <div class="sidebar-list">
               
-              <ng-container *ngIf="cargoUsuario === 'ROLE_ADMIN' || cargoUsuario === 'ROLE_ARQUITETO'">
+              <ng-container *ngIf="cargoUsuario === 'ROLE_ADMIN' || cargoUsuario === 'ROLE_ARQUITETO' || cargoUsuario === 'ROLE_CONSTRUTORA' || cargoUsuario === 'ROLE_DESIGN_INTERIORES'">
               <a routerLink="/usuario/visualizar-clientes"
                 class="sidebar-link"
                 [ngClass]="{'active-link': isActive('/usuario/visualizar-clientes')}">
@@ -116,7 +116,7 @@
             </ng-container>
 
 
-               <ng-container *ngIf="cargoUsuario === 'ROLE_CLIENTE' || cargoUsuario === 'ROLE_ADMIN'">
+               <ng-container *ngIf="cargoUsuario === 'ROLE_CLIENTE'">
                 <a routerLink="/usuario/apresentacao-do-projeto"
                   class="sidebar-link"
                   [ngClass]="{'active-link': isActive('/usuario/apresentacao-do-projeto')}">

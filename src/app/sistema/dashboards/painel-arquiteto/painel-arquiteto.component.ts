@@ -50,6 +50,7 @@ export type ChartOptions = {
 export class PainelArquitetoComponent implements OnInit {
 
   usuario: Usuario | null = null;
+  nomeUsuario: string = '';
   weatherDescription: string = 'Carregando...';
   temperature: number = 0;
   iconUrl: string = '';
@@ -73,6 +74,7 @@ export class PainelArquitetoComponent implements OnInit {
     private motivationalMessagesService: MotivationalMessagesService,
     private cdr: ChangeDetectorRef,
     private usuarioService: AuthService,
+    private authService: AuthService,
   ) {}
 
 
@@ -80,6 +82,17 @@ export class PainelArquitetoComponent implements OnInit {
     this.getWeatherForCurrentLocation();
     this.motivationalMessage =
     this.motivationalMessagesService.getRandomMessage();
+    this.authService.obterPerfilUsuario().subscribe(
+      (usuario) => {
+        this.usuario = usuario;
+        this.nomeUsuario = usuario.nome;
+        this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
+        console.log('Usuário logado:', this.nomeUsuario);
+      },
+      (err) => {
+        console.error('Erro ao carregar o perfil do usuário:', err);
+      }
+    );
   }
 
 
