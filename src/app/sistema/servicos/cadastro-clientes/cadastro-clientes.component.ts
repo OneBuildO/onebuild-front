@@ -20,6 +20,8 @@ export class CadastroClientesComponent implements OnInit {
   tipoAlerta = AlertType.Warning;
   isEmailValidado : boolean = true;
   apiErrors: string[] = [];
+  passwordFieldType: string = 'password';
+  confirmPasswordFieldType: string = 'password';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,6 +82,13 @@ export class CadastroClientesComponent implements OnInit {
     }
   }
 
+  togglePasswordVisibility() {
+  this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.confirmPasswordFieldType = this.confirmPasswordFieldType === 'password' ? 'text' : 'password';
+  }
 
   onEstadoChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;

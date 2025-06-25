@@ -116,6 +116,25 @@
             </ng-container>
 
 
+            <ng-container *ngIf="cargoUsuario === 'ROLE_FORNECEDOR'">
+
+                <a routerLink="/usuario/painel-geral-de-promoções"
+                  class="sidebar-link"
+                  [ngClass]="{'active-link': isActive('/usuario/painel-geral-de-promoções')}">
+                  <img src="assets/icones/apre.svg" alt="home icon" />
+                  <span>Painel de Promoções</span>
+                </a>
+                
+                <a routerLink="/usuario/visualizar-promocoes"
+                  class="sidebar-link"
+                  [ngClass]="{'active-link': isActive('/usuario/visualizar-promocoes')}">
+                  <img src="assets/icones/historico.svg" alt="home icon" />
+                  <span> Suas Promoções</span>
+                </a>
+
+              </ng-container>
+
+
                <ng-container *ngIf="cargoUsuario === 'ROLE_CLIENTE'">
                 <a routerLink="/usuario/apresentacao-do-projeto"
                   class="sidebar-link"

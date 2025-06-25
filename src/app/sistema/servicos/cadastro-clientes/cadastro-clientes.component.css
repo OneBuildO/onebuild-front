@@ -168,3 +168,32 @@ label.required::after {
         text-align: center; /* texto centralizado dentro do botão */
     }
 }
+
+
+/* Wrapper que permite alinhar ícone dentro do input */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon-wrapper input {
+  padding-right: 40px; /* espaço pro ícone à direita */
+}
+
+/* Botão "olhinho" sobreposto no canto direito */
+.eye-button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.eye-button:focus {
+  outline: none;
+}

@@ -132,52 +132,50 @@
       </div>
 
       <!-- SENHA & CONFIRMAR SENHA -->
-      <section class="campos-tipo-valor">
-        <!-- SENHA -->
-        <div id="campo-senha">
-          <label class="form-label required" for="senha">Senha</label>
-          <input
-            type="password"
-            id="input-senha"
-            formControlName="senha"
-            autocomplete="new-password"
-          />
-          <small
-            *ngIf="submited && clienteForm.get('senha')?.hasError('required')"
-            class="text-red-500 text-left"
-          >
-            {{ ERROR_MESSAGES.required() }}
-          </small>
-        </div>
+<section class="campos-tipo-valor">
+  <!-- SENHA -->
+<div id="campo-senha" class="campo-senha-wrapper">
+  <label class="form-label required" for="senha">Senha</label>
+  <div class="input-icon-wrapper">
+    <input
+      [type]="passwordFieldType"
+      id="input-senha"
+      formControlName="senha"
+      autocomplete="new-password"
+    />
+    <button type="button" (click)="togglePasswordVisibility()" class="eye-button" tabindex="-1">
+      <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+    </button>
+  </div>
+  <small *ngIf="submited && clienteForm.get('senha')?.hasError('required')" class="text-red-500">
+    {{ ERROR_MESSAGES.required() }}
+  </small>
+</div>
 
-        <!-- CONFIRMAR SENHA -->
-        <div id="campo-confirmar-senha">
-          <label class="form-label required" for="confirmarSenha"
-            >Confirmar Senha</label
-          >
-          <input
-            type="password"
-            id="input-confirmar-senha"
-            formControlName="confirmarSenha"
-            autocomplete="new-password"
-          />
-          <small
-            *ngIf="
-              submited && clienteForm.get('confirmarSenha')?.hasError('required')
-            "
-            class="text-red-500 text-left"
-          >
-            {{ ERROR_MESSAGES.required() }}
-          </small>
-          <!-- Exemplo de validação customizada de senhas que não casam -->
-          <small
-            *ngIf="submited && clienteForm.hasError('passwordsMismatch')"
-            class="text-red-500 text-left"
-          >
-            As senhas não coincidem.
-          </small>
-        </div>
-      </section>
+<!-- CONFIRMAR SENHA -->
+<div id="campo-confirmar-senha" class="campo-senha-wrapper">
+  <label class="form-label required" for="confirmarSenha">Confirmar Senha</label>
+  <div class="input-icon-wrapper">
+    <input
+      [type]="confirmPasswordFieldType"
+      id="input-confirmar-senha"
+      formControlName="confirmarSenha"
+      autocomplete="new-password"
+    />
+    <button type="button" (click)="toggleConfirmPasswordVisibility()" class="eye-button" tabindex="-1">
+      <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+    </button>
+  </div>
+  <small *ngIf="submited && clienteForm.get('confirmarSenha')?.hasError('required')" class="text-red-500">
+    {{ ERROR_MESSAGES.required() }}
+  </small>
+  <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">
+    As senhas não coincidem.
+  </small>
+</div>
+
+</section>
+
 
       <button id="btn-cadastrar-cupom" type="submit">
         Cadastrar Cliente

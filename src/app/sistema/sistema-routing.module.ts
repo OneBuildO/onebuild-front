@@ -9,7 +9,6 @@ import { CadastroClientesComponent } from './servicos/cadastro-clientes/cadastro
 import { CadastroProjetoComponent } from './servicos/cadastro-projeto/cadastro-projeto.component';
 import { VisualizarClientesComponent } from './servicos/visualizar-clientes/visualizar-clientes.component';
 import { VisualizarFornecedoresComponent } from './servicos/visualizar-fornecedores/visualizar-fornecedores.component';
-import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportunidades/visualizar-oportunidades.component';
 import { VisualizarProjetoComponent } from './servicos/visualizar-projeto/visualizar-projeto.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { PainelArquitetoComponent } from './dashboards/painel-arquiteto/painel-arquiteto.component';
@@ -21,6 +20,9 @@ import { AtividadesComponent } from './servicos/atividades/atividades.component'
 import { AquivosDoProjetoClienteComponent } from './servicos/cliente/aquivos-do-projeto-cliente/aquivos-do-projeto-cliente.component';
 import { HistoricoDeStatusComponent } from './servicos/cliente/historico-de-status/historico-de-status.component';
 import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-projeto/apresentacao-projeto.component';
+import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/visualizar-promocoes.component';
+import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadastro-promocoes.component';
+import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 
 const routes: Routes = [
   {
@@ -51,9 +53,12 @@ const routes: Routes = [
       {path:'cadastro-cliente/:id', component: CadastroClientesComponent},
       {path:'cadastro-projeto', component: CadastroProjetoComponent},
       {path:'cadastro-projeto/:id', component: CadastroProjetoComponent},
+      {path:'cadastro-de-promocoes', component: CadastroPromocoesComponent},
+      {path:'cadastro-de-promocoes/:id', component: CadastroPromocoesComponent},
       {path:'visualizar-clientes', component: VisualizarClientesComponent},
       {path:'visualizar-fornecedores', component: VisualizarFornecedoresComponent},
-      {path:'visualizar-oportunidades', component: VisualizarOportunidadesComponent},
+      {path:'visualizar-promocoes', component: VisualizarPromocoesComponent},
+      {path:'painel-geral-de-promoções', component: VisualizarPromocoesGeralComponent},
       {path:'visualizar-projeto', component: VisualizarProjetoComponent},
     ]
   }

@@ -10,7 +10,6 @@ import { CadastroClientesComponent } from './servicos/cadastro-clientes/cadastro
 import { CadastroProjetoComponent } from './servicos/cadastro-projeto/cadastro-projeto.component';
 import { VisualizarProjetoComponent } from './servicos/visualizar-projeto/visualizar-projeto.component';
 import { VisualizarFornecedoresComponent } from './servicos/visualizar-fornecedores/visualizar-fornecedores.component';
-import { VisualizarOportunidadesComponent } from './servicos/visualizar-oportunidades/visualizar-oportunidades.component';
 import { SharedModule } from '../shared/shared.module';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +23,9 @@ import { AtividadesComponent } from './servicos/atividades/atividades.component'
 import { AquivosDoProjetoClienteComponent } from './servicos/cliente/aquivos-do-projeto-cliente/aquivos-do-projeto-cliente.component';
 import { HistoricoDeStatusComponent } from './servicos/cliente/historico-de-status/historico-de-status.component';
 import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-projeto/apresentacao-projeto.component';
+import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadastro-promocoes.component';
+import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/visualizar-promocoes.component';
+import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 
 
 @NgModule({
@@ -36,7 +38,6 @@ import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-pr
     CadastroProjetoComponent,
     VisualizarProjetoComponent,
     VisualizarFornecedoresComponent,
-    VisualizarOportunidadesComponent,
     MeuPerfilComponent,
     PainelArquitetoComponent,
     NotificacoesComponent,
@@ -46,7 +47,10 @@ import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-pr
     AtividadesComponent,
     AquivosDoProjetoClienteComponent,
     HistoricoDeStatusComponent,
-    ApresentacaoProjetoComponent
+    ApresentacaoProjetoComponent,
+    CadastroPromocoesComponent,
+    VisualizarPromocoesComponent,
+    VisualizarPromocoesGeralComponent
   ],
   imports: [
     CommonModule,
