@@ -19,9 +19,11 @@ export class CadastroClientesComponent implements OnInit {
   serverMessages: string[] = [];
   tipoAlerta = AlertType.Warning;
   isEmailValidado : boolean = true;
-  apiErrors: string[] = [];
   passwordFieldType: string = 'password';
   confirmPasswordFieldType: string = 'password';
+
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,8 +43,7 @@ export class CadastroClientesComponent implements OnInit {
     cidade: new FormControl('', {validators: [Validators.required]}),
   });
   
-  successMessage: string | null = null;
-  
+
   ngOnInit(): void {
 
   }
@@ -110,14 +111,14 @@ export class CadastroClientesComponent implements OnInit {
     this.submited = true;
 
     if (this.clienteForm.invalid) {
-      console.warn('Formulário inválido');
+      this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
       return;
     }
 
     const dados = this.clienteForm.value;
 
     if (dados.senha !== dados.confirmarSenha) {
-      alert('As senhas não coincidem.');
+      this.errorMessage = 'As senhas não coincidem.';
       return;
     }
 
@@ -135,8 +136,9 @@ export class CadastroClientesComponent implements OnInit {
 
     this.clienteService.cadastrarCliente(cadastroCliente).subscribe({
       next: () => {
-        alert('Cadastro realizado com sucesso!');
         console.log('Cliente cadastrado:', cadastroCliente);
+        this.successMessage = 'Cliente cadastrado com sucesso!';
+        this.errorMessage = null; //prevenir de aparecer a mensagem de erro dps que o usuario der o input correto.
 
         this.clienteForm.reset();        
         this.submited = false;           

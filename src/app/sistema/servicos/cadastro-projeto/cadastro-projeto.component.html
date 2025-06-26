@@ -9,34 +9,19 @@
   </div>
 
   <section class="inputs-cadastro">
-    <form
-      [formGroup]="projetoForm"
-      (ngSubmit)="enviarProjeto()"
-      class="container-form"
-      autocomplete="off"
-    >
+    <form [formGroup]="projetoForm" (ngSubmit)="onSubmit()" class="container-form" autocomplete="off">
       <!-- CLIENTE -->
       <div id="campo-titulo">
         <label class="form-label required" for="cliente">Cliente</label>
-        <select
-          formControlName="cliente"
-          name="cliente"
-          id="cliente"
-          class="form-select"
-        >
-          <option value="">Selecione o cliente</option>
+        <select formControlName="cliente" name="cliente" id="cliente" class="form-select">
+          <option value="''" disabled selected hidden>Selecione o cliente</option>
           <option *ngFor="let cliente of clientes" [value]="cliente.id">
             {{ cliente.nome }}
           </option>
         </select>
-        <small
-          *ngIf="
-            submited && projetoForm.get('cliente')?.invalid && projetoForm.get('cliente')?.touched
-          "
-          class="text-red-500 text-left"
-        >
-          Cliente é obrigatório.
-        </small>
+          <small *ngIf="submited && (projetoForm.get('cliente')?.hasError('required'))" class="text-red-500 text-left">
+            {{ "Cliente é obrigatório." }}
+          </small>
       </div>
 
       <!--INPUT - ARQUIVO-->
@@ -47,14 +32,6 @@
           formControlName="arquivos"
         >
         </app-input-arquivos>
-        <small
-          *ngIf="
-            submited && projetoForm.get('arquivos')?.invalid && projetoForm.get('arquivos')?.touched
-          "
-          class="text-red-500 text-left"
-        >
-          Arquivos são obrigatórios.
-        </small>
       </div>
 
       <section class="campos-tipo-valor">
@@ -62,14 +39,13 @@
         <div id="campo-tipo">
           <label class="form-label required" for="categoria">Categoria</label>
           <select formControlName="categoria" id="tipo">
-            <option [value]="''">Selecione uma categoria</option>
+            <option [value]="''" disabled selected hidden>Selecione uma categoria</option>
             <!-- Aqui você deve preencher as opções da categoria -->
           </select>
           <small
             *ngIf="
               submited &&
-              projetoForm.get('categoria')?.invalid &&
-              projetoForm.get('categoria')?.touched
+              projetoForm.get('categoria')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -93,8 +69,7 @@
           <small
             *ngIf="
               submited &&
-              projetoForm.get('dataLimiteOrcamento')?.invalid &&
-              projetoForm.get('dataLimiteOrcamento')?.touched
+              projetoForm.get('dataLimiteOrcamento')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -137,7 +112,7 @@
             id="tipo"
             (change)="onEstadoChange($event)"
           >
-            <option [value]="''">Selecione seu estado</option>
+            <option [value]="''" disabled selected hidden>Selecione seu estado</option>
             <option *ngFor="let estado of listaEstados" [value]="estado.nome">
               {{ estado.nome }}
             </option>
@@ -145,8 +120,7 @@
           <small
             *ngIf="
               submited &&
-              projetoForm.get('estado')?.invalid &&
-              projetoForm.get('estado')?.touched
+              projetoForm.get('estado')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -158,7 +132,7 @@
         <div id="campo-valor">
           <label class="form-label required" for="cidade">Cidade</label>
           <select name="cidade" formControlName="cidade" id="tipo">
-            <option [value]="''">Selecione sua cidade</option>
+            <option [value]="''" disabled selected hidden>Selecione sua cidade</option>
             <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">
               {{ cidade.nome }}
             </option>
@@ -166,8 +140,7 @@
           <small
             *ngIf="
               submited &&
-              projetoForm.get('cidade')?.invalid &&
-              projetoForm.get('cidade')?.touched
+              projetoForm.get('cidade')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -188,8 +161,7 @@
         <small
           *ngIf="
             submited &&
-            projetoForm.get('endereco')?.invalid &&
-            projetoForm.get('endereco')?.touched
+            projetoForm.get('endereco')?.invalid
           "
           class="text-red-500 text-left"
         >
@@ -213,8 +185,7 @@
           <small
             *ngIf="
               submited &&
-              projetoForm.get('status')?.invalid &&
-              projetoForm.get('status')?.touched
+              projetoForm.get('status')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -233,8 +204,7 @@
           <small
             *ngIf="
               submited &&
-              projetoForm.get('visibilidade')?.invalid &&
-              projetoForm.get('visibilidade')?.touched
+              projetoForm.get('visibilidade')?.invalid
             "
             class="text-red-500 text-left"
           >
@@ -243,7 +213,18 @@
         </div>
       </section>
 
-      <button id="btn-cadastrar-cupom" type="submit">Cadastrar Projeto</button>
+      <div class="alerts">
+        <div id="sucess-message" class="alerts-container alert-success" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+        <div class=" alerts-container alert-danger" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+      </div>
+
+    <button id="btn-cadastrar-cupom" type="submit">Cadastrar Projeto</button>
+
+    
     </form>
   </section>
 </section>

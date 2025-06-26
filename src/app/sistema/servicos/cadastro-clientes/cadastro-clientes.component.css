@@ -100,7 +100,20 @@ label.required::after {
     cursor: pointer;
 }
 
+.alerts > div{
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+    font-size: 18px;
+}
 
+.container-form small{
+    font-size: 13px;
+}
+
+#sucess-message{
+    color: black;
+}
 
 /* ==============================
    MEDIA QUERIES (RESPONSIVIDADE)

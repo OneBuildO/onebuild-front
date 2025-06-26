@@ -65,6 +65,7 @@ export class VisualizarClientesComponent implements OnInit {
     next: (res) => {
       if (res && res.statusCode === 200) {
         this.clientesPaginados = res.response ?? [];
+        console.log(res.response);
         this.erro = null;
       } else {
         this.erro = 'Erro ao buscar clientes.';
