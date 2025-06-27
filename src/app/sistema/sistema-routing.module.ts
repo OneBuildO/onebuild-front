@@ -24,6 +24,7 @@ import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/vi
 import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadastro-promocoes.component';
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
+import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
 
 const routes: Routes = [
   {
@@ -62,7 +63,9 @@ const routes: Routes = [
       {path:'painel-geral-de-promoções', component: VisualizarPromocoesGeralComponent},
       {path:'visualizar-projeto', component: VisualizarProjetoComponent},
 
-      {path:'detalhes-cliente/:id', component: DetalhesClienteComponent}
+      //visualizacao detalhada
+      {path:'detalhes-cliente/:id', component: DetalhesClienteComponent},
+      {path:'detalhes-projeto/:id', component: DetalhesProjetoComponent}
     ]
   }
 ];
