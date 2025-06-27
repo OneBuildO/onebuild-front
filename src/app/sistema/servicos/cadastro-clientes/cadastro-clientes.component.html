@@ -9,26 +9,13 @@
   </div>
 
   <section class="inputs-cadastro">
-    <form
-      [formGroup]="clienteForm"
-      class="container-form"
-      autocomplete="off"
-      (ngSubmit)="onSubmit()"
-    >
+    <form [formGroup]="clienteForm" class="container-form" autocomplete="off" (ngSubmit)="onSubmit()">
       <!-- NOME -->
       <div id="campo-titulo">
         <label class="form-label required" for="nome">Nome</label>
-        <input
-          type="text"
-          id="input-titulo"
-          formControlName="nome"
-          placeholder="Ex: Caio Fonseca"
-        />
-        <small
-          *ngIf="submited && clienteForm.get('nome')?.hasError('required')"
-          class="text-red-500 text-left"
-        >
-          {{ ERROR_MESSAGES.required() }}
+        <input type="text" id="input-titulo" formControlName="nome" placeholder="Ex: Caio Fonseca" />
+        <small *ngIf="submited && clienteForm.get('nome')?.hasError('required')" class="text-red-500 text-left">
+          {{ "O campo Nome é obrigatório."}}
         </small>
       </div>
 
@@ -37,17 +24,9 @@
         <!-- PROJETO -->
         <div id="campo-tipo">
           <label class="form-label required" for="projeto">Projeto</label>
-          <input
-            type="text"
-            id="input-projeto"
-            formControlName="projeto"
-            placeholder="Ex: Casa Alphaville"
-          />
-          <small
-            *ngIf="submited && clienteForm.get('projeto')?.hasError('required')"
-            class="text-red-500 text-left"
-          >
-            {{ ERROR_MESSAGES.required() }}
+          <input type="text" id="input-projeto" formControlName="projeto" placeholder="Ex: Casa Alphaville" />
+          <small *ngIf="submited && clienteForm.get('projeto')?.hasError('required')" class="text-red-500 text-left">
+            {{ "O campo Projeto é obrigatório."}}
           </small>
         </div>
 
@@ -56,12 +35,7 @@
           <label class="form-label" for="contato">
             Contato <span>(opcional)</span>
           </label>
-          <input
-            type="text"
-            id="input-contato"
-            formControlName="contato"
-            placeholder="Ex: (xx) xxxxx-xxxx"
-          />
+          <input type="text" id="input-contato" formControlName="contato" placeholder="Ex: (xx) xxxxx-xxxx" />
         </div>
       </section>
 
@@ -70,24 +44,14 @@
         <!-- ESTADO -->
         <div id="campo-tipo">
           <label class="form-label required" for="estado">Estado</label>
-          <select
-            formControlName="estado"
-            id="estado"
-            (change)="onEstadoChange($event)"
-          >
-            <option [value]="''">Selecione</option>
-            <option
-              *ngFor="let estado of listaEstados"
-              [value]="estado.sigla"
-            >
+          <select formControlName="estado" id="estado" (change)="onEstadoChange($event)">
+            <option [value]="''" disabled selected hidden>Selecione</option>
+            <option *ngFor="let estado of listaEstados" [value]="estado.sigla">
               {{ estado.nome }}
             </option>
           </select>
-          <small
-            *ngIf="submited && clienteForm.get('estado')?.hasError('required')"
-            class="text-red-500 text-left"
-          >
-            {{ ERROR_MESSAGES.required() }}
+          <small *ngIf="submited && clienteForm.get('estado')?.hasError('required')" class="text-red-500 text-left">
+            {{ "Selecione o estado." }}
           </small>
         </div>
 
@@ -95,19 +59,13 @@
         <div id="campo-valor">
           <label class="form-label required" for="cidade">Cidade</label>
           <select formControlName="cidade" id="cidade">
-            <option value="">Selecione</option>
-            <option
-              *ngFor="let cidade of listaCidades"
-              [value]="cidade.nome"
-            >
+            <option [value]="''" disabled selected hidden>Selecione</option>
+            <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">
               {{ cidade.nome }}
             </option>
           </select>
-          <small
-            *ngIf="submited && clienteForm.get('cidade')?.hasError('required')"
-            class="text-red-500 text-left"
-          >
-            {{ ERROR_MESSAGES.required() }}
+          <small *ngIf="submited && clienteForm.get('cidade')?.hasError('required')" class="text-red-500 text-left">
+            {{ "Selecione a cidade." }}
           </small>
         </div>
       </section>
@@ -115,71 +73,65 @@
       <!-- EMAIL -->
       <div id="campo-email" style="width: 100%;">
         <label class="form-label required" for="email">Email</label>
-        <input
-          type="email"
-          id="input-email"
-          formControlName="email"
-          placeholder="Ex: onebuild@gmail.com"
-          autocomplete="off"
-          style="width: 100%;"
-        />
-        <small
-          *ngIf="submited && clienteForm.get('email')?.hasError('required')"
-          class="text-red-500 text-left"
-        >
-          {{ ERROR_MESSAGES.required() }}
+        <input type="email" id="input-email" formControlName="email" placeholder="Ex: onebuild@gmail.com"
+          autocomplete="off" style="width: 100%;" />
+        <small *ngIf="submited && clienteForm.get('email')?.hasError('required')" class="text-red-500 text-left">
+          {{ "O campo Email é obrigatório." }}
         </small>
       </div>
 
       <!-- SENHA & CONFIRMAR SENHA -->
-<section class="campos-tipo-valor">
-  <!-- SENHA -->
-<div id="campo-senha" class="campo-senha-wrapper">
-  <label class="form-label required" for="senha">Senha</label>
-  <div class="input-icon-wrapper">
-    <input
-      [type]="passwordFieldType"
-      id="input-senha"
-      formControlName="senha"
-      autocomplete="new-password"
-    />
-    <button type="button" (click)="togglePasswordVisibility()" class="eye-button" tabindex="-1">
-      <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
-    </button>
-  </div>
-  <small *ngIf="submited && clienteForm.get('senha')?.hasError('required')" class="text-red-500">
-    {{ ERROR_MESSAGES.required() }}
-  </small>
-</div>
+      <section class="campos-tipo-valor">
+        <!-- SENHA -->
+        <div id="campo-senha" class="campo-senha-wrapper">
+          <label class="form-label required" for="senha">Senha</label>
+          <div class="input-icon-wrapper">
+            <input [type]="passwordFieldType" id="input-senha" formControlName="senha" autocomplete="new-password" />
+            <button type="button" (click)="togglePasswordVisibility()" class="eye-button" tabindex="-1">
+              <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
 
-<!-- CONFIRMAR SENHA -->
-<div id="campo-confirmar-senha" class="campo-senha-wrapper">
-  <label class="form-label required" for="confirmarSenha">Confirmar Senha</label>
-  <div class="input-icon-wrapper">
-    <input
-      [type]="confirmPasswordFieldType"
-      id="input-confirmar-senha"
-      formControlName="confirmarSenha"
-      autocomplete="new-password"
-    />
-    <button type="button" (click)="toggleConfirmPasswordVisibility()" class="eye-button" tabindex="-1">
-      <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
-    </button>
-  </div>
-  <small *ngIf="submited && clienteForm.get('confirmarSenha')?.hasError('required')" class="text-red-500">
-    {{ ERROR_MESSAGES.required() }}
-  </small>
-  <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">
-    As senhas não coincidem.
-  </small>
-</div>
+          </div>
+          <small *ngIf="submited && clienteForm.get('senha')?.hasError('required')" class="text-red-500">
+            {{ "O campo Senha é obrigatório."}}
+          </small>
 
-</section>
+        </div>
 
+        <!-- CONFIRMAR SENHA -->
+        <div id="campo-confirmar-senha" class="campo-senha-wrapper">
+          <label class="form-label required" for="confirmarSenha">Confirmar Senha</label>
+          <div class="input-icon-wrapper">
+            <input [type]="confirmPasswordFieldType" id="input-confirmar-senha" formControlName="confirmarSenha"
+              autocomplete="new-password" />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()" class="eye-button" tabindex="-1">
+              <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
+          </div>
+          <small *ngIf="submited && clienteForm.get('confirmarSenha')?.hasError('required')" class="text-red-500">
+            {{ "O campo Confirmar Senha é obrigatório." }}
+          </small>
+        </div>
+
+      </section>
+
+      <div class="alerts">
+        <div id="sucess-message" class="alerts-container alert-success" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+        <div class=" alerts-container alert-danger" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+      </div>
 
       <button id="btn-cadastrar-cupom" type="submit">
         Cadastrar Cliente
       </button>
+
+      <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">
+        As senhas não coincidem.
+      </small>
+
     </form>
   </section>
 </section>

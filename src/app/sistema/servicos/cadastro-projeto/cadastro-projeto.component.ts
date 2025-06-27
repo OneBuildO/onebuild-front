@@ -37,8 +37,9 @@ export class CadastroProjetoComponent implements OnInit {
   isLoading: boolean = false;
   isLoadingFile: boolean = false;
   tipoAlerta = AlertType.Warning;
+
   successMessage: string | null = null; 
-  
+  errorMessage: string | null = null;
   submited:boolean = false;
 
   clientes: ProjetoUsuarioDTO[] = [];
@@ -63,25 +64,21 @@ export class CadastroProjetoComponent implements OnInit {
 
   projetoForm = this.formBuilder.group({
     id: new FormControl(0, { validators: [Validators.required] }),
-    cliente: new FormControl(''),
+    cliente: new FormControl('',{ validators: [Validators.required] }),
     arquivos: new FormControl<
       Array<File | { documentoUrl: string; id: number; name: string }>
     >([]),
     plantaBaixa: new FormControl<
       Array<File | { documentoUrl: string; id: number; name: string }>
     >([]),
-    categoria: new FormControl('', { validators: [Validators.required] }),
-    dataLimiteOrcamento: new FormControl('', {
-      validators: [Validators.required],
-    }),
+    categoria: new FormControl('',{ validators: [Validators.required] }),
+    dataLimiteOrcamento: new FormControl('', {validators: [Validators.required]}),
     observacoes: new FormControl(''),
-    estado: new FormControl(''),
-    cidade: new FormControl(''),
+    estado: new FormControl('', { validators: [Validators.required] }),
+    cidade: new FormControl('', { validators: [Validators.required] }),
     endereco: new FormControl('', { validators: [Validators.required] }),
     visibilidade: new FormControl(VisibilidadeProjeto.PUBLICO),
-    status: new FormControl(StatusDoProjeto.NOVO_PROJETO, {
-      validators: [Validators.required],
-    }),
+    status: new FormControl(StatusDoProjeto.NOVO_PROJETO, {validators: [Validators.required]}),
   });
 
   onEstadoChange(event: Event) {
@@ -117,7 +114,9 @@ export class CadastroProjetoComponent implements OnInit {
     });
   }
 
-  enviarProjeto(): void {
+  onSubmit(): void {
+    this.submited = true;
+
     const formValue = this.projetoForm.value;
     const arquivos: File[] = (formValue.arquivos ?? []).filter(
       (a): a is File => a instanceof File)
@@ -125,6 +124,10 @@ export class CadastroProjetoComponent implements OnInit {
     const plantaBaixaArquivos: File[] = (formValue.plantaBaixa ?? []).filter(
     (a): a is File => a instanceof File);
 
+    if (this.projetoForm.invalid) {
+      this.errorMessage = "Por favor, preencha todos os campos obrigatórios.";
+      return;
+    }
 
     const projeto: Projeto = {
       idUsuario: formValue.cliente ?? '',
@@ -143,9 +146,11 @@ export class CadastroProjetoComponent implements OnInit {
       this.projetoService.novoProjeto(projeto, arquivos, plantaBaixaArquivos).subscribe({
         next: (res) => {
           console.log('Projeto cadastrado com sucesso!', res);
+          this.successMessage = "Projeto cadastrado com sucesso!";
         },
         error: (err) => {
           console.error('Erro ao cadastrar projeto:', err);
+          this.errorMessage = "Erro ao cadastrar projeto!";
         }
       });
   }
