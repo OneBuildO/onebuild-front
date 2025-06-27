@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
+import { ProjetoService } from 'src/app/services/services/projeto.service';
 
 @Component({
   selector: 'app-visualizar-projeto',
@@ -15,20 +17,21 @@ export class VisualizarProjetoComponent implements OnInit {
     successMessage: string = '';
     messageTimeout: any;
   
-   
+
     itensPorPagina = 6;
     paginaAtual = 1;
     
-    lojasPaginados: any[] = []; // ou tipo correto se souber
-  totalItens: number = 0;
+    projetosPaginados: any[] = []; // ou tipo correto se souber
+    totalItens: number = 0;
   
-    selectedLoja: any = null;
+    selectedProjeto: any = null;
   
    
     constructor(
       private router: Router,
-     // private modalDeleteService: ModalDeleteService,
-      private authService: AuthService
+     private modalDeleteService: ModalDeleteService,
+      private authService: AuthService,
+      private projetoService: ProjetoService
     ) {}
   
     ngOnInit(): void {
@@ -88,11 +91,73 @@ export class VisualizarProjetoComponent implements OnInit {
       return colors[index];
     }
   
-    openModalDeletar(loja: any): void {
-      this.selectedLoja = loja;
+    openModalDeletar(projeto: any): void {
+      this.selectedProjeto = projeto;
+      this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de Projeto',
+        description: `Tem certeza que deseja excluir o projeto <strong>${
+          projeto.nome
+        } - ${projeto.estado || '-'} - ${projeto.cidade}</strong>?`,
+        item: projeto,
+        deletarTextoBotao: 'Remover',
+        size: 'md',
+      },
+      () => {
+        // this.deleteProjeto(projeto.id);
+      }
+    );
   
-     
     }
+
+  visualizarProjeto(id: string): void {
+    this.router.navigate(['/usuario/detalhes-projeto', id]);
+  }
+
+  editarProjeto(id: string): void {
+    this.router.navigate(['/usuario/cadastro-projeto', id]);
+  }
+
+      //PRA QUANDO O ENDPOINT TIVER IMPLEMENTADO
+  //   fetchClientes(): void {
+  //   this.projetoService.obterTodosProjetos().subscribe({
+  //     next: (res) => {
+  //       if (res && res.statusCode === 200) {
+  //         this.projetosPaginados = res.response ?? [];
+  //         console.log(res.response);
+  //         this.erro = null;
+  //       } else {
+  //         this.erro = 'Erro ao buscar clientes.';
+  //         this.projetosPaginados = [];
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Erro na API:', err);
+  //       this.erro = 'Erro ao conectar com o servidor.';
+  //       this.projetosPaginados = [];
+  //     }
+  //   });
+  // }
+
+
+  // deleteProjeto(id:string){
+  //   const projetoRemovido = this.projetosPaginados.find((e) => e.id === id);
+
+  //   this.projetoService.deleteProjetoById(id).subscribe(
+  //     () => {
+  //       console.log('Cliente deletado com sucesso!');
+  //       this.fetchProjetos();
+  //       this.showMessage(
+  //         'success',
+  //         `Cliente "${projetoRemovido?.nome || ''} - 
+  //         ${ projetoRemovido?.estado || '-'}" - ${projetoRemovido?.cidade } deletado com sucesso!`
+  //       );
+  //     },
+  //     (error) => {
+  //       console.error('Erro ao deletar o cliente:', error);
+  //     }
+  //   );
+  // }
   
     exibirMensagemDeSucesso(): void {
       const state = window.history.state as { successMessage?: string };

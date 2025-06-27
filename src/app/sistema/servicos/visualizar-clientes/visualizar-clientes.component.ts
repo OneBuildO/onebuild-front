@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -17,9 +18,11 @@ export class VisualizarClientesComponent implements OnInit {
   successMessage: string = '';
   messageTimeout: any;
 
- 
+  selectedCliente:any = null;
   itensPorPagina = 6;
   paginaAtual = 1;
+
+  clientes: ClienteCadastroDTO[] = [];
   
   clientesPaginados: ClienteCadastroDTO[] = []; 
   erro: string | null = null;
@@ -32,7 +35,7 @@ export class VisualizarClientesComponent implements OnInit {
   constructor(
     private router: Router,
     private clienteService: ClienteService,
-   // private modalDeleteService: ModalDeleteService,
+    private modalDeleteService: ModalDeleteService,
     private authService: AuthService
   ) {}
 
@@ -81,15 +84,11 @@ export class VisualizarClientesComponent implements OnInit {
 }
 
   visualizarCliente(id: string): void {
-    this.router.navigate(['/usuario/detalhes-loja', id]);
+    this.router.navigate(['/usuario/detalhes-cliente', id]);
   }
 
   editarCliente(id: string): void {
-    this.router.navigate(['/usuario/cadastro-de-lojas', id]);
-  }
-
-  deleteCliente(id: string): void {
- 
+    this.router.navigate(['/usuario/cadastro-cliente', id]);
   }
 
   getInitial(name?: string): string {
@@ -109,12 +108,46 @@ export class VisualizarClientesComponent implements OnInit {
     return colors[index];
   }
 
-  openModalDeletar(loja: any): void {
-    this.selectedLoja = loja;
+  openModalDeletar(cliente: any): void {
+    this.selectedCliente = cliente;
 
-   
+    this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de Cliente',
+        description: `Tem certeza que deseja excluir o cliente <strong>${
+          cliente.nome
+        } - ${cliente.estado || '-'} - ${cliente.cidade}</strong>?`,
+        item: cliente,
+        deletarTextoBotao: 'Remover',
+        size: 'md',
+      },
+      () => {
+        this.deleteCliente(cliente.id);
+      }
+    );
+  
   }
 
+  deleteCliente(id:string){
+    const clienteRemovido = this.clientesPaginados.find((e) => e.id === id);
+
+    this.clienteService.deleteClientById(id).subscribe(
+      () => {
+        console.log('Cliente deletado com sucesso!');
+        this.fetchClientes();
+        this.showMessage(
+          'success',
+          `Cliente "${clienteRemovido?.nome || ''} - 
+          ${ clienteRemovido?.estado || '-'}" - ${clienteRemovido?.cidade } deletado com sucesso!`
+        );
+      },
+      (error) => {
+        console.error('Erro ao deletar o cliente:', error);
+      }
+    );
+  }
+
+  
   exibirMensagemDeSucesso(): void {
     const state = window.history.state as { successMessage?: string };
     if (state?.successMessage) {
@@ -127,7 +160,7 @@ export class VisualizarClientesComponent implements OnInit {
   showMessage(type: 'success' | 'error', msg: string) {
     this.clearMessage();
     if (type === 'success') this.successMessage = msg;
-    this.messageTimeout = setTimeout(() => this.clearMessage(), 3000);
+    this.messageTimeout = setTimeout(() => this.clearMessage(), 4000);
   }
 
   clearMessage() {

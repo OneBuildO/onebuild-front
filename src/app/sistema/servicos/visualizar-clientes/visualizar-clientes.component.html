@@ -53,13 +53,13 @@
           <td>
             <div class="acoes">
               <button class="btn-acao visualizar">
-                <img src="assets/icones/See.png" alt="Visualizar" />
+                <img src="assets/icones/See.png" (click)="visualizarCliente(cliente.id!)" alt="Visualizar" />
               </button>
               <button class="btn-acao edit" >
-                <img src="assets/icones/Edit.png" alt="Editar" />
+                <img src="assets/icones/Edit.png" (click)="editarCliente(cliente.id!)" alt="Editar" />
               </button>
               <button class="btn-acao delete">
-                <img src="assets/icones/Delete.png" alt="Excluir" />
+                <img src="assets/icones/Delete.png" (click)="openModalDeletar(cliente)" alt="Excluir" />
               </button>
             </div>
           </td>

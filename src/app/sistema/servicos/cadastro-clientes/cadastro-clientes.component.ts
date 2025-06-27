@@ -5,6 +5,7 @@ import { AlertType } from 'src/app/shared/components/alert/alert.type';
 import { ERROR_MESSAGES } from 'src/app/shared/components/validation-error/error-messages';
 import { ClienteCadastroDTO } from './cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -25,10 +26,14 @@ export class CadastroClientesComponent implements OnInit {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
+  isEditMode = false;
+  clienteId: string | null = null;
+
   constructor(
     private formBuilder: FormBuilder,
     private serviceLocalidade: CidadesService,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private route:ActivatedRoute
   ) {}
 
   clienteForm = this.formBuilder.group({
@@ -45,7 +50,7 @@ export class CadastroClientesComponent implements OnInit {
   
 
   ngOnInit(): void {
-
+    this.verificarModoEdicao();
   }
 
   popularClienteForm(cliente?: ClienteCadastroDTO) {
@@ -133,22 +138,68 @@ export class CadastroClientesComponent implements OnInit {
       estado: dados.estado ?? '',
     };
 
+    if (this.clienteId && this.isEditMode) {
+        this.clienteService.atualizarCliente(this.clienteId,cadastroCliente).subscribe(
+          (response) => {
+            this.successMessage = 'Cliente atualizado com sucesso!';
+            this.errorMessage = null;
+            this.clienteForm.reset();
+            this.submited = false;
+          },
+           (error) => {
+              console.error('Erro ao atualizar cliente:', error);
+              this.errorMessage = "Erro ao atualizar. Tente novamente.";
+           }
+        );
 
-    this.clienteService.cadastrarCliente(cadastroCliente).subscribe({
-      next: () => {
-        console.log('Cliente cadastrado:', cadastroCliente);
-        this.successMessage = 'Cliente cadastrado com sucesso!';
-        this.errorMessage = null; //prevenir de aparecer a mensagem de erro dps que o usuario der o input correto.
 
-        this.clienteForm.reset();        
-        this.submited = false;           
-      },
-      error: (err) => {
-        console.error('Erro ao cadastrar cliente:', err);
-        alert('Erro ao cadastrar. Tente novamente.');
-      }
-    });
+    }else{
+      this.clienteService.cadastrarCliente(cadastroCliente).subscribe({
+        next: () => {
+          console.log('Cliente cadastrado:', cadastroCliente);
+          this.successMessage = 'Cliente cadastrado com sucesso!';
+          this.errorMessage = null; //prevenir de aparecer a mensagem de erro dps que o usuario der o input correto.
+  
+          this.clienteForm.reset();        
+          this.submited = false;           
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar cliente:', err);
+          this.errorMessage = "Erro ao cadastrar. Tente novamente.";
+        }
+      });
+    }
+
+
   }
+
+
+  //precisa do endpoint getClientById funcionando, ainda nao funciona.
+  private verificarModoEdicao():void{
+    this.clienteId = this.route.snapshot.paramMap.get('id');
+    if (this.clienteId) {
+      this.isEditMode = true;
+      this.clienteService.getClientById(this.clienteId).subscribe(
+        (cliente:ClienteCadastroDTO) =>{
+          this.clienteForm.patchValue({
+            id:            cliente.id,
+            nome:          cliente.nome,
+            email:         cliente.email,
+            senha:         cliente.senha,
+            confirmarSenha: cliente.confirmarSenha,
+            projeto:       cliente.projeto,
+            contato:       cliente.contato,
+            estado:        cliente.estado,
+            cidade:        cliente.cidade
+          });
+          this.obterCidadePorEstado(cliente.estado); 
+        },
+        (error) => {console.error('Erro ao carregar cliente para edição', error)}
+      );
+    }
+  }
+
+
 
   protected onAlertCloseHandler = (e: any) => {
     this.serverMessages = [];

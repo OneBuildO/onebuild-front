@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from './api-response-dto';
 
 @Injectable({
@@ -22,4 +22,63 @@ export class ClienteService {
     const url = `${this.apiUrl}/obter-todos-clientes`;
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
+
+  //funcionando.
+  deleteClientById(id: string):Observable<void>{
+      const url = `${this.apiUrl}/deletar/${id}`;
+      return this.httpCliente.delete<void>(url).pipe(
+      catchError((error) => {
+        let errorMessage = 'Erro ao deletar cliente.';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  //necessita implementar no back-end!!
+  getClientById(id:string){
+      const url = `${this.apiUrl}/obter-cliente/${id}`;
+      return this.httpCliente.get<ClienteCadastroDTO>(url).pipe(
+      map((response) => response),
+      catchError((error) => {
+        let errorMessage = 'Erro ao buscar cliente.';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  //precisa de ajustes!
+  atualizarCliente(id:string, clienteAtualizado:ClienteCadastroDTO): Observable<{message: string}>{
+    const url = `${this.apiUrl}/atualizar/${id}`;
+    return this.httpCliente.put<{message: string}>(url, clienteAtualizado).pipe(
+      map((response) => response),
+      catchError((error) => {
+        let errorMessage = 'Erro ao atualizar a loja.';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+
+
 }

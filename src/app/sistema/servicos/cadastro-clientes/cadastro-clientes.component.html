@@ -4,7 +4,7 @@
       <a [routerLink]="['/usuario/visualizar-clientes']">
         <img src="/assets/icones/voltar-icon.svg" alt="Voltar">
       </a>
-      Cadastrar Cliente
+      {{isEditMode? 'Editar Cliente':'Cadastrar Cliente'}}
     </h1>
   </div>
 
@@ -125,7 +125,7 @@
       </div>
 
       <button id="btn-cadastrar-cupom" type="submit">
-        Cadastrar Cliente
+        {{ isEditMode ? 'Atualizar cliente' : 'Cadastrar cliente' }}
       </button>
 
       <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">

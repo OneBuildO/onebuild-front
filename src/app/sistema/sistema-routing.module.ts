@@ -23,6 +23,7 @@ import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-pr
 import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/visualizar-promocoes.component';
 import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadastro-promocoes.component';
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
+import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,8 @@ const routes: Routes = [
       {path:'visualizar-promocoes', component: VisualizarPromocoesComponent},
       {path:'painel-geral-de-promoções', component: VisualizarPromocoesGeralComponent},
       {path:'visualizar-projeto', component: VisualizarProjetoComponent},
+
+      {path:'detalhes-cliente/:id', component: DetalhesClienteComponent}
     ]
   }
 ];

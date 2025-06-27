@@ -39,34 +39,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let loja of lojasPaginados">
+                <tr *ngFor="let projeto of projetosPaginados">
                     <td>
                         <div class="perfil">
-                            <span>{{ loja.nome || '-' }}</span>
+                            <span>{{ projeto.nome || '-' }}</span>
                         </div>
                     </td>
-                    <td>{{ loja.endereco.rua }}, {{ loja.endereco.numero }} - {{ loja.endereco.bairro }}, {{ loja.endereco.cidade }} - {{ loja.endereco.estado }}, {{ loja.endereco.cep }}</td>
+                    <td>{{ projeto.endereco.rua }}, {{ projeto.endereco.numero }} - {{ projeto.endereco.bairro }}, {{ projeto.endereco.cidade }} - {{ projeto.endereco.estado }}, {{ projeto.endereco.cep }}</td>
                     <td>
                         <div class="perfil">
-                            <div class="avatar" [ngStyle]="{'background-color': getRandomColor(loja.supervisor?.username || '')}">
-                                <img [src]="loja.supervisor?.foto?.documentoUrl" alt="Foto do supervisor" *ngIf="loja.supervisor?.foto?.documentoUrl; else defaultAvatar" />
+                            <div class="avatar" [ngStyle]="{'background-color': getRandomColor(projeto.supervisor?.username || '')}">
+                                <img [src]="projeto.supervisor?.foto?.documentoUrl" alt="Foto do supervisor" *ngIf="projeto.supervisor?.foto?.documentoUrl; else defaultAvatar" />
                                 <ng-template #defaultAvatar>
-                                    <span>{{ getInitial(loja.supervisor?.username || '') }}</span>
+                                    <span>{{ getInitial(projeto.supervisor?.username || '') }}</span>
                                 </ng-template>
                             </div>
-                            <span>{{ loja.supervisor?.username || '-' }}</span>
+                            <span>{{ projeto.supervisor?.username || '-' }}</span>
                         </div>
                     </td>
-                    <td>{{ loja.quantidadeFuncionarios }}</td>
+                    <td>{{ projeto.quantidadeFuncionarios }}</td>
                     <td>
                         <div class="acoes">
-                            <button class="btn-acao visualizar" (click)="visualizarLoja(loja.id)">
+                            <button class="btn-acao visualizar" (click)="visualizarProjeto(projeto.id)">
                                 <img src="assets/icones/See.png" alt="Visualizar">
                             </button>
-                            <button class="btn-acao edit" (click)="editarLoja(loja.id)">
+                            <button class="btn-acao edit" (click)="editarProjeto(projeto.id)">
                                 <img src="assets/icones/Edit.png" alt="Editar">
                             </button>
-                            <button class="btn-acao delete" (click)="openModalDeletar(loja)">
+                            <button class="btn-acao delete" (click)="openModalDeletar(projeto)">
                                 <img src="assets/icones/Delete.png" alt="Excluir">
                             </button>
                         </div>
@@ -76,15 +76,15 @@
         </table>
     </div>
  
-    <div *ngIf="lojasPaginados.length === 0">
-        <ng-container *ngIf="mensagemBusca; else semLojas">
+    <div *ngIf="projetosPaginados.length === 0">
+        <ng-container *ngIf="mensagemBusca; else semprojetos">
             <div>
             <div class="alert alert-warning text-center">
                 {{ mensagemBusca }}
             </div>
             </div>
         </ng-container>
-        <ng-template #semLojas>
+        <ng-template #semprojetos>
             <div class="no-data-message">
             <img src="assets/imgs/no-data.svg" alt="Sem dados">
             <p>Não há projetos cadastrados.</p>
