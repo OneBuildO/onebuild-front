@@ -26,6 +26,8 @@ import { ApresentacaoProjetoComponent } from './servicos/cliente/apresentacao-pr
 import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadastro-promocoes.component';
 import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/visualizar-promocoes.component';
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
+import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
+import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
 
 
 @NgModule({
@@ -50,7 +52,9 @@ import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promoco
     ApresentacaoProjetoComponent,
     CadastroPromocoesComponent,
     VisualizarPromocoesComponent,
-    VisualizarPromocoesGeralComponent
+    VisualizarPromocoesGeralComponent,
+    DetalhesClienteComponent,
+    DetalhesProjetoComponent
   ],
   imports: [
     CommonModule,

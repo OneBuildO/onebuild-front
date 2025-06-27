@@ -1,0 +1,80 @@
+<div class="main-container">
+    <div class="breadcrumb-container">
+        <div class="back-title">
+            <img src="assets/icones/voltar-icon.svg" alt="Back" class="back-icon" [routerLink]="['/usuario/visualizar-clientes']">
+            <span>Detalhes do Cliente</span>
+        </div>
+    </div>
+    <div class="actions">
+        <h1>{{ "Nome do Cliente" }}</h1>
+        <p>{{"Quantidade de projetos: 20"}}</p>
+    </div>
+</div>
+<div class="subMain-container">
+    <div class="divisao">
+        <p>Informações</p>
+        <hr class="line">
+    </div>
+    <div class="data-itens">
+        <div class="data-grid">
+            <div class="item-data">
+                <label>Cidade</label>
+                <p>{{'Cidade do cliente'}}</p>
+            </div>
+            <div class="item-data">
+                <label>Estado</label>
+                <p>{{ 'Estado do cliente'}}</p>
+            </div>
+        </div>
+        <div class="data-grid">
+            <div class="item-data">
+                <label>Endereço</label>
+                <p>{{ "'Rua do cliente'" }}</p>
+            </div>
+            <div class="item-data">
+                <label>Contato</label>
+                <p>{{ "Número"}}</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="divisao">
+        <p>Projetos</p>
+        <hr class="line">
+    </div>
+
+    <div class="data-grid-trio">
+        <div class="item-data-title">
+            <p>{{ "Nome"}}</p>
+        </div>
+        <div class="item-data-title">
+            <p>{{ "Estado/Cidade"}}</p>
+        </div>
+        <div class="item-data-title">
+            <p>{{ "Status do Projeto" }}</p>
+        </div>
+
+        <!-- só para exemplos -->
+        <div class="item-data">
+            <p>{{ "Casa AlphaVille"}}</p>
+        </div>
+        <div class="item-data">
+            <p>{{ "CE/Morada Nova"}}</p>
+        </div>
+        <div class="item-data">
+            <p>{{ "Concluido"}}</p>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="subMain-container">
+
+    <div class="pagination">
+        <app-pagination
+        [paginaAtual]="paginaAtual"
+        [totalItens]="totalItens"
+        [itensPorPagina]="itensPorPagina"
+        (paginaMudou)="onPaginaMudou($event)">
+        </app-pagination>
+    </div>  
+</div> -->

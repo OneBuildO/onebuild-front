@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { ModalDeleteService } from './services/services/modal-delete.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app-onebuild';
+
+  @ViewChild('modalDeleteOutlet', { read: ViewContainerRef, static: true })
+  modalOutlet!: ViewContainerRef;
+
+  constructor(
+    private modalService:ModalDeleteService
+  ){}
+
+  ngAfterViewInit(): void {
+    this.modalService.registerOutlet(this.modalOutlet);
+  }
 }
