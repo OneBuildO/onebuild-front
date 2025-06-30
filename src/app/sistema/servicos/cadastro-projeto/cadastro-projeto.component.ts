@@ -71,7 +71,8 @@ export class CadastroProjetoComponent implements OnInit {
     plantaBaixa: new FormControl<
       Array<File | { documentoUrl: string; id: number; name: string }>
     >([]),
-    categoria: new FormControl('',{ validators: [Validators.required] }),
+    // categoria: new FormControl('',{ validators: [Validators.required] }), //COMENTEI SO PRA ENQUANTO NAO TIVER AS CATEGORIAS, EU FAZER O POST
+    categoria: new FormControl(''),
     dataLimiteOrcamento: new FormControl('', {validators: [Validators.required]}),
     observacoes: new FormControl(''),
     estado: new FormControl('', { validators: [Validators.required] }),
