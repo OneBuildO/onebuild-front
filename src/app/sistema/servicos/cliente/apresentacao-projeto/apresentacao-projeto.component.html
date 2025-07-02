@@ -40,7 +40,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of projetos">
-          <td>{{ p.nomeArquiteto || '-' }}</td>
+          <td>{{ p.Nome || '-' }}</td>
           <td>{{ p.projetoCliente || '-' }}</td>
           <td>{{ p.status || '-' }}</td>
           <td>{{ p.dataCadastro | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -67,7 +67,7 @@
     <p><strong>Cliente:</strong>
        {{ detalhe.nomeCliente || '-' }}
     </p>
-    <p><strong>Arquiteto:</strong>
+    <p><strong>Nome:</strong>
        {{ detalhe.nomeArquiteto || '-' }}
     </p>
     <p><strong>Projeto:</strong>
