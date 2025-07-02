@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
+import { ClienteProjetoDTO } from './cliente-projeto-dto';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -31,7 +32,7 @@ export class VisualizarClientesComponent implements OnInit {
 
   selectedLoja: any = null;
 
- 
+
   constructor(
     private router: Router,
     private clienteService: ClienteService,
@@ -53,8 +54,7 @@ export class VisualizarClientesComponent implements OnInit {
     
   }
 
-  atualizarPaginacao(): void {
-   
+  atualizarPaginacao(): void { 
   }
 
 
@@ -64,24 +64,25 @@ export class VisualizarClientesComponent implements OnInit {
   }
 
   fetchClientes(): void {
-  this.clienteService.obterTodosClientes().subscribe({
-    next: (res) => {
-      if (res && res.statusCode === 200) {
-        this.clientesPaginados = res.response ?? [];
-        console.log(res.response);
-        this.erro = null;
-      } else {
-        this.erro = 'Erro ao buscar clientes.';
+    this.clienteService.obterTodosClientes().subscribe({
+      next: (res) => {
+        if (res && res.statusCode === 200) {
+          this.clientesPaginados = res.response ?? [];
+          console.log(res.response);
+          this.erro = null;
+        } else {
+          this.erro = 'Erro ao buscar clientes.';
+          this.clientesPaginados = [];
+        }
+      },
+      error: (err) => {
+        console.error('Erro na API:', err);
+        this.erro = 'Erro ao conectar com o servidor.';
         this.clientesPaginados = [];
       }
-    },
-    error: (err) => {
-      console.error('Erro na API:', err);
-      this.erro = 'Erro ao conectar com o servidor.';
-      this.clientesPaginados = [];
-    }
-  });
-}
+    });
+  }
+
 
   visualizarCliente(id: string): void {
     this.router.navigate(['/usuario/detalhes-cliente', id]);
@@ -116,7 +117,7 @@ export class VisualizarClientesComponent implements OnInit {
         title: 'Remoção de Cliente',
         description: `Tem certeza que deseja excluir o cliente <strong>${
           cliente.nome
-        } - ${cliente.estado || '-'} - ${cliente.cidade}</strong>?`,
+        } - ${cliente.estado ?? '-'} - ${cliente.cidade}</strong>?`,
         item: cliente,
         deletarTextoBotao: 'Remover',
         size: 'md',
@@ -137,8 +138,8 @@ export class VisualizarClientesComponent implements OnInit {
         this.fetchClientes();
         this.showMessage(
           'success',
-          `Cliente "${clienteRemovido?.nome || ''} - 
-          ${ clienteRemovido?.estado || '-'}" - ${clienteRemovido?.cidade } deletado com sucesso!`
+          `Cliente "${clienteRemovido?.nome ?? ''} - 
+          ${ clienteRemovido?.estado ?? '-'}" - ${clienteRemovido?.cidade } deletado com sucesso!`
         );
       },
       (error) => {
@@ -173,6 +174,4 @@ export class VisualizarClientesComponent implements OnInit {
     this.router.navigate([rota]);
   }
   
-
-
 }

@@ -4,7 +4,7 @@ export interface ClienteCadastroDTO {
   email: string;
   senha: string;
   confirmarSenha?: string;
-  projeto: string;
+  projetoCliente: string;
   contato: string;
   cidade: string;
   estado: string;

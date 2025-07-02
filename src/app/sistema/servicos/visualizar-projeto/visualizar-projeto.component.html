@@ -1,96 +1,106 @@
 <div class="main-container">
-    <div class="banner">
-        <h1>Projetos</h1>
-        <p>Um espaço onde você pode administrar seus projetos.</p>
+  <div class="banner">
+    <h1>Projetos</h1>
+    <p>Um espaço onde você pode administrar seus projetos.</p>
+  </div>
+
+  <div class="breadcrumb-container">
+    <div class="breadcrumb">
+      <a (click)="onVoltarClick()">Dashboard &gt; </a>
+      <span class="breadcrumb-highlight"> Projetos</span>
     </div>
-  
-    <div class="breadcrumb-container">
-        <div class="breadcrumb">
-            <a (click)="onVoltarClick()" >Dashboard &gt; </a> <span class="breadcrumb-highlight"> Projetos</span>
+    <div class="actions">
+     <!-- <div class="search-container">
+        <input
+          type="text"
+          placeholder="Buscar por nome ou cidade"
+          [(ngModel)]="termoBusca"
+          (input)="onSearch(termoBusca)"
+        />
+      </div>-->
+      <button class="btn-cadastrar" (click)="cadastrarProjeto()">Cadastrar Projeto</button>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    <span>{{ successMessage }}</span>
+    <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
+    <div
+      class="progress-bar-sucess"
+      [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"
+    ></div>
+  </div>
+
+  <div class="progress-bar-container" *ngIf="isLoading">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="tabela-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Projeto</th>
+          <th>Status</th>
+          <th>Cidade</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let projeto of projetosPaginados">
+          <td>
+            <div class="perfil">
+              <span>{{ projeto.cliente || '-' }}</span>
+            </div>
+          </td>
+          <td>{{ projeto.projetoCliente || '-' }}</td>
+          <td>{{ traduzirStatusDoProjeto(projeto.status) || '-' }}</td>
+          <td>{{ projeto.cidade || '-' }}</td>
+          <td>{{ projeto.estado || '-' }}</td>
+          <td>
+            <div class="acoes">
+              <button class="btn-acao visualizar">
+                <img
+                  src="assets/icones/See.png"
+                  (click)="visualizarProjeto(projeto.idProjeto)"
+                  alt="Visualizar"
+                />
+              </button>
+              <button class="btn-acao edit">
+                <img
+                  src="assets/icones/Edit.png"
+                  (click)="editarProjeto(projeto.idProjeto)"
+                  alt="Editar"
+                />
+              </button>
+              <button class="btn-acao delete">
+                <img
+                  src="assets/icones/Delete.png"
+                  (click)="openModalDeletar(projeto)"
+                  alt="Excluir"
+                />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="projetosPaginados.length === 0">
+    <ng-container *ngIf="mensagemBusca; else semProjetos">
+      <div>
+        <div class="alert alert-warning text-center">
+          {{ mensagemBusca }}
         </div>
-        <div class="actions">
-            <div class="search-container">
-                
-            </div>
-            <button class="btn-cadastrar" (click)="cadastrarProjeto()">Cadastrar Projeto</button>
-        </div>
-    </div>
-
-    <div *ngIf="successMessage" class="alert alert-success">
-        <span>{{ successMessage }}</span>
-        <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
-        <div class="progress-bar-sucess" [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"></div>
-    </div>
-
-    <div class="progress-bar-container" *ngIf="isLoading">
-        <div class="progress-bar"></div>
-    </div>
-
-    <div class="tabela-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Nome do Projeto</th>
-                    <th>Status</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let projeto of projetosPaginados">
-                    <td>
-                        <div class="perfil">
-                            <span>{{ projeto.nome || '-' }}</span>
-                        </div>
-                    </td>
-                    <td>{{ projeto.endereco.rua }}, {{ projeto.endereco.numero }} - {{ projeto.endereco.bairro }}, {{ projeto.endereco.cidade }} - {{ projeto.endereco.estado }}, {{ projeto.endereco.cep }}</td>
-                    <td>
-                        <div class="perfil">
-                            <div class="avatar" [ngStyle]="{'background-color': getRandomColor(projeto.supervisor?.username || '')}">
-                                <img [src]="projeto.supervisor?.foto?.documentoUrl" alt="Foto do supervisor" *ngIf="projeto.supervisor?.foto?.documentoUrl; else defaultAvatar" />
-                                <ng-template #defaultAvatar>
-                                    <span>{{ getInitial(projeto.supervisor?.username || '') }}</span>
-                                </ng-template>
-                            </div>
-                            <span>{{ projeto.supervisor?.username || '-' }}</span>
-                        </div>
-                    </td>
-                    <td>{{ projeto.quantidadeFuncionarios }}</td>
-                    <td>
-                        <div class="acoes">
-                            <button class="btn-acao visualizar" (click)="visualizarProjeto(projeto.id)">
-                                <img src="assets/icones/See.png" alt="Visualizar">
-                            </button>
-                            <button class="btn-acao edit" (click)="editarProjeto(projeto.id)">
-                                <img src="assets/icones/Edit.png" alt="Editar">
-                            </button>
-                            <button class="btn-acao delete" (click)="openModalDeletar(projeto)">
-                                <img src="assets/icones/Delete.png" alt="Excluir">
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
- 
-    <div *ngIf="projetosPaginados.length === 0">
-        <ng-container *ngIf="mensagemBusca; else semprojetos">
-            <div>
-            <div class="alert alert-warning text-center">
-                {{ mensagemBusca }}
-            </div>
-            </div>
-        </ng-container>
-        <ng-template #semprojetos>
-            <div class="no-data-message">
-            <img src="assets/imgs/no-data.svg" alt="Sem dados">
-            <p>Não há projetos cadastrados.</p>
-            </div>
-        </ng-template>
-    </div>
-
-  
+      </div>
+    </ng-container>
+    <ng-template #semProjetos>
+      <div class="no-data-message">
+        <img src="assets/imgs/no-data.svg" alt="Sem dados" />
+        <p>Não há projetos cadastrados.</p>
+      </div>
+    </ng-template>
+  </div>
 </div>

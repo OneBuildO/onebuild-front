@@ -1,118 +1,115 @@
 <div class="main-container">
-    <div class="breadcrumb-container">
-        <div class="back-title">
-            <img src="assets/icones/voltar-icon.svg" alt="Back" class="back-icon" [routerLink]="['/usuario/visualizar-clientes']">
-            <span>Detalhes do Projeto</span>
-        </div>
+  <div class="breadcrumb-container">
+    <div class="back-title">
+      <img src="assets/icones/voltar-icon.svg" alt="Voltar" class="back-icon" [routerLink]="['/usuario/visualizar-clientes']" />
+      <span>Detalhes do Projeto</span>
     </div>
-    <div class="actions">
-        <h1>{{ "Nome do Projeto" }}</h1>
-        <p>{{"Cliente: Fulano da Silva"}}</p>
-    </div>
-</div>
-<div class="subMain-container">
-    <div class="divisao">
-        <p>Informações do projeto</p>
-        <hr class="line">
-    </div>
-    <div class="data-itens">
-        <div class="data-grid">
-            <div class="item-data">
-                <label>Cidade</label>
-                <p>{{'Cidade do projeto'}}</p>
-            </div>
-            <div class="item-data">
-                <label>Estado</label>
-                <p>{{ 'Estado do projeto'}}</p>
-            </div>
-        </div>
-        <div class="data-grid">
-            <div class="item-data">
-                <label>Endereço</label>
-                <p>{{ "Endereço do projeto" }}</p>
-            </div>
-            <div class="item-data">
-                <label>Categoria</label>
-                <p>{{ "Categoria do projeto"}}</p>
-            </div>
-        </div>
-        <div class="data-grid">
-            <div class="item-data">
-                <label>Visibilidade</label>
-                <p>{{ "Publico/Privado" }}</p>
-            </div>
-            <div class="item-data">
-                <label>Status</label>
-                <p>{{ "Em Cotação"}}</p>
-            </div>
-        </div>
-        <div class="data-grid">
-            <div class="item-data">
-                <label>Observações</label>
-                <p>{{ "Observações acerca do projeto" }}</p>
-            </div>
-            <div class="item-data">
-                <label>Data Limite do Orçamento</label>
-                <p>{{ "25/12/2030"}}</p>
-            </div>
-        </div>
+  </div>
 
-    </div>
+  <div class="actions" *ngIf="detalheProjeto">
+    <h1>{{ detalheProjeto.nomeProjeto || '—' }}</h1>
+    <p>Cliente: {{ detalheProjeto.nomeCliente || '—' }}</p>
+  </div>
 </div>
 
 <div class="subMain-container">
+  <div class="divisao">
+    <p>Informações do projeto</p>
+    <hr class="line" />
+  </div>
 
-    <div class="divisao">
-        <p>Arquivos anexados ao projeto</p>
-        <hr class="line">
+  <div class="data-itens" *ngIf="projetoResumo">
+    <div class="data-grid">
+      <div class="item-data">
+        <label>Cidade</label>
+        <p>{{ projetoResumo.cidade || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <label>Estado</label>
+        <p>{{ projetoResumo.estado || '—' }}</p>
+      </div>
     </div>
 
     <div class="data-grid">
-        <div class="item-data-title">
-            <label>Nome</label>
-        </div>
-        <div class="item-data-title">
-            <label>Download</label>
-        </div>
-
-        <!-- só para exemplos -->
-        <div class="item-data">
-            <p>{{ "Casa-AlphaVille.pdf"}}</p>
-        </div>
-        <div class="item-data">
-            <p>{{ "botão-download"}}</p>
-        </div>
+      <div class="item-data">
+        <label>Endereço</label>
+        <p>{{ projetoResumo.endereco || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <label>Categoria</label>
+        <p>{{ traduzirCategoriaProjeto(projetoResumo.categoria) || '—' }}</p>
+      </div>
     </div>
 
-
-    <div class="divisao">
-        <p>Planta Baixa</p>
-        <hr class="line">
-    </div>
-    
     <div class="data-grid">
-        <div class="item-data-title">
-            <label>Nome</label>
-        </div>
-        <div class="item-data-title">
-            <label>Download</label>
-        </div>
-
-        <!-- só para exemplos -->
-        <div class="item-data">
-            <p>{{ "Casa-AlphaVille.pdf"}}</p>
-        </div>
-        <div class="item-data">
-            <p>{{ "botão-download"}}</p>
-        </div>
+      <div class="item-data">
+        <label>Visibilidade</label>
+        <p>{{ traduzirVisibilidade(projetoResumo.publico) || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <label>Status</label>
+        <p>{{ traduzirStatusProjeto(projetoResumo.status) || '—' }}</p>
+      </div>
     </div>
-<!--
-    <div class="pagination">
-        <app-pagination
-        [paginaAtual]="paginaAtual"
-        [totalItens]="totalItens"
-        [itensPorPagina]="itensPorPagina"
-        (paginaMudou)="onPaginaMudou($event)">
-        </app-pagination>
-    </div>   -->
-</div> 
+
+    <div class="data-grid">
+      <div class="item-data">
+        <label>Observações</label>
+        <p>{{ projetoResumo.observacoes || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <label>Data Limite do Orçamento</label>
+        <p>{{ projetoResumo.dataLimiteOrcamento | date: 'dd/MM/yyyy' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Arquivos anexados -->
+<div class="subMain-container">
+  <div class="divisao">
+    <p>Arquivos anexados ao projeto</p>
+    <hr class="line" />
+  </div>
+
+  <div class="data-grid" *ngIf="arquivosNormais.length > 0; else semArquivos">
+    <div class="item-data-title"><label>Nome</label></div>
+    <div class="item-data-title"><label>Download</label></div>
+
+    <ng-container *ngFor="let arquivo of arquivosNormais">
+      <div class="item-data">
+        <p>{{ arquivo.nomeArquivo || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <button (click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">Baixar</button>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #semArquivos>
+    <p style="margin-left: 1rem;">Nenhum arquivo encontrado.</p>
+  </ng-template>
+
+  <div class="divisao">
+    <p>Planta Baixa</p>
+    <hr class="line" />
+  </div>
+
+  <div class="data-grid" *ngIf="plantasBaixas.length > 0; else semPlantas">
+    <div class="item-data-title"><label>Nome</label></div>
+    <div class="item-data-title"><label>Download</label></div>
+
+    <ng-container *ngFor="let planta of plantasBaixas">
+      <div class="item-data">
+        <p>{{ planta.nomeArquivo || '—' }}</p>
+      </div>
+      <div class="item-data">
+        <button (click)="baixarPlantaBaixa(planta.id, planta.nomeArquivo)">Baixar</button>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #semPlantas>
+    <p style="margin-left: 1rem;">Nenhuma planta baixa encontrada.</p>
+  </ng-template>
+</div>

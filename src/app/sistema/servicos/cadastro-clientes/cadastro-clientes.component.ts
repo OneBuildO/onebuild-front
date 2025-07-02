@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from 'src/app/shared/components/validation-error/error
 import { ClienteCadastroDTO } from './cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ActivatedRoute } from '@angular/router';
+import { ClienteProjetoDTO } from '../visualizar-clientes/cliente-projeto-dto';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CadastroClientesComponent implements OnInit {
     email: new FormControl('', {validators: [Validators.required]}),
     senha: new FormControl('', {validators: [Validators.required]}),
     confirmarSenha: new FormControl('', {validators: [Validators.required]}),
-    projeto: new FormControl('', {validators: [Validators.required]}),
+    nomeProjeto: new FormControl('', {validators: [Validators.required]}),
     contato: new FormControl('',),  // Contato é opcional, sem Validators.required
     estado: new FormControl('', {validators: [Validators.required]}),
     cidade: new FormControl('', {validators: [Validators.required]}),
@@ -62,7 +63,7 @@ export class CadastroClientesComponent implements OnInit {
       this.clienteForm.setValue({
         id: cliente.id ?? null,
         nome: cliente.nome,
-        projeto: cliente.projeto,
+        nomeProjeto: cliente.projetoCliente,
         contato: cliente.contato,
         estado: estado,
         cidade: cidade,
@@ -76,7 +77,7 @@ export class CadastroClientesComponent implements OnInit {
     } else {
       this.clienteForm.reset({
         nome: '',
-        projeto: '',
+        nomeProjeto: '',
         contato: '',
         estado: '',
         cidade: '',
@@ -132,7 +133,7 @@ export class CadastroClientesComponent implements OnInit {
       email: dados.email ?? '',
       senha: dados.senha ?? '',
       confirmarSenha: dados.confirmarSenha ?? '',
-      projeto: dados.projeto ?? '',
+      projetoCliente: dados.nomeProjeto ?? '',
       contato: dados.contato ?? '',
       cidade: dados.cidade ?? '',
       estado: dados.estado ?? '',
@@ -141,15 +142,18 @@ export class CadastroClientesComponent implements OnInit {
     if (this.clienteId && this.isEditMode) {
         this.clienteService.atualizarCliente(this.clienteId,cadastroCliente).subscribe(
           (response) => {
+            console.log('Cliente atualizado:', cadastroCliente);
             this.successMessage = 'Cliente atualizado com sucesso!';
             this.errorMessage = null;
+            console.log(this.clienteForm);
             this.clienteForm.reset();
             this.submited = false;
+
           },
-           (error) => {
+          (error) => {
               console.error('Erro ao atualizar cliente:', error);
               this.errorMessage = "Erro ao atualizar. Tente novamente.";
-           }
+          }
         );
 
 
@@ -173,26 +177,22 @@ export class CadastroClientesComponent implements OnInit {
 
   }
 
-
-  //precisa do endpoint getClientById funcionando, ainda nao funciona.
   private verificarModoEdicao():void{
     this.clienteId = this.route.snapshot.paramMap.get('id');
     if (this.clienteId) {
       this.isEditMode = true;
       this.clienteService.getClientById(this.clienteId).subscribe(
-        (cliente:ClienteCadastroDTO) =>{
+        (cliente:ClienteProjetoDTO) =>{
           this.clienteForm.patchValue({
             id:            cliente.id,
             nome:          cliente.nome,
             email:         cliente.email,
-            senha:         cliente.senha,
-            confirmarSenha: cliente.confirmarSenha,
-            projeto:       cliente.projeto,
+            nomeProjeto:   cliente.projetoCliente,  
             contato:       cliente.contato,
             estado:        cliente.estado,
             cidade:        cliente.cidade
           });
-          this.obterCidadePorEstado(cliente.estado); 
+          this.obterCidadePorEstado(cliente.estado);
         },
         (error) => {console.error('Erro ao carregar cliente para edição', error)}
       );

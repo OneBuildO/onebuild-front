@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
+import { ProjetosDisponiveisDTO } from '../cadastro-projeto/projetos-disponiveis-dto';
+import { StatusDoProjeto } from '../cadastro-projeto/statusDoProjeto';
+import { StatusDoProjetoDescricoes } from '../cadastro-projeto/statusDoProjetoDescricoes';
+import { concatMap } from 'rxjs';
 
 @Component({
   selector: 'app-visualizar-projeto',
@@ -20,23 +24,25 @@ export class VisualizarProjetoComponent implements OnInit {
 
     itensPorPagina = 6;
     paginaAtual = 1;
+
+    projetos: ProjetosDisponiveisDTO[] = [];
+    projetosPaginados: ProjetosDisponiveisDTO[] = [];
     
-    projetosPaginados: any[] = []; // ou tipo correto se souber
     totalItens: number = 0;
   
     selectedProjeto: any = null;
   
-   
+
     constructor(
       private router: Router,
-     private modalDeleteService: ModalDeleteService,
+      private modalDeleteService: ModalDeleteService,
       private authService: AuthService,
       private projetoService: ProjetoService
     ) {}
   
     ngOnInit(): void {
       this.exibirMensagemDeSucesso();
-      this.fetchLojas();
+      this.fetchProjetos();
       this.atualizarPaginacao();
     }
   
@@ -49,30 +55,46 @@ export class VisualizarProjetoComponent implements OnInit {
     }
   
     atualizarPaginacao(): void {
-     
+
     }
   
   
-    onPaginaMudou(novaPagina: number) {
+  onPaginaMudou(novaPagina: number) {
       this.paginaAtual = novaPagina;
       this.atualizarPaginacao();
     }
   
-    fetchLojas(): void {
-   
+
+  fetchProjetos(): void {
+      this.isLoading = true;
+      this.projetoService.obterProjetos().subscribe({
+        next: (res) => {
+          this.isLoading = false;
+          if (res.statusCode === 200 && res.response) {
+            this.projetosPaginados = res.response;
+            this.totalItens = this.projetos.length;
+            console.log(this.projetosPaginados);
+            
+            this.atualizarPaginacao();
+          } else {
+            this.projetos = [];
+            this.totalItens = 0;
+            this.mensagemBusca = 'Nenhum projeto encontrado.';
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error('Erro ao buscar projetos:', err);
+          this.mensagemBusca = 'Erro ao conectar com o servidor.';
+        }
+      });
     }
-  
-    visualizarLoja(id: string): void {
-      this.router.navigate(['/usuario/detalhes-loja', id]);
+
+    traduzirStatusDoProjeto(statusProjeto: string): string {
+      return StatusDoProjetoDescricoes[statusProjeto as StatusDoProjeto];
     }
-  
-    editarLoja(id: string): void {
-      this.router.navigate(['/usuario/cadastro-de-lojas', id]);
-    }
-  
-    deleteLoja(id: string): void {
-   
-    }
+
+    
   
     getInitial(name?: string): string {
       return name && name.length > 0 ? name.charAt(0).toUpperCase() : '';
@@ -97,67 +119,46 @@ export class VisualizarProjetoComponent implements OnInit {
       {
         title: 'Remoção de Projeto',
         description: `Tem certeza que deseja excluir o projeto <strong>${
-          projeto.nome
-        } - ${projeto.estado || '-'} - ${projeto.cidade}</strong>?`,
+          projeto.nomeProjeto
+        } - ${projeto.estado ?? '-'} - ${projeto.cidade}</strong>?`,
         item: projeto,
         deletarTextoBotao: 'Remover',
         size: 'md',
       },
       () => {
-        // this.deleteProjeto(projeto.id);
+        console.log(this.selectedProjeto);
+        this.deleteProjeto(projeto.idProjeto);
       }
     );
   
     }
 
-  visualizarProjeto(id: string): void {
+  visualizarProjeto(id: number): void {
     this.router.navigate(['/usuario/detalhes-projeto', id]);
   }
 
-  editarProjeto(id: string): void {
+  editarProjeto(id: number): void {
     this.router.navigate(['/usuario/cadastro-projeto', id]);
   }
 
-      //PRA QUANDO O ENDPOINT TIVER IMPLEMENTADO
-  //   fetchClientes(): void {
-  //   this.projetoService.obterTodosProjetos().subscribe({
-  //     next: (res) => {
-  //       if (res && res.statusCode === 200) {
-  //         this.projetosPaginados = res.response ?? [];
-  //         console.log(res.response);
-  //         this.erro = null;
-  //       } else {
-  //         this.erro = 'Erro ao buscar clientes.';
-  //         this.projetosPaginados = [];
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro na API:', err);
-  //       this.erro = 'Erro ao conectar com o servidor.';
-  //       this.projetosPaginados = [];
-  //     }
-  //   });
-  // }
+  deleteProjeto(id:number){
+    const projetoRemovido = this.projetosPaginados.find((e) => e.idProjeto === id);
 
-
-  // deleteProjeto(id:string){
-  //   const projetoRemovido = this.projetosPaginados.find((e) => e.id === id);
-
-  //   this.projetoService.deleteProjetoById(id).subscribe(
-  //     () => {
-  //       console.log('Cliente deletado com sucesso!');
-  //       this.fetchProjetos();
-  //       this.showMessage(
-  //         'success',
-  //         `Cliente "${projetoRemovido?.nome || ''} - 
-  //         ${ projetoRemovido?.estado || '-'}" - ${projetoRemovido?.cidade } deletado com sucesso!`
-  //       );
-  //     },
-  //     (error) => {
-  //       console.error('Erro ao deletar o cliente:', error);
-  //     }
-  //   );
-  // }
+    this.projetoService.deletarProjeto(id).subscribe(
+      () => {
+        console.log('Cliente deletado com sucesso!');
+        this.fetchProjetos();
+        this.showMessage(
+          'success',
+          `Cliente "${projetoRemovido?.projetoCliente ?? ''} - 
+          ${ projetoRemovido?.estado ?? '-'}" - ${projetoRemovido?.cidade } deletado com sucesso!`
+        );
+      },
+      (error) => {
+        console.error('Erro ao deletar o cliente:', error);
+      }
+    );
+  }
   
     exibirMensagemDeSucesso(): void {
       const state = window.history.state as { successMessage?: string };
