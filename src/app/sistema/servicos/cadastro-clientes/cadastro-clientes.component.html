@@ -23,7 +23,7 @@
       <section class="campos-tipo-valor">
         <!-- PROJETO -->
         <div id="campo-tipo">
-          <label class="form-label required" for="nomeProjeto">Projeto</label>
+          <label class="form-label required" for="nomeProjeto">Nome do Projeto</label>
           <input type="text" id="input-projeto" formControlName="nomeProjeto" placeholder="Ex: Casa Alphaville" />
           <small *ngIf="submited && clienteForm.get('nomeProjeto')?.hasError('required')" class="text-red-500 text-left">
             {{ "O campo Projeto é obrigatório."}}

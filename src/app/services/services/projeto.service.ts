@@ -49,9 +49,15 @@ export class ProjetoService {
     );
   }
 
+    getMeusProjetos(): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+    return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(
+      `${this.apiUrl}/meus-projetos`
+    );
+  }
+
   obterProjetos(): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
     return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(`${this.apiUrl}/obter-projetos`);
-}
+  }
 
   obterProjeto(id: number): Observable<ApiResponse<ProjetoResumoDTO>> {
     return this.httpCliente.get<ApiResponse<ProjetoResumoDTO>>(`${this.apiUrl}/obter-projeto/${id}`);

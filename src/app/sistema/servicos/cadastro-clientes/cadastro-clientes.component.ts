@@ -63,7 +63,7 @@ export class CadastroClientesComponent implements OnInit {
       this.clienteForm.setValue({
         id: cliente.id ?? null,
         nome: cliente.nome,
-        nomeProjeto: cliente.projetoCliente,
+        nomeProjeto: cliente.nomeProjeto,
         contato: cliente.contato,
         estado: estado,
         cidade: cidade,
@@ -133,7 +133,7 @@ export class CadastroClientesComponent implements OnInit {
       email: dados.email ?? '',
       senha: dados.senha ?? '',
       confirmarSenha: dados.confirmarSenha ?? '',
-      projetoCliente: dados.nomeProjeto ?? '',
+      nomeProjeto: dados.nomeProjeto ?? '',
       contato: dados.contato ?? '',
       cidade: dados.cidade ?? '',
       estado: dados.estado ?? '',

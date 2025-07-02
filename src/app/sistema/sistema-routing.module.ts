@@ -47,6 +47,8 @@ const routes: Routes = [
       {path:'arquivos-da-obra', component: AquivosDoProjetoClienteComponent},
       {path:'historico-de-movimentacao', component: HistoricoDeStatusComponent},
       {path:'apresentacao-do-projeto', component: ApresentacaoProjetoComponent},
+      {path:'apresentacao-do-projeto/:id', component: ApresentacaoProjetoComponent},
+
 
       {path:'meu-perfil', component: MeuPerfilComponent},
       {path:'notificacoes', component: NotificacoesComponent},

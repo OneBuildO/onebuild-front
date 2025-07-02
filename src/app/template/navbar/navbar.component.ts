@@ -25,6 +25,8 @@ export class NavbarComponent implements OnInit {
   isSidebarOpen = false;
   isDropdownOpen = false;
 
+  projetoId: number | null = null;
+
   nomeUsuario: string = '';
   permissaoUsuario: string = '';
   cargoUsuario!: Permissao;
@@ -77,6 +79,7 @@ ngOnInit(): void {
       console.error('Erro ao buscar perfil do usuário', err);
     }
   );
+  
 }
 
 
