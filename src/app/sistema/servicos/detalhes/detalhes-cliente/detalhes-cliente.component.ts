@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ClienteCadastroDTO } from '../../cadastro-clientes/cliente-cadastro-dto';
+import { ClienteService } from 'src/app/services/services/cliente.service';
+import { ActivatedRoute } from '@angular/router';
+import { ClienteProjetoDTO } from '../../visualizar-clientes/cliente-projeto-dto';
+import { StatusDoProjeto } from '../../cadastro-projeto/statusDoProjeto';
+import { StatusDoProjetoDescricoes } from '../../cadastro-projeto/statusDoProjetoDescricoes';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-detalhes-cliente',
@@ -7,15 +12,39 @@ import { ClienteCadastroDTO } from '../../cadastro-clientes/cliente-cadastro-dto
   styleUrls: ['./detalhes-cliente.component.css']
 })
 export class DetalhesClienteComponent implements OnInit {
-  cliente!:ClienteCadastroDTO;
 
-  constructor() { }
+  cliente: ClienteProjetoDTO | null = null;
+
+
+  constructor(private clienteService: ClienteService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
+    const id = this.router.snapshot.paramMap.get('id');
+    if (id) {
+      this.carregarCliente(id);
+    }
   }
 
   getInitial(name: string): string {
     return name ? name.charAt(0).toUpperCase() : '?';
+  }
+
+  carregarCliente(id: string): void {
+    this.clienteService.getClientById(id).subscribe({
+      next: (res) => {
+        this.cliente = res;
+
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  traduzirStatusDoProjeto(statusProjeto: string) {
+    const statusDoProjetoTraduzido = StatusDoProjetoDescricoes[statusProjeto as StatusDoProjeto];
+    
+    return statusDoProjetoTraduzido;
   }
 
   getRandomColor(seed: string): string {

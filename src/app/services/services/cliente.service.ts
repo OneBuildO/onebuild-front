@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from './api-response-dto';
+import { ClienteProjetoDTO } from 'src/app/sistema/servicos/visualizar-clientes/cliente-projeto-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class ClienteService {
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 
-  //funcionando.
+
   deleteClientById(id: string):Observable<void>{
       const url = `${this.apiUrl}/deletar/${id}`;
       return this.httpCliente.delete<void>(url).pipe(
@@ -41,11 +42,10 @@ export class ClienteService {
     );
   }
 
-  //necessita implementar no back-end!!
-  getClientById(id:string){
-      const url = `${this.apiUrl}/obter-cliente/${id}`;
-      return this.httpCliente.get<ClienteCadastroDTO>(url).pipe(
-      map((response) => response),
+  getClientById(id: string): Observable<ClienteProjetoDTO> {
+    const url = `${this.apiUrl}/obter-cliente/${id}`;
+    return this.httpCliente.get<ApiResponse<ClienteProjetoDTO>>(url).pipe(
+      map((res) => res.response),
       catchError((error) => {
         let errorMessage = 'Erro ao buscar cliente.';
 
@@ -60,7 +60,6 @@ export class ClienteService {
     );
   }
 
-  //precisa de ajustes!
   atualizarCliente(id:string, clienteAtualizado:ClienteCadastroDTO): Observable<{message: string}>{
     const url = `${this.apiUrl}/atualizar/${id}`;
     return this.httpCliente.put<{message: string}>(url, clienteAtualizado).pipe(
