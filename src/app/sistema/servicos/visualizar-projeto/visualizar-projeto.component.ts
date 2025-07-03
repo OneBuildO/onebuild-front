@@ -150,7 +150,7 @@ export class VisualizarProjetoComponent implements OnInit {
         this.fetchProjetos();
         this.showMessage(
           'success',
-          `Cliente "${projetoRemovido?.projetoCliente ?? ''} - 
+          `Cliente "${projetoRemovido?.nomeProjeto ?? ''} - 
           ${ projetoRemovido?.estado ?? '-'}" - ${projetoRemovido?.cidade } deletado com sucesso!`
         );
       },

@@ -48,7 +48,7 @@ export class ApresentacaoProjetoComponent implements OnInit {
     this.isLoading = false;
   }
 });
- }
+}
 
 
   selectProjeto(id: number) {
