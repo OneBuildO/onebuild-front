@@ -65,6 +65,14 @@ export class CadastroProjetoComponent implements OnInit {
   errorMessage: string | null = null;
   tipoAlerta = AlertType.Warning;
 
+  private tiposPermitidos = [
+    'image/png',
+    'image/jpeg',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -152,12 +160,24 @@ export class CadastroProjetoComponent implements OnInit {
   }
 
   onArquivosSelecionados(arquivos: File[]): void {
-    // apenas arquivos novos
-    this.projetoForm.get('arquivos')?.setValue(arquivos);
+    const arquivosValidos = this.validarArquivos(arquivos);
+    if (arquivosValidos.length < arquivos.length) {
+      this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
+    }
+    this.projetoForm.get('arquivos')?.setValue(arquivosValidos);
   }
 
   onPlantaBaixaSelecionados(arquivos: File[]): void {
-    this.projetoForm.get('plantaBaixa')?.setValue(arquivos);
+    const arquivosValidos = this.validarArquivos(arquivos);
+    if (arquivosValidos.length < arquivos.length) {
+      this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
+    }
+    this.projetoForm.get('plantaBaixa')?.setValue(arquivosValidos);
+  }
+
+  // Função para validar os arquivos
+  private validarArquivos(arquivos: File[]): File[] {
+    return arquivos.filter(arquivo => this.tiposPermitidos.includes(arquivo.type));
   }
 
   removerArquivoExistente(id: number, tipo: 'arquivo' | 'planta'): void {
@@ -170,89 +190,88 @@ export class CadastroProjetoComponent implements OnInit {
     }
   }
 
-onSubmit(): void {
-  this.submited = true;
-  this.projetoForm.markAllAsTouched();
+  onSubmit(): void {
+    this.submited = true;
+    this.projetoForm.markAllAsTouched();
 
-  if (this.projetoForm.invalid) {
-    this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
-    return;
+    if (this.projetoForm.invalid) {
+      this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
+      return;
+    }
+
+    this.errorMessage = null;
+
+    const fv = this.projetoForm.value;
+    const projetoDTO: ProjetoResumoDTO = {
+      id: fv.id ?? 0,
+      idCliente: fv.cliente!,
+      observacoes: fv.observacoes ?? '',
+      categoria: fv.categoria ?? '',
+      estado: fv.estado!,
+      cidade: fv.cidade!,
+      endereco: fv.endereco!,
+      dataLimiteOrcamento: fv.dataLimiteOrcamento!,
+      publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
+      status: fv.status!
+    };
+
+    const novosArquivos = fv.arquivos || [];
+    const novasPlantas = fv.plantaBaixa || [];
+
+    if (this.isEditMode && this.projetoId) {
+      this.projetoService.atualizarProjeto(
+        this.projetoId,
+        projetoDTO,
+        novosArquivos,
+        novasPlantas,
+        this.arquivosRemoverIds,
+        this.plantasRemoverIds
+      ).subscribe({
+        next: () => {
+          this.successMessage = 'Projeto atualizado com sucesso!';
+
+          this.arquivosRemoverIds = [];
+          this.plantasRemoverIds = [];
+
+          this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
+            next: res => this.arquivosProjeto = res.response,
+            error: () => this.arquivosProjeto = []
+          });
+
+          this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
+            next: res => this.plantaBaixa = res.response,
+            error: () => this.plantaBaixa = []
+          });
+        },
+        error: () => {
+          this.errorMessage = 'Erro ao atualizar projeto.';
+        }
+      });
+
+    } else {
+      this.projetoService.novoProjeto(
+        projetoDTO,
+        novosArquivos,
+        novasPlantas
+      ).subscribe({
+        next: () => {
+          this.successMessage = 'Projeto cadastrado com sucesso!';
+          
+          this.projetoForm.reset({
+            visibilidade: VisibilidadeProjeto.PUBLICO,
+            status: StatusDoProjeto.NOVO_PROJETO
+          });
+
+          this.arquivosProjeto = [];
+          this.plantaBaixa = [];
+          this.submited = false;
+        },
+        error: () => {
+          this.errorMessage = 'Erro ao cadastrar projeto.';
+        }
+      });
+    }
   }
-
-  this.errorMessage = null;
-
-  const fv = this.projetoForm.value;
-  const projetoDTO: ProjetoResumoDTO = {
-    id: fv.id ?? 0,
-    idCliente: fv.cliente!,
-    observacoes: fv.observacoes ?? '',
-    categoria: fv.categoria ?? '',
-    estado: fv.estado!,
-    cidade: fv.cidade!,
-    endereco: fv.endereco!,
-    dataLimiteOrcamento: fv.dataLimiteOrcamento!,
-    publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
-    status: fv.status!
-  };
-
-  const novosArquivos = fv.arquivos || [];
-  const novasPlantas = fv.plantaBaixa || [];
-
-  if (this.isEditMode && this.projetoId) {
-    this.projetoService.atualizarProjeto(
-      this.projetoId,
-      projetoDTO,
-      novosArquivos,
-      novasPlantas,
-      this.arquivosRemoverIds,
-      this.plantasRemoverIds
-    ).subscribe({
-      next: () => {
-        this.successMessage = 'Projeto atualizado com sucesso!';
-
-        this.arquivosRemoverIds = [];
-        this.plantasRemoverIds = [];
-
-        this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
-          next: res => this.arquivosProjeto = res.response,
-          error: () => this.arquivosProjeto = []
-        });
-
-        this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
-          next: res => this.plantaBaixa = res.response,
-          error: () => this.plantaBaixa = []
-        });
-      },
-      error: () => {
-        this.errorMessage = 'Erro ao atualizar projeto.';
-      }
-    });
-
-  } else {
-    this.projetoService.novoProjeto(
-      projetoDTO,
-      novosArquivos,
-      novasPlantas
-    ).subscribe({
-      next: () => {
-        this.successMessage = 'Projeto cadastrado com sucesso!';
-        
-        this.projetoForm.reset({
-          visibilidade: VisibilidadeProjeto.PUBLICO,
-          status: StatusDoProjeto.NOVO_PROJETO
-        });
-
-        this.arquivosProjeto = [];
-        this.plantaBaixa = [];
-        this.submited = false;
-      },
-      error: () => {
-        this.errorMessage = 'Erro ao cadastrar projeto.';
-      }
-    });
-  }
-}
-
 
   protected onAlertCloseHandler(): void {
     this.errorMessage = null;

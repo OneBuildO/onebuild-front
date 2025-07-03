@@ -41,8 +41,10 @@
           [isEditMode]="isEditMode"
           (arquivosSelecionados)="onArquivosSelecionados($event)"
           formControlName="arquivos"
+          accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ></app-input-arquivos>
       </div>
+    
 
       <!-- EXISTENTES: ARQUIVOS -->
       <div
@@ -127,7 +129,11 @@
           [isEditMode]="isEditMode"
           (arquivosSelecionados)="onPlantaBaixaSelecionados($event)"
           formControlName="plantaBaixa"
+          accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ></app-input-arquivos>
+
+        <!-- Exibição de erro se arquivos inválidos forem selecionados -->
+      
       </div>
 
       <!-- EXISTENTES: PLANTAS BAIXAS -->

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { ProjetoResumoDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-resumo-dto';
 import { DetalheProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/detalhe-projeto-dto';
@@ -17,6 +17,7 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
   styleUrls: ['./detalhes-projeto.component.css']
 })
 export class DetalhesProjetoComponent implements OnInit {
+  @Input() projetoIdInput?: number
 
   detalheProjeto?: DetalheProjetoDTO;
   projetoResumo?: ProjetoResumoDTO;
@@ -28,20 +29,27 @@ export class DetalhesProjetoComponent implements OnInit {
   carregando: boolean = true;
   erro?: string;
 
+  rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
+
+
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
-    private dadosService: DadosService
+    private dadosService: DadosService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.projetoId = Number(this.route.snapshot.paramMap.get('id'));
-    
+    const url = this.router.url;
+    if (url.startsWith('/usuario/apresentacao-do-projeto/')) {
+      this.rotaOrigem = 'apresentacao-do-projeto';
+    } else if (url.startsWith('/usuario/visualizar-projeto/')) {
+      this.rotaOrigem = 'visualizar-projeto';
+    }
+
+    this.projetoId = this.projetoIdInput ?? Number(this.route.snapshot.paramMap.get('id'));
     if (this.projetoId) {
       this.carregarDetalhes();
-    } else {
-      this.erro = "ID do projeto inválido.";
-      this.carregando = false;
     }
   }
 
@@ -136,6 +144,10 @@ export class DetalhesProjetoComponent implements OnInit {
 
   traduzirCategoriaProjeto(categoriaProjeto: string): string {
     return TipoFornecedorDescricoes[categoriaProjeto as TipoFornecedor];
+  }
+
+  onVoltar(): void {
+    this.router.navigate([`/usuario/${this.rotaOrigem}`]);
   }
 
 }
