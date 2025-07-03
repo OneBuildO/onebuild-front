@@ -69,6 +69,38 @@
           </small>
         </div>
       </section>
+      
+      <section class="campos-tipo-valor">
+        <!-- RUA -->
+        <div id="campo-tipo">
+          <label class="form-label" for="rua">Rua <span>(opcional)</span></label>
+          <input type="text" id="input-rua" formControlName="rua" placeholder="Ex: Avenida OneBuild" />
+        </div>
+
+        <!-- BAIRRO -->
+        <div id="campo-tipo">
+          <label class="form-label" for="bairro">Bairro <span>(opcional)</span></label>
+          <input type="text" id="input-bairro" formControlName="bairro" placeholder="Ex: Aldeota" />
+        </div>
+      </section>
+
+      <!-- NUMERO E CEP-->
+      <section class="campos-tipo-valor">
+          <!-- NÚMERO -->
+        <div id="campo-tipo">
+          <label class="form-label" for="numeroEndereco">Número <span>(opcional)</span></label>
+          <input type="text" id="input-numeroEndereco" formControlName="numeroEndereco" placeholder="Ex: 134" />
+        </div>
+
+        <!-- CEP -->
+        <div id="campo-valor">
+          <label class="form-label" for="cep">
+            CEP <span>(opcional)</span>
+          </label>
+          <input type="text" id="input-cep" formControlName="cep" placeholder="00000-000" mask="00000-000" />
+        </div>
+      </section>
+
 
       <!-- EMAIL -->
       <div id="campo-email" style="width: 100%;">

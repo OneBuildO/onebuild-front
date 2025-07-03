@@ -13,6 +13,10 @@ export interface ClienteProjetoDTO {
     cidade: string;
     estado: string;
     endereco: string | null;
+    rua: string | null;
+    bairro: string | null;
+    cep: string | null;
+    numeroEndereco: string | null;
     cnpj: string | null;
     projetoCliente: string | null;
     projetos: ProjetoDTO[];
