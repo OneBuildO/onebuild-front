@@ -28,20 +28,10 @@
           </option>
           <option
             *ngFor="let cliente of clientes"
-            [value]="cliente.id"
-          >
+            [value]="cliente.id">
             {{ cliente.nome }}
           </option>
         </select>
-        <small
-          *ngIf="
-            submited &&
-            projetoForm.get('cliente')?.hasError('required')
-          "
-          class="text-red-500 text-left"
-        >
-          Cliente é obrigatório.
-        </small>
       </div>
 
       <!-- UPLOAD DE ARQUIVOS -->

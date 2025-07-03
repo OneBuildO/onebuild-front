@@ -75,6 +75,7 @@ export class InputArquivosComponent implements ControlValueAccessor, OnInit {
   }
 
   adicionarArquivos(novosArquivos: File[]): void {
+    this.isEditMode = false;
     if (this.arquivos.length + novosArquivos.length > 3) {
       this.errorMessage = 'Você pode enviar no máximo 3 arquivos PDF.';
       return;

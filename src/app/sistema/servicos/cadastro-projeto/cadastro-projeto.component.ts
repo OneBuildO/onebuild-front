@@ -27,7 +27,7 @@ export class CadastroProjetoComponent implements OnInit {
     cliente: new FormControl('', [Validators.required]),
     arquivos: new FormControl<File[]>([]),
     plantaBaixa: new FormControl<File[]>([]),
-    categoria: new FormControl('', []),  // agora opcional
+    categoria: new FormControl('', [Validators.required]), 
     dataLimiteOrcamento: new FormControl('', [Validators.required]),
     observacoes: new FormControl(''),
     estado: new FormControl('', [Validators.required]),
@@ -88,7 +88,7 @@ export class CadastroProjetoComponent implements OnInit {
         next: ({ response: projeto }) => {
           this.projetoForm.patchValue({
             id: projeto.id,
-            cliente: projeto.idUsuario,
+            cliente: projeto.idCliente,
             categoria: projeto.categoria,
             dataLimiteOrcamento: projeto.dataLimiteOrcamento,
             observacoes: projeto.observacoes,
@@ -100,8 +100,6 @@ export class CadastroProjetoComponent implements OnInit {
               : VisibilidadeProjeto.PRIVADO,
             status: projeto.status,
           });
-          
-          console.log(this.projetoForm)
 
           this.obterCidadePorNomeEstado(projeto.estado);
 
@@ -114,7 +112,6 @@ export class CadastroProjetoComponent implements OnInit {
             }
           });
 
-          // buscar plantas baixas existentes
           this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
             next: (res: ApiResponse<ArquivosProjetoDTO[]>) => {
               this.plantaBaixa = res.response;
@@ -173,63 +170,89 @@ export class CadastroProjetoComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    this.submited = true;
-    this.projetoForm.markAllAsTouched();
+onSubmit(): void {
+  this.submited = true;
+  this.projetoForm.markAllAsTouched();
 
-    if (this.projetoForm.invalid) {
-      this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
-      return;
-    }
-
-    this.errorMessage = null;
-
-    const fv = this.projetoForm.value;
-    const projetoDTO: ProjetoResumoDTO = {
-      id: fv.id ?? 0,
-      idUsuario: fv.cliente!,
-      observacoes: fv.observacoes ?? '',
-      categoria: fv.categoria ?? '',
-      estado: fv.estado!,
-      cidade: fv.cidade!,
-      endereco: fv.endereco!,
-      dataLimiteOrcamento: fv.dataLimiteOrcamento!,
-      publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
-      status: fv.status!
-    };
-
-    const novosArquivos = fv.arquivos || [];
-    const novasPlantas = fv.plantaBaixa || [];
-
-    if (this.isEditMode && this.projetoId) {
-      this.projetoService.atualizarProjeto(
-        this.projetoId,
-        projetoDTO,
-        novosArquivos,
-        novasPlantas,
-        this.arquivosRemoverIds,
-        this.plantasRemoverIds
-      ).subscribe({
-        next: () => this.successMessage = 'Projeto atualizado com sucesso!',
-        error: () => this.errorMessage = 'Erro ao atualizar projeto.'
-      });
-    } else {
-      this.projetoService.novoProjeto(
-        projetoDTO,
-        novosArquivos,
-        novasPlantas
-      ).subscribe({
-        next: () => {
-          this.successMessage = 'Projeto cadastrado com sucesso!';
-          this.projetoForm.reset({ visibilidade: VisibilidadeProjeto.PUBLICO, status: StatusDoProjeto.NOVO_PROJETO });
-          this.arquivosProjeto = [];
-          this.plantaBaixa = [];
-          this.submited = false;
-        },
-        error: () => this.errorMessage = 'Erro ao cadastrar projeto.'
-      });
-    }
+  if (this.projetoForm.invalid) {
+    this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
+    return;
   }
+
+  this.errorMessage = null;
+
+  const fv = this.projetoForm.value;
+  const projetoDTO: ProjetoResumoDTO = {
+    id: fv.id ?? 0,
+    idCliente: fv.cliente!,
+    observacoes: fv.observacoes ?? '',
+    categoria: fv.categoria ?? '',
+    estado: fv.estado!,
+    cidade: fv.cidade!,
+    endereco: fv.endereco!,
+    dataLimiteOrcamento: fv.dataLimiteOrcamento!,
+    publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
+    status: fv.status!
+  };
+
+  const novosArquivos = fv.arquivos || [];
+  const novasPlantas = fv.plantaBaixa || [];
+
+  if (this.isEditMode && this.projetoId) {
+    this.projetoService.atualizarProjeto(
+      this.projetoId,
+      projetoDTO,
+      novosArquivos,
+      novasPlantas,
+      this.arquivosRemoverIds,
+      this.plantasRemoverIds
+    ).subscribe({
+      next: () => {
+        this.successMessage = 'Projeto atualizado com sucesso!';
+
+        this.arquivosRemoverIds = [];
+        this.plantasRemoverIds = [];
+
+        this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
+          next: res => this.arquivosProjeto = res.response,
+          error: () => this.arquivosProjeto = []
+        });
+
+        this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
+          next: res => this.plantaBaixa = res.response,
+          error: () => this.plantaBaixa = []
+        });
+      },
+      error: () => {
+        this.errorMessage = 'Erro ao atualizar projeto.';
+      }
+    });
+
+  } else {
+    this.projetoService.novoProjeto(
+      projetoDTO,
+      novosArquivos,
+      novasPlantas
+    ).subscribe({
+      next: () => {
+        this.successMessage = 'Projeto cadastrado com sucesso!';
+        
+        this.projetoForm.reset({
+          visibilidade: VisibilidadeProjeto.PUBLICO,
+          status: StatusDoProjeto.NOVO_PROJETO
+        });
+
+        this.arquivosProjeto = [];
+        this.plantaBaixa = [];
+        this.submited = false;
+      },
+      error: () => {
+        this.errorMessage = 'Erro ao cadastrar projeto.';
+      }
+    });
+  }
+}
+
 
   protected onAlertCloseHandler(): void {
     this.errorMessage = null;

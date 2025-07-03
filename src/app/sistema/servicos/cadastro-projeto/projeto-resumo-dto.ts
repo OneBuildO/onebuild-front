@@ -2,7 +2,7 @@ import { StatusDoProjeto } from "./statusDoProjeto";
 
 export interface ProjetoResumoDTO {
     id: number | null | undefined;
-    idUsuario: string;
+    idCliente: string;
     observacoes: string;
     categoria: string;
     endereco: string;
