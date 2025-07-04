@@ -20,7 +20,7 @@ import { Usuario } from 'src/app/login/usuario';
   styleUrls: ['./detalhes-projeto.component.css']
 })
 export class DetalhesProjetoComponent implements OnInit {
-  @Input() projetoIdInput?: number
+  @Input() projetoIdInput?: number;
 
   detalheProjeto?: DetalheProjetoDTO;
   projetoResumo?: ProjetoResumoDTO;
@@ -32,6 +32,35 @@ export class DetalhesProjetoComponent implements OnInit {
   carregando: boolean = true;
   erro?: string;
 
+  // Controle do modal de novidades
+  showNovidadesModal = false;
+  novidadesTitulo = '';
+  novidadesDescricao = '';
+  novidadesStatus = '';
+  novidadesImagemFile?: File;
+
+  listaStatusObra: string[] = [
+    'Planejamento',
+    'Em Andamento',
+    'Concluído',
+    'Aguardando Materiais'
+  ];
+
+   novidadesList: {
+    titulo: string;
+    descricao: string;
+    status: string;
+    imagemUrl?: string;
+    data: Date;
+  }[] = [];
+
+  // comentário por item
+  showComentarioModal = false;
+  comentarioTitulo = '';
+  comentarioDescricao = '';
+  comentarioTargetIndex: number | null = null;
+
+
   rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
 
   constructor(
@@ -39,7 +68,7 @@ export class DetalhesProjetoComponent implements OnInit {
     private route: ActivatedRoute,
     private dadosService: DadosService,
     private router: Router,
-    private authService:AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -89,7 +118,6 @@ export class DetalhesProjetoComponent implements OnInit {
     this.dadosService.listarArquivosNormais(this.projetoId).subscribe({
       next: (res) => {
         this.arquivosNormais = res.response || [];
-        console.log(this.arquivosNormais);
       },
       error: () => {
         this.erro = "Erro ao carregar arquivos.";
@@ -99,7 +127,6 @@ export class DetalhesProjetoComponent implements OnInit {
     this.dadosService.listarPlantasBaixas(this.projetoId).subscribe({
       next: (res) => {
         this.plantasBaixas = res.response || [];
-        console.log(this.plantasBaixas)
       },
       error: () => {
         this.erro = "Erro ao carregar plantas baixas.";
@@ -109,7 +136,7 @@ export class DetalhesProjetoComponent implements OnInit {
 
   baixarArquivo(id: number, nomeArquivo: string): void {
     this.dadosService.downloadArquivo(id).subscribe({
-      next: (blob) => {
+      next: blob => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -117,15 +144,13 @@ export class DetalhesProjetoComponent implements OnInit {
         link.click();
         window.URL.revokeObjectURL(url);
       },
-      error: () => {
-        alert('Erro ao baixar o arquivo.');
-      }
+      error: () => alert('Erro ao baixar o arquivo.')
     });
   }
 
   baixarPlantaBaixa(id: number, nomeArquivo: string): void {
     this.dadosService.downloadPlantaBaixa(id).subscribe({
-      next: (blob) => {
+      next: blob => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -133,31 +158,23 @@ export class DetalhesProjetoComponent implements OnInit {
         link.click();
         window.URL.revokeObjectURL(url);
       },
-      error: () => {
-        alert('Erro ao baixar a planta baixa.');
-      }
+      error: () => alert('Erro ao baixar a planta baixa.')
     });
   }
 
-    /** Extrai só a extensão */
   getFileType(nome: string): string {
     return nome.split('.').pop()?.toLowerCase() || '';
   }
 
-  /** Retorna o caminho do ícone conforme a extensão */
   getFileIcon(nome: string): string {
     const ext = this.getFileType(nome);
-    if (ext === 'pdf') {
-      return 'assets/icones/pdf-icon.svg';
-    }
-    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
-      return 'assets/icones/image-icon.svg';
-    }
+    if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
+    if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
     return 'assets/icones/file-icon.svg';
   }
 
   traduzirVisibilidade(statusVisibilidade: boolean): string {
-    return statusVisibilidade ? "Público" : "Privado" 
+    return statusVisibilidade ? "Público" : "Privado";
   }
 
   traduzirStatusProjeto(statusProjeto: string): string {
@@ -173,8 +190,74 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
   isClient(): boolean {
-    const role = this.authService.getRoleUsuarioFromToken();
-    return role === Permissao.CLIENTE;
+    return this.authService.getRoleUsuarioFromToken() === Permissao.CLIENTE;
   }
 
+  // --- Ações dos novos botões ---
+  onAdicionarNovidades(): void {
+    console.log('Adicionar novidades clicado');
+    // TODO: implementar lógica para "Adicionar Novidades"
+  }
+
+ 
+
+
+
+  openNovidadesModal(): void {
+    this.showNovidadesModal = true;
+  }
+
+  fecharNovidadesModal(): void {
+    this.showNovidadesModal = false;
+    this.novidadesTitulo = '';
+    this.novidadesDescricao = '';
+    this.novidadesStatus = '';
+    this.novidadesImagemFile = undefined;
+  }
+
+  onImagemChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.novidadesImagemFile = input.files[0];
+    }
+  }
+
+
+
+
+   enviarNovidades(): void {
+    // montar o objeto de novidade
+    const nova = {
+      titulo: this.novidadesTitulo,
+      descricao: this.novidadesDescricao,
+      status: this.novidadesStatus,
+      imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
+      data: new Date()
+    };
+    // adiciona no início da lista (mais recente em cima)
+    this.novidadesList.unshift(nova);
+
+    this.fecharNovidadesModal();
+  }
+
+  // abre modal de comentário para um item específico
+  openComentarioModal(idx: number): void {
+    this.comentarioTargetIndex = idx;
+    this.comentarioTitulo = '';
+    this.comentarioDescricao = '';
+    this.showComentarioModal = true;
+  }
+
+  enviarComentario(): void {
+    if (this.comentarioTargetIndex === null) return;
+    const alvo = this.novidadesList[this.comentarioTargetIndex];
+    console.log(`Comentário em "${alvo.titulo}":`, this.comentarioTitulo, this.comentarioDescricao);
+    // TODO: salvar comentario via serviço…
+    this.fecharComentarioModal();
+  }
+
+  fecharComentarioModal(): void {
+    this.showComentarioModal = false;
+    this.comentarioTargetIndex = null;
+  }
 }

@@ -15,6 +15,8 @@
   </div>
 </div>
 
+
+
 <div class="subMain-container">
   <div class="divisao">
     <p>Informações do projeto</p>
@@ -127,13 +129,78 @@
     <p style="margin-left: 1rem;">Nenhuma planta baixa encontrada.</p>
   </ng-template>
 
+  <!-- ... seu código existente ... -->
+
   <div class="button-grid">
-    <button>
-      Adicionar Modificações
+    <button class="btn-cadastrar btn-novidades" (click)="openNovidadesModal()">
+      Adicionar Novidades
     </button>
-    <button *ngIf="isClient()" id="btn-comentario">
-      Adicionar comentário
-    </button>
+    
   </div>
+
+  <!-- Modal de comentário (já existente) -->
+  <div class="modal-overlay" *ngIf="showComentarioModal">
+    <div class="modal-content">
+      <button class="modal-close" (click)="fecharComentarioModal()">×</button>
+      <h2>Adicionar Comentário</h2>
+      <div class="modal-body">
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" [(ngModel)]="comentarioTitulo" />
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" rows="4" [(ngModel)]="comentarioDescricao"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-acao voltar" (click)="fecharComentarioModal()">Voltar</button>
+        <button class="btn-acao enviar" (click)="enviarComentario()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Novo Modal de “Adicionar Novidades” -->
+  <div class="modal-overlay" *ngIf="showNovidadesModal">
+    <div class="modal-content">
+      <button class="modal-close" (click)="fecharNovidadesModal()">×</button>
+      <h2>Adicionar Novidades</h2>
+      <div class="modal-body">
+        <label for="nov-titulo">Título</label>
+        <input id="nov-titulo" type="text" [(ngModel)]="novidadesTitulo" />
+
+        <label for="nov-descricao">Descrição</label>
+        <textarea id="nov-descricao" rows="4" [(ngModel)]="novidadesDescricao"></textarea>
+
+        <label for="nov-status">Status da Obra</label>
+        <select id="nov-status" [(ngModel)]="novidadesStatus">
+          <option value="" disabled selected>Selecione...</option>
+          <option *ngFor="let s of listaStatusObra" [value]="s">{{ s }}</option>
+        </select>
+
+        <label for="nov-imagem">Imagem</label>
+        <input id="nov-imagem" type="file" (change)="onImagemChange($event)" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-acao voltar" (click)="fecharNovidadesModal()">Voltar</button>
+        <button class="btn-acao enviar" (click)="enviarNovidades()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="timeline">
+  <div class="timeline-item"
+       *ngFor="let nov of novidadesList; let i = index"
+       [ngClass]="{'left': i % 2 === 0, 'right': i % 2 !== 0}">
+    <div class="content">
+      <h3>{{ nov.titulo }}</h3>
+      <small>{{ nov.data | date:'dd/MM/yyyy HH:mm' }} — {{ nov.status }}</small>
+      <p>{{ nov.descricao }}</p>
+      <img *ngIf="nov.imagemUrl" [src]="nov.imagemUrl" class="nov-img" />
+      <button class="btn-acao comentar"
+              (click)="openComentarioModal(i)">
+          Comentar
+      </button>
+    </div>
+  </div>
+</div>
+
 
 </div>
