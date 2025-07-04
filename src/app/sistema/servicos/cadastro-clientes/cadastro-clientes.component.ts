@@ -47,6 +47,10 @@ export class CadastroClientesComponent implements OnInit {
     contato: new FormControl('',),  // Contato é opcional, sem Validators.required
     estado: new FormControl('', {validators: [Validators.required]}),
     cidade: new FormControl('', {validators: [Validators.required]}),
+    cep: new FormControl('',), 
+    rua: new FormControl('',),
+    bairro: new FormControl('',),  
+    numeroEndereco: new FormControl('',), 
   });
   
 
@@ -69,7 +73,11 @@ export class CadastroClientesComponent implements OnInit {
         cidade: cidade,
         email: cliente.email,
         senha: cliente.senha,
-        confirmarSenha: cliente.confirmarSenha ?? '' 
+        confirmarSenha: cliente.confirmarSenha ?? '' ,
+        cep:cliente.cep ?? '',
+        rua: cliente.rua ?? '',
+        bairro: cliente.bairro ?? '',
+        numeroEndereco: cliente.numeroEndereco ?? ''
       });
 
       // Atualizar a lista de cidades com base no estado atual
@@ -137,6 +145,10 @@ export class CadastroClientesComponent implements OnInit {
       contato: dados.contato ?? '',
       cidade: dados.cidade ?? '',
       estado: dados.estado ?? '',
+      rua: dados.rua ?? '',
+      bairro: dados.bairro ?? '',
+      numeroEndereco: dados.numeroEndereco ?? '',
+      cep: dados.cep ?? '',
     };
 
     if (this.clienteId && this.isEditMode) {
@@ -190,8 +202,13 @@ export class CadastroClientesComponent implements OnInit {
             nomeProjeto:   cliente.nomeProjeto,  
             contato:       cliente.contato,
             estado:        cliente.estado,
-            cidade:        cliente.cidade
+            cidade:        cliente.cidade,
+            rua:           cliente.rua,
+            bairro:        cliente.bairro,
+            cep:           cliente.cep,
+            numeroEndereco:cliente.numeroEndereco
           });
+          console.log('Cliente modo edição: ', cliente);
           this.obterCidadePorEstado(cliente.estado);
           console.log(this.clienteForm.value)
         },

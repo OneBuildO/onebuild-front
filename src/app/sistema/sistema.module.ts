@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
 
 import { SistemaRoutingModule } from './sistema-routing.module';
 import { PainelAdminComponent } from './dashboards/painel-admin/painel-admin.component';
@@ -62,7 +63,8 @@ import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/d
     SharedModule,
     ReactiveFormsModule,
     NgApexchartsModule,
-    FormsModule
+    FormsModule,
+    NgxMaskModule.forRoot(),
   ]
 })
 export class SistemaModule { }
