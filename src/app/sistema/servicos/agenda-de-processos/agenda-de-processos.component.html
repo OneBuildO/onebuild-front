@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="banner">
     <h1>Agenda</h1>
-    <p>Gerencie compromissos dos seus projetos de forma simples.</p>
+    <p>Um espaço onde você pode administrar a agenda de seus projetos.</p>
   </div>
 
   <div class="breadcrumb-container">
@@ -9,53 +9,58 @@
       <a (click)="onVoltarClick()">Dashboard &gt; </a>
       <span class="breadcrumb-highlight">Agenda</span>
     </div>
-  </div>
-
-  <!-- Calendário estilizado -->
-  <div class="calendar-container">
-    <div class="calendar-header">
-      <button class="nav-btn" (click)="prevYear()">«</button>
-      <button class="nav-btn" (click)="prevMonth()">‹</button>
-
-      <select class="month-select" [(ngModel)]="currentMonth" (change)="generateCalendar()">
-        <option *ngFor="let m of meses; let idx = index" [value]="idx">{{ m }}</option>
-      </select>
-      <select class="year-select" [(ngModel)]="currentYear" (change)="generateCalendar()">
-        <option *ngFor="let y of yearOptions" [value]="y">{{ y }}</option>
-      </select>
-
-      <button class="nav-btn" (click)="nextMonth()">›</button>
-      <button class="nav-btn" (click)="nextYear()">»</button>
-    </div>
-
-    <div class="calendar-grid">
-      <div class="day-name" *ngFor="let d of dayNames">{{ d }}</div>
-      <div
-        class="day-cell"
-        *ngFor="let dt of calendarDays"
-        [class.other-month]="dt.otherMonth"
-        [class.today]="isToday(dt.date)"
-        (click)="openCompromissoModal(dt.date)">
-        {{ dt.date.getDate() }}
+    <div class="actions">
+      <div class="calendar-filters">
+        <select [(ngModel)]="selectedYear" (change)="applyFilters()" class="filter-select">
+          <option *ngFor="let y of yearOptions" [ngValue]="y">{{ y }}</option>
+        </select>
+        <select [(ngModel)]="selectedMonthFilter" (change)="applyFilters()" class="filter-select">
+          <option *ngFor="let mo of monthObjects" [ngValue]="mo.index">{{ mo.name }}</option>
+        </select>
       </div>
     </div>
   </div>
 
-  <!-- Modal de compromisso -->
+  <!-- Calendário Mensal -->
+  <div class="month-calendar">
+    <div class="month-header">
+      {{ meses[selectedMonthFilter] }} {{ selectedYear }}
+    </div>
+    <div class="calendar-grid">
+      <div class="day-name" *ngFor="let d of dayNames">{{ d }}</div>
+      <div
+        class="day-cell"
+        *ngFor="let dt of monthDays"
+        [class.other-month]="dt.otherMonth"
+        (click)="openCompromissoModal(dt.date)">
+        <span class="date-label">{{ dt.date.getDate() }}</span>
+        <ng-container *ngFor="let ev of getEventosByDate(dt.date)">
+          <div class="post-it" [ngStyle]="{'background-color': ev.color}">
+            {{ ev.title }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Compromisso -->
   <div class="modal-overlay" *ngIf="showCompModal">
     <div class="modal-content">
-      <button class="modal-close" (click)="closeCompModal()">×</button>
-      <h2>Compromisso - {{ selectedDate | date: 'dd/MM/yyyy' }}</h2>
+      <button class="modal-close" (click)="closeCompModal()">x</button>
+      <h2>Compromisso - {{ modalDate | date: 'dd/MM/yyyy' }}</h2>
       <div class="modal-body">
         <label for="comp-titulo">Título</label>
         <input id="comp-titulo" type="text" [(ngModel)]="compTitulo" />
 
         <label for="comp-desc">Descrição</label>
-        <textarea id="comp-desc" rows="4" [(ngModel)]="compDescricao"></textarea>
+        <textarea id="comp-desc" rows="3" [(ngModel)]="compDescricao"></textarea>
+
+        <label for="comp-color">Cor do Post-it</label>
+        <input id="comp-color" type="color" [(ngModel)]="compColor" />
       </div>
       <div class="modal-footer">
         <button class="btn-acao voltar" (click)="closeCompModal()">Voltar</button>
-        <button class="btn-acao enviar" (click)="saveCompromisso()">Salvar</button>
+        <button class="btn-acao enviar" (click)="confirmCompromisso()">Salvar</button>
       </div>
     </div>
   </div>
