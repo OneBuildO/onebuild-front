@@ -1,4 +1,7 @@
 <div class="main-container">
+  <div class="progress-bar-container" *ngIf="carregando">
+      <div class="progress-bar"></div>
+  </div>
   <div class="breadcrumb-container">
     <div class="back-title">
       <img src="assets/icones/voltar-icon.svg" alt="Voltar" class="back-icon" (click)="onVoltar()" />
