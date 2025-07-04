@@ -72,19 +72,27 @@
     <hr class="line" />
   </div>
 
-  <div class="data-grid" *ngIf="arquivosNormais.length > 0; else semArquivos">
+<ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
+  <!-- cabeçalho -->
+  <div class="data-grid header">
     <div class="item-data-title"><label>Nome</label></div>
     <div class="item-data-title"><label>Download</label></div>
-
-    <ng-container *ngFor="let arquivo of arquivosNormais">
-      <div class="item-data">
-        <p>{{ arquivo.nomeArquivo || '—' }}</p>
-      </div>
-      <div class="item-data">
-        <button (click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">Baixar</button>
-      </div>
-    </ng-container>
   </div>
+
+  <!-- cada linha com borda -->
+  <div class="data-grid row" *ngFor="let arquivo of arquivosNormais">
+    <div id="foto-e-nome" class="item-data"> 
+      <img [src]="getFileIcon(arquivo.nomeArquivo)" alt="plantaBaixaIcon" style="width: 5%;">
+      {{ arquivo.nomeArquivo || '—' }}
+    </div>
+    <div class="item-data">
+      <button (click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">
+        Baixar
+      </button>
+    </div>
+  </div>
+</ng-container>
+
 
   <ng-template #semArquivos>
     <p style="margin-left: 1rem;">Nenhum arquivo encontrado.</p>
@@ -95,21 +103,34 @@
     <hr class="line" />
   </div>
 
-  <div class="data-grid" *ngIf="plantasBaixas.length > 0; else semPlantas">
-    <div class="item-data-title"><label>Nome</label></div>
-    <div class="item-data-title"><label>Download</label></div>
+  <ng-container *ngIf="plantasBaixas.length > 0; else semPlantas">
+    <div class="data-grid header">
+      <div class="item-data-title"><label>Nome</label></div>
+      <div class="item-data-title"><label>Download</label></div>
+    </div>
 
-    <ng-container *ngFor="let planta of plantasBaixas">
-      <div class="item-data">
-        <p>{{ planta.nomeArquivo || '—' }}</p>
+    <div class="data-grid row" *ngFor="let planta of plantasBaixas">
+      <div id="foto-e-nome" class="item-data">
+        <img src="/assets/icones/planta-baixa-icon.svg" alt="plantaBaixaIcon" style="width: 5%;">
+        {{ planta.nomeArquivo || '—' }}
       </div>
       <div class="item-data">
         <button (click)="baixarPlantaBaixa(planta.id, planta.nomeArquivo)">Baixar</button>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 
   <ng-template #semPlantas>
     <p style="margin-left: 1rem;">Nenhuma planta baixa encontrada.</p>
   </ng-template>
+
+  <div class="button-grid">
+    <button>
+      Adicionar Modificações
+    </button>
+    <button *ngIf="isClient()" id="btn-comentario">
+      Adicionar comentário
+    </button>
+  </div>
+
 </div>

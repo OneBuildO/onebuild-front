@@ -10,6 +10,9 @@ import { StatusDoProjetoDescricoes } from '../../cadastro-projeto/statusDoProjet
 import { StatusDoProjeto } from '../../cadastro-projeto/statusDoProjeto';
 import { TipoFornecedorDescricoes } from 'src/app/login/tipoFornecedorDescricoes';
 import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
+import { Permissao } from 'src/app/login/permissao';
+import { AuthService } from 'src/app/services/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-detalhes-projeto',
@@ -36,7 +39,8 @@ export class DetalhesProjetoComponent implements OnInit {
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
     private dadosService: DadosService,
-    private router: Router
+    private router: Router,
+    private authService:AuthService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +138,23 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
+    /** Extrai só a extensão */
+  getFileType(nome: string): string {
+    return nome.split('.').pop()?.toLowerCase() || '';
+  }
+
+  /** Retorna o caminho do ícone conforme a extensão */
+  getFileIcon(nome: string): string {
+    const ext = this.getFileType(nome);
+    if (ext === 'pdf') {
+      return 'assets/icones/pdf-icon.svg';
+    }
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+      return 'assets/icones/image-icon.svg';
+    }
+    return 'assets/icones/file-icon.svg';
+  }
+
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? "Público" : "Privado" 
   }
@@ -148,6 +169,11 @@ export class DetalhesProjetoComponent implements OnInit {
 
   onVoltar(): void {
     this.router.navigate([`/usuario/${this.rotaOrigem}`]);
+  }
+
+  isClient(): boolean {
+    const role = this.authService.getRoleUsuarioFromToken();
+    return role === Permissao.CLIENTE;
   }
 
 }

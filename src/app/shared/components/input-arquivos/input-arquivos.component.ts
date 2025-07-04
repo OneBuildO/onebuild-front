@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class InputArquivosComponent implements ControlValueAccessor, OnInit {
   @Input() label: string = 'Clique ou arraste o arquivo para fazer upload';
   @Input() isEditMode = false;
+  @Input() iconSrc = 'assets/icones/upload-icon.svg';
   @Output() arquivosSelecionados = new EventEmitter<File[]>();
 
   successMessage: string | null = null;

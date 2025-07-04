@@ -38,7 +38,7 @@ export class AuthService {
     return null; 
   }
 
-    obterPerfilUsuario(): Observable<Usuario> {
+  obterPerfilUsuario(): Observable<Usuario> {
     const token = this.obterToken();
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -115,10 +115,6 @@ export class AuthService {
         return '/forbidden';
     }
   }
-
-
-
-
 
 
   isAuthenticated() : boolean {
