@@ -8,4 +8,8 @@ export interface ClienteCadastroDTO {
   contato: string;
   cidade: string;
   estado: string;
+  cep:string;
+  rua:string;
+  bairro:string;
+  numeroEndereco:string;
 }

@@ -27,7 +27,7 @@ export class CadastroProjetoComponent implements OnInit {
     cliente: new FormControl('', [Validators.required]),
     arquivos: new FormControl<File[]>([]),
     plantaBaixa: new FormControl<File[]>([]),
-    categoria: new FormControl('', []),  // agora opcional
+    categoria: new FormControl('', [Validators.required]), 
     dataLimiteOrcamento: new FormControl('', [Validators.required]),
     observacoes: new FormControl(''),
     estado: new FormControl('', [Validators.required]),
@@ -65,6 +65,14 @@ export class CadastroProjetoComponent implements OnInit {
   errorMessage: string | null = null;
   tipoAlerta = AlertType.Warning;
 
+  private tiposPermitidos = [
+    'image/png',
+    'image/jpeg',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -88,7 +96,7 @@ export class CadastroProjetoComponent implements OnInit {
         next: ({ response: projeto }) => {
           this.projetoForm.patchValue({
             id: projeto.id,
-            cliente: projeto.idUsuario,
+            cliente: projeto.idCliente,
             categoria: projeto.categoria,
             dataLimiteOrcamento: projeto.dataLimiteOrcamento,
             observacoes: projeto.observacoes,
@@ -100,8 +108,6 @@ export class CadastroProjetoComponent implements OnInit {
               : VisibilidadeProjeto.PRIVADO,
             status: projeto.status,
           });
-          
-          console.log(this.projetoForm)
 
           this.obterCidadePorNomeEstado(projeto.estado);
 
@@ -114,7 +120,6 @@ export class CadastroProjetoComponent implements OnInit {
             }
           });
 
-          // buscar plantas baixas existentes
           this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
             next: (res: ApiResponse<ArquivosProjetoDTO[]>) => {
               this.plantaBaixa = res.response;
@@ -155,12 +160,24 @@ export class CadastroProjetoComponent implements OnInit {
   }
 
   onArquivosSelecionados(arquivos: File[]): void {
-    // apenas arquivos novos
-    this.projetoForm.get('arquivos')?.setValue(arquivos);
+    const arquivosValidos = this.validarArquivos(arquivos);
+    if (arquivosValidos.length < arquivos.length) {
+      this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
+    }
+    this.projetoForm.get('arquivos')?.setValue(arquivosValidos);
   }
 
   onPlantaBaixaSelecionados(arquivos: File[]): void {
-    this.projetoForm.get('plantaBaixa')?.setValue(arquivos);
+    const arquivosValidos = this.validarArquivos(arquivos);
+    if (arquivosValidos.length < arquivos.length) {
+      this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
+    }
+    this.projetoForm.get('plantaBaixa')?.setValue(arquivosValidos);
+  }
+
+  // Função para validar os arquivos
+  private validarArquivos(arquivos: File[]): File[] {
+    return arquivos.filter(arquivo => this.tiposPermitidos.includes(arquivo.type));
   }
 
   removerArquivoExistente(id: number, tipo: 'arquivo' | 'planta'): void {
@@ -187,7 +204,7 @@ export class CadastroProjetoComponent implements OnInit {
     const fv = this.projetoForm.value;
     const projetoDTO: ProjetoResumoDTO = {
       id: fv.id ?? 0,
-      idUsuario: fv.cliente!,
+      idCliente: fv.cliente!,
       observacoes: fv.observacoes ?? '',
       categoria: fv.categoria ?? '',
       estado: fv.estado!,
@@ -210,9 +227,30 @@ export class CadastroProjetoComponent implements OnInit {
         this.arquivosRemoverIds,
         this.plantasRemoverIds
       ).subscribe({
-        next: () => this.successMessage = 'Projeto atualizado com sucesso!',
-        error: () => this.errorMessage = 'Erro ao atualizar projeto.'
+        next: () => {
+          this.successMessage = 'Projeto atualizado com sucesso!';
+
+          this.arquivosRemoverIds = [];
+          this.plantasRemoverIds = [];
+          this.projetoForm.get('arquivos')?.reset([]);
+          this.projetoForm.get('plantaBaixa')?.reset([]);
+          
+
+          this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
+            next: res => this.arquivosProjeto = res.response,
+            error: () => this.arquivosProjeto = []
+          });
+
+          this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
+            next: res => this.plantaBaixa = res.response,
+            error: () => this.plantaBaixa = []
+          });
+        },
+        error: () => {
+          this.errorMessage = 'Erro ao atualizar projeto.';
+        }
       });
+
     } else {
       this.projetoService.novoProjeto(
         projetoDTO,
@@ -221,12 +259,19 @@ export class CadastroProjetoComponent implements OnInit {
       ).subscribe({
         next: () => {
           this.successMessage = 'Projeto cadastrado com sucesso!';
-          this.projetoForm.reset({ visibilidade: VisibilidadeProjeto.PUBLICO, status: StatusDoProjeto.NOVO_PROJETO });
+          
+          this.projetoForm.reset({
+            visibilidade: VisibilidadeProjeto.PUBLICO,
+            status: StatusDoProjeto.NOVO_PROJETO
+          });
+
           this.arquivosProjeto = [];
           this.plantaBaixa = [];
           this.submited = false;
         },
-        error: () => this.errorMessage = 'Erro ao cadastrar projeto.'
+        error: () => {
+          this.errorMessage = 'Erro ao cadastrar projeto.';
+        }
       });
     }
   }

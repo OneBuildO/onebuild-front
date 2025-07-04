@@ -49,7 +49,7 @@ export class ProjetoService {
     );
   }
 
-    getMeusProjetos(): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+  getMeusProjetos(): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
     return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(
       `${this.apiUrl}/meus-projetos`
     );

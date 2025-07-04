@@ -1,5 +1,3 @@
-<!-- src/app/sistema/servicos/cliente/apresentacao-projeto/apresentacao-projeto.component.html -->
-
 <div class="main-container">
   <!-- Banner e breadcrumb -->
   <div class="banner">
@@ -13,18 +11,18 @@
     </div>
   </div>
 
-  <!-- Mensagem de erro/sucesso -->
+  <!-- Mensagem de erro -->
   <div *ngIf="errorMsg" class="alert alert-error">
     {{ errorMsg }}
     <button class="close-btn" (click)="errorMsg = null">&times;</button>
   </div>
 
-  <!-- Barra de loading -->
+  <!-- Loading -->
   <div class="progress-bar-container" *ngIf="isLoading">
     <div class="progress-bar"></div>
   </div>
 
-  <!-- Tabela de projetos -->
+  <!-- Tabela -->
   <div class="tabela-container" *ngIf="!isLoading && projetos.length">
     <table>
       <thead>
@@ -40,62 +38,23 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of projetos">
-          <td>{{ p.Nome || '-' }}</td>
-          <td>{{ p.projetoCliente || '-' }}</td>
-          <td>{{ p.status || '-' }}</td>
+          <td>{{ p.cliente || '-' }}</td>
+          <td>{{ p.nomeProjeto || '-' }}</td>
+          <td>{{ traduzirStatusDoProjeto(p.status) || '-' }}</td>
           <td>{{ p.dataCadastro | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ p.cidade || '-' }}</td>
           <td>{{ p.estado || '-' }}</td>
           <td>
-            <button class="btn-acao visualizar" (click)="selectProjeto(p.idProjeto)" title="Visualizar">
-              <img src="assets/icones/See.png" alt="Ver">
+            <button
+              class="btn-acao visualizar"
+              (click)="visualizarProjeto(p.idProjeto)"
+              title="Visualizar"
+            >
+              <img src="assets/icones/See.png" alt="Ver" />
             </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  <!-- Quando não houver projetos -->
-  <div *ngIf="!isLoading && projetos.length === 0" class="no-data-message">
-    <p>Você ainda não possui nenhum projeto cadastrado.</p>
-  </div>
-
-  <!-- Detalhe do projeto selecionado -->
-<section *ngIf="!isLoading && detalhe" class="project-details">
-  <div class="project-info">
-    <p><strong>Cliente:</strong>
-       {{ detalhe.nomeCliente || '-' }}
-    </p>
-    <p><strong>Nome:</strong>
-       {{ detalhe.nomeArquiteto || '-' }}
-    </p>
-    <p><strong>Projeto:</strong>
-       {{ detalhe.nomeProjeto || '-' }}
-    </p>
-    <p><strong>Data de cadastro:</strong>
-       {{ detalhe.dataCadastro | date:'dd/MM/yyyy HH:mm' }}
-    </p>
-    <p><strong>Status:</strong>
-       {{ detalhe.status || '-' }}
-    </p>
-  </div>
-
-  <div *ngIf="detalhe.documentos?.length; else noDocsTpl"
-       class="project-documents">
-    <h3>Documentos</h3>
-    <ul>
-      <li *ngFor="let doc of detalhe.documentos">
-        <a (click)="download(doc.urlDownload)">
-          {{ doc.nomeArquivo }}
-        </a>
-      </li>
-    </ul>
-  </div>
-  <ng-template #noDocsTpl>
-    <p>Não há documentos para este projeto.</p>
-  </ng-template>
-</section>
-
-
 </div>

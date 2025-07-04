@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class InputArquivosComponent implements ControlValueAccessor, OnInit {
   @Input() label: string = 'Clique ou arraste o arquivo para fazer upload';
   @Input() isEditMode = false;
+  @Input() iconSrc = 'assets/icones/upload-icon.svg';
   @Output() arquivosSelecionados = new EventEmitter<File[]>();
 
   successMessage: string | null = null;
@@ -75,12 +76,22 @@ export class InputArquivosComponent implements ControlValueAccessor, OnInit {
   }
 
   adicionarArquivos(novosArquivos: File[]): void {
+    this.isEditMode = false;
+
+    // Verifica se o número total de arquivos não excede o limite de 3
     if (this.arquivos.length + novosArquivos.length > 3) {
-      this.errorMessage = 'Você pode enviar no máximo 3 arquivos PDF.';
+      this.errorMessage = 'Você pode enviar no máximo 3 arquivos.';
       return;
     }
 
     for (let arquivo of novosArquivos) {
+      // Verifica se o arquivo é do tipo permitido
+      if (!this.isValidFileType(arquivo)) {
+        this.errorMessage = 'Arquivo inválido. Aceitamos apenas PDFs, imagens (JPEG/PNG) e documentos Word.';
+        return;
+      }
+
+      // Verifica se o arquivo já não foi adicionado
       if (!this.isDuplicate(arquivo)) {
         this.arquivos.push(arquivo);
       }
@@ -89,6 +100,17 @@ export class InputArquivosComponent implements ControlValueAccessor, OnInit {
     this.onChange([...this.arquivos]);
     this.arquivosSelecionados.emit([...this.arquivos]);
     this.errorMessage = null;
+  }
+
+  private isValidFileType(file: File): boolean {
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+    return allowedTypes.includes(file.type);
   }
 
   private isDuplicate(file: File): boolean {

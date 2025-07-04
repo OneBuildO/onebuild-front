@@ -28,20 +28,10 @@
           </option>
           <option
             *ngFor="let cliente of clientes"
-            [value]="cliente.id"
-          >
+            [value]="cliente.id">
             {{ cliente.nome }}
           </option>
         </select>
-        <small
-          *ngIf="
-            submited &&
-            projetoForm.get('cliente')?.hasError('required')
-          "
-          class="text-red-500 text-left"
-        >
-          Cliente é obrigatório.
-        </small>
       </div>
 
       <!-- UPLOAD DE ARQUIVOS -->
@@ -51,8 +41,11 @@
           [isEditMode]="isEditMode"
           (arquivosSelecionados)="onArquivosSelecionados($event)"
           formControlName="arquivos"
+          accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          [iconSrc]="'assets/icones/upload-file-icon.svg'"
         ></app-input-arquivos>
       </div>
+    
 
       <!-- EXISTENTES: ARQUIVOS -->
       <div
@@ -137,7 +130,12 @@
           [isEditMode]="isEditMode"
           (arquivosSelecionados)="onPlantaBaixaSelecionados($event)"
           formControlName="plantaBaixa"
+          accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          [iconSrc]="'assets/icones/planta-baixa-icon.svg'"
         ></app-input-arquivos>
+
+        <!-- Exibição de erro se arquivos inválidos forem selecionados -->
+      
       </div>
 
       <!-- EXISTENTES: PLANTAS BAIXAS -->

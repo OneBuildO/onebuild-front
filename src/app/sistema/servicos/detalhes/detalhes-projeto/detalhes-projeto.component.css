@@ -191,6 +191,43 @@
   margin-bottom: 0px;
 }
 
+/* só o header */
+.data-grid.header {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* só as linhas */
+.data-grid.row {
+  border: 1px solid #d7d7d7;
+  border-color: #d7d7d7;
+  border-radius: 4px;
+  padding: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+
+#foto-e-nome{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.button-grid{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#btn-comentario{
+  color: var(--font-color-dark);
+  background-color: #e5e7eb;
+  border: 1px solid #d7d7d7 ;
+}
+
+
+
 /* Breakpoints */
 @media (min-width: 1200px) {
   .main-container {

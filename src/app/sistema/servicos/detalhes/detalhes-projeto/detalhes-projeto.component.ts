@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { ProjetoResumoDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-resumo-dto';
 import { DetalheProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/detalhe-projeto-dto';
@@ -10,6 +10,9 @@ import { StatusDoProjetoDescricoes } from '../../cadastro-projeto/statusDoProjet
 import { StatusDoProjeto } from '../../cadastro-projeto/statusDoProjeto';
 import { TipoFornecedorDescricoes } from 'src/app/login/tipoFornecedorDescricoes';
 import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
+import { Permissao } from 'src/app/login/permissao';
+import { AuthService } from 'src/app/services/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-detalhes-projeto',
@@ -17,6 +20,7 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
   styleUrls: ['./detalhes-projeto.component.css']
 })
 export class DetalhesProjetoComponent implements OnInit {
+  @Input() projetoIdInput?: number
 
   detalheProjeto?: DetalheProjetoDTO;
   projetoResumo?: ProjetoResumoDTO;
@@ -28,20 +32,28 @@ export class DetalhesProjetoComponent implements OnInit {
   carregando: boolean = true;
   erro?: string;
 
+  rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
+
+
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
-    private dadosService: DadosService
+    private dadosService: DadosService,
+    private router: Router,
+    private authService:AuthService
   ) {}
 
   ngOnInit(): void {
-    this.projetoId = Number(this.route.snapshot.paramMap.get('id'));
-    
+    const url = this.router.url;
+    if (url.startsWith('/usuario/apresentacao-do-projeto/')) {
+      this.rotaOrigem = 'apresentacao-do-projeto';
+    } else if (url.startsWith('/usuario/visualizar-projeto/')) {
+      this.rotaOrigem = 'visualizar-projeto';
+    }
+
+    this.projetoId = this.projetoIdInput ?? Number(this.route.snapshot.paramMap.get('id'));
     if (this.projetoId) {
       this.carregarDetalhes();
-    } else {
-      this.erro = "ID do projeto inválido.";
-      this.carregando = false;
     }
   }
 
@@ -126,6 +138,23 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
+    /** Extrai só a extensão */
+  getFileType(nome: string): string {
+    return nome.split('.').pop()?.toLowerCase() || '';
+  }
+
+  /** Retorna o caminho do ícone conforme a extensão */
+  getFileIcon(nome: string): string {
+    const ext = this.getFileType(nome);
+    if (ext === 'pdf') {
+      return 'assets/icones/pdf-icon.svg';
+    }
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+      return 'assets/icones/image-icon.svg';
+    }
+    return 'assets/icones/file-icon.svg';
+  }
+
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? "Público" : "Privado" 
   }
@@ -136,6 +165,15 @@ export class DetalhesProjetoComponent implements OnInit {
 
   traduzirCategoriaProjeto(categoriaProjeto: string): string {
     return TipoFornecedorDescricoes[categoriaProjeto as TipoFornecedor];
+  }
+
+  onVoltar(): void {
+    this.router.navigate([`/usuario/${this.rotaOrigem}`]);
+  }
+
+  isClient(): boolean {
+    const role = this.authService.getRoleUsuarioFromToken();
+    return role === Permissao.CLIENTE;
   }
 
 }

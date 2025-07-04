@@ -1,5 +1,3 @@
-<!-- input-arquivos.component.html -->
-
 <div class="cont-arquivos">
   <label
     class="arquivo-upload"
@@ -9,13 +7,14 @@
     <!-- input escondido cobrindo toda a área de drop -->
     <input
       type="file"
-      accept="application/pdf"
+      accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       (change)="onPdfSelected($event)"
       style="opacity:0; position:absolute; width:100%; height:100%; top:0; left:0;"
+      multiple
     />
 
     <div class="arquivo-preview">
-      <img src="assets/icones/upload-icon.svg" class="upload-icon" />
+      <img [src]="iconSrc" class="upload-icon" />
       <span class="upload-placeholder">
         Clique ou arraste o arquivo para fazer upload
       </span>

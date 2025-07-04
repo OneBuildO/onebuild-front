@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
@@ -37,7 +37,8 @@ export class VisualizarProjetoComponent implements OnInit {
       private router: Router,
       private modalDeleteService: ModalDeleteService,
       private authService: AuthService,
-      private projetoService: ProjetoService
+      private projetoService: ProjetoService,
+      private cdr:ChangeDetectorRef
     ) {}
   
     ngOnInit(): void {
@@ -146,16 +147,17 @@ export class VisualizarProjetoComponent implements OnInit {
 
     this.projetoService.deletarProjeto(id).subscribe(
       () => {
-        console.log('Cliente deletado com sucesso!');
+        console.log('Projeto deletado com sucesso!');
         this.fetchProjetos();
         this.showMessage(
           'success',
-          `Cliente "${projetoRemovido?.projetoCliente ?? ''} - 
+          `Projeto "${projetoRemovido?.nomeProjeto ?? ''} - 
           ${ projetoRemovido?.estado ?? '-'}" - ${projetoRemovido?.cidade } deletado com sucesso!`
         );
+        this.cdr.detectChanges(); //revisar isso aqui para assim que deletar sumir.
       },
       (error) => {
-        console.error('Erro ao deletar o cliente:', error);
+        console.error('Erro ao deletar o projeto:', error);
       }
     );
   }

@@ -2,7 +2,7 @@ import { StatusDoProjeto } from "./statusDoProjeto";
 
 export interface ProjetosDisponiveisDTO {
   idProjeto: number;
-  projetoCliente: string;    // nome do projeto
+  nomeProjeto: string;    // nome do projeto
   cliente: string;
   nomeArquiteto: string;
   status: string;
