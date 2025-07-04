@@ -14,6 +14,6 @@ export interface ClienteProjetoDTO {
     estado: string;
     endereco: string | null;
     cnpj: string | null;
-    projetoCliente: string | null;
+    nomeProjeto: string | null;
     projetos: ProjetoDTO[];
 }

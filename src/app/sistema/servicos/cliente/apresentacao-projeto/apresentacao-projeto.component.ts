@@ -23,6 +23,7 @@ export class ApresentacaoProjetoComponent implements OnInit {
   ngOnInit(): void {
     this.projetoService.getMeusProjetos().subscribe({
       next: resp => {
+        console.log(resp);
         this.projetos = resp.response || [];
         this.isLoading = false;
       },

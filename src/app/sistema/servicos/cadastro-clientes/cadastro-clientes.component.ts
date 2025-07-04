@@ -71,7 +71,7 @@ export class CadastroClientesComponent implements OnInit {
         senha: cliente.senha,
         confirmarSenha: cliente.confirmarSenha ?? '' 
       });
-  
+
       // Atualizar a lista de cidades com base no estado atual
       this.obterCidadePorEstado(estado);
     } else {
@@ -187,12 +187,13 @@ export class CadastroClientesComponent implements OnInit {
             id:            cliente.id,
             nome:          cliente.nome,
             email:         cliente.email,
-            nomeProjeto:   cliente.projetoCliente,  
+            nomeProjeto:   cliente.nomeProjeto,  
             contato:       cliente.contato,
             estado:        cliente.estado,
             cidade:        cliente.cidade
           });
           this.obterCidadePorEstado(cliente.estado);
+          console.log(this.clienteForm.value)
         },
         (error) => {console.error('Erro ao carregar cliente para edição', error)}
       );
