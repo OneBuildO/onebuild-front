@@ -232,6 +232,9 @@ export class CadastroProjetoComponent implements OnInit {
 
           this.arquivosRemoverIds = [];
           this.plantasRemoverIds = [];
+          this.projetoForm.get('arquivos')?.reset([]);
+          this.projetoForm.get('plantaBaixa')?.reset([]);
+          
 
           this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
             next: res => this.arquivosProjeto = res.response,
