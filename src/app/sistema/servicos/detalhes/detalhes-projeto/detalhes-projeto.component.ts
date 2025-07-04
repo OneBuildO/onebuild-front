@@ -34,7 +34,6 @@ export class DetalhesProjetoComponent implements OnInit {
 
   rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
 
-
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
@@ -58,11 +57,13 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
   carregarDetalhes(): void {
+    this.carregando = true;
     this.projetoService.obterDetalheProjeto(this.projetoId).subscribe({
       next: (res: ApiResponse<DetalheProjetoDTO>) => {
         this.detalheProjeto = res.response;
         this.carregarProjetoResumo();
         this.carregarArquivosProjeto();
+        this.carregando = false;
       },
       error: () => {
         this.erro = "Erro ao carregar os detalhes do projeto.";

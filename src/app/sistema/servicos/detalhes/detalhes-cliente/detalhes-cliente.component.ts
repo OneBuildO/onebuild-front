@@ -14,7 +14,7 @@ import { stat } from 'fs';
 export class DetalhesClienteComponent implements OnInit {
 
   cliente: ClienteProjetoDTO | null = null;
-
+  carregando:boolean = false;
 
   constructor(private clienteService: ClienteService, private router: ActivatedRoute) { }
 
@@ -30,10 +30,11 @@ export class DetalhesClienteComponent implements OnInit {
   }
 
   carregarCliente(id: string): void {
+    this.carregando = true;
     this.clienteService.getClientById(id).subscribe({
       next: (res) => {
         this.cliente = res;
-
+        this.carregando = false;
       },
       error: (err) => {
         console.log(err);

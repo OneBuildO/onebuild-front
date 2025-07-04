@@ -93,7 +93,7 @@ label.required::after {
   font-size: 10px;
 }
 
-#btn-cadastrar-cupom {
+#btn-cadastrar-projeto {
     background: var(--gradient-primary);
     color: var(--color-text-dark);
     display: block; /* faz o botão se comportar como bloco */

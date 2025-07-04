@@ -1,4 +1,8 @@
 <div class="main-container" *ngIf="cliente">
+  <div class="progress-bar-container" *ngIf="carregando">
+      <div class="progress-bar"></div>
+  </div>
+  
   <div class="breadcrumb-container">
     <div class="back-title">
       <img
@@ -37,8 +41,19 @@
 
     <div class="data-grid">
       <div class="item-data">
-        <label>Endereço</label>
-        <p>{{ cliente.endereco || 'Não informado' }}</p>
+        <label>Rua | Número do Endereço</label>
+        <p>{{ cliente.rua || 'Não informado' }}, {{ cliente.numeroEndereco || 'Não informado' }}</p>
+      </div>
+      <div class="item-data">
+        <label>Bairro</label>
+        <p>{{ cliente.bairro || 'Não informado'}}</p>
+      </div>
+    </div>
+
+    <div class="data-grid">
+      <div class="item-data">
+        <label>CEP</label>
+        <p>{{ cliente.cep || 'Não informado' }}</p>
       </div>
       <div class="item-data">
         <label>Contato</label>
