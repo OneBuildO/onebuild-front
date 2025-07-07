@@ -36,14 +36,14 @@ interface Evento {
   styleUrls: ['./agenda-de-processos.component.css']
 })
 export class AgendaDeProcessosComponent implements OnInit {
-  dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+  dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
   monthObjects: MonthObj[] = [];
   yearOptions: number[] = [];
 
   selectedYear!: number;
-  selectedMonthFilter!: number;   // sempre um mês
+  selectedMonthFilter!: number;   
   filteredMonths: MonthObj[] = [];
   monthDays: CalendarDay[] = [];
   eventos: Evento[] = [];

@@ -6,7 +6,7 @@
 
   <div class="breadcrumb-container">
     <div class="breadcrumb">
-      <a (click)="onVoltarClick()">Dashboard &gt; </a>
+      <a (click)="onVoltarClick()">Dashboard &gt;</a>
       <span class="breadcrumb-highlight">Agenda</span>
     </div>
     <div class="actions">
@@ -19,97 +19,81 @@
         </select>
       </div>
     </div>
-
-      <!-- toggle button -->
-  <button class="toggle-mini-calendar"
-          (click)="showMiniCalendar = !showMiniCalendar">
-    <img  src="assets/icones/cale-preto.svg"  alt="Calendário"/>
-  </button>
-
-  <!-- mini-calendar bem ali -->
-  <div class="mini-calendar" *ngIf="showMiniCalendar">
-    <mat-calendar
-      [(selected)]="selectedDate"
-      (selectedChange)="onMiniDateSelected($event)">
-    </mat-calendar>
   </div>
 
-  </div>
-
-  <!-- Calendário Mensal -->
-  <div class="month-calendar">
-    <div class="month-header">
-      {{ meses[selectedMonthFilter] }} {{ selectedYear }}
-    </div>
-    <div class="calendar-grid">
-      <div class="day-name" *ngFor="let d of dayNames">{{ d }}</div>
-      <div
-        class="day-cell"
-        *ngFor="let dt of monthDays"
-        [class.other-month]="dt.otherMonth"
-        [class.today]="isToday(dt.date)"
-        (click)="openCompromissoModal(dt.date)">
-        <span class="date-label">{{ dt.date.getDate() }}</span>
-        <ng-container *ngFor="let ev of getEventosByDate(dt.date)">
-          <div class="post-it" [ngStyle]="{'background-color': ev.color}">
-            {{ ev.title }}
-          </div>
-        </ng-container>
+  <!-- Aqui iniciamos o layout com os dois calendários lado a lado -->
+  <div class="calendar-wrapper">
+    <!-- Calendário Mensal (grande) -->
+    <div class="month-calendar">
+      <div class="month-header">
+        {{ meses[selectedMonthFilter] }} {{ selectedYear }}
       </div>
+      <div class="calendar-grid">
+        <div class="day-name" *ngFor="let d of dayNames">{{ d }}</div>
+        <div
+          class="day-cell"
+          *ngFor="let dt of monthDays"
+          [class.other-month]="dt.otherMonth"
+          [class.today]="isToday(dt.date)"
+          (click)="openCompromissoModal(dt.date)">
+          <span class="date-label">{{ dt.date.getDate() }}</span>
+          <ng-container *ngFor="let ev of getEventosByDate(dt.date)">
+            <div class="post-it" [ngStyle]="{'background-color': ev.color}">
+              {{ ev.title }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+      <!-- QUADRADO COM O MINI-CALENDÁRIO -->
+    <div class="mini-calendar-container">
+      <mat-calendar
+        [(selected)]="selectedDate"
+        (selectedChange)="onMiniDateSelected($event)">
+      </mat-calendar>
     </div>
   </div>
 
   <!-- Modal de Compromisso -->
-<div class="modal-overlay" *ngIf="showCompModal">
-  <div class="modal-content">
-    <!-- Ícone de fechar com SVG arredondado -->
-    <button class="modal-close" (click)="closeCompModal()">
-      <img src="assets/icones/close.svg" alt="Fechar" class="modal-close-icon"/>
-    </button>
+  <div class="modal-overlay" *ngIf="showCompModal">
+    <div class="modal-content">
+      <button class="modal-close" (click)="closeCompModal()">
+        <img src="assets/icones/close.svg" alt="Fechar" class="modal-close-icon"/>
+      </button>
 
-    <!-- Cabeçalho com data e hora em tags -->
-    <div class="modal-header">
-      <span class="date-tag">{{ modalDate | date:'dd/MM/yyyy' }}</span>
-      <span class="time-tag">{{ compTime || '--:--' }}</span>
-    </div>
-
-    <div class="modal-body">
-      <!-- Horário + cor lado a lado -->
-      <div class="field-row">
-        <div class="field-group">
-          <label for="comp-time">Hora</label>
-          <input id="comp-time" type="time" [(ngModel)]="compTime" />
-        </div>
-
-        <div class="field-group">
-          <label for="comp-color">Cor</label>
-          <input id="comp-color" type="color" [(ngModel)]="compColor" />
-        </div>
+      <div class="modal-header">
+        <span class="date-tag">{{ modalDate | date:'dd/MM/yyyy' }}</span>
+        <span class="time-tag">{{ compTime || '--:--' }}</span>
       </div>
 
-      <!-- Título -->
-      <label for="comp-titulo">Título</label>
-      <input id="comp-titulo" type="text" [(ngModel)]="compTitulo" />
+      <div class="modal-body">
+        <div class="field-row">
+          <div class="field-group">
+            <label for="comp-time">Hora</label>
+            <input id="comp-time" type="time" [(ngModel)]="compTime" />
+          </div>
+          <div class="field-group">
+            <label for="comp-color">Cor</label>
+            <input id="comp-color" type="color" [(ngModel)]="compColor" />
+          </div>
+        </div>
 
-      <!-- Descrição -->
-      <label for="comp-desc">Descrição</label>
-      <textarea id="comp-desc" rows="3" [(ngModel)]="compDescricao"></textarea>
+        <label for="comp-titulo">Título</label>
+        <input id="comp-titulo" type="text" [(ngModel)]="compTitulo" />
 
-      <!-- Link opcional -->
-      <label for="comp-link">Link da reunião no Meet/Zoom (opcional)</label>
-      <input id="comp-link" type="url"
-            placeholder="https://sua.reuniao.exemplo"
-            [(ngModel)]="compLink" />
+        <label for="comp-desc">Descrição</label>
+        <textarea id="comp-desc" rows="3" [(ngModel)]="compDescricao"></textarea>
 
-     
-    </div>
+        <label for="comp-link">Link da reunião no Meet/Zoom (opcional)</label>
+        <input id="comp-link" type="url"
+               placeholder="https://sua.reuniao.exemplo"
+               [(ngModel)]="compLink" />
+      </div>
 
-
-    <div class="modal-footer">
-      <!-- Removido o “Voltar”, mantém só “Salvar” -->
-      <button class="btn-acao enviar" (click)="confirmCompromisso()">Salvar</button>
+      <div class="modal-footer">
+        <button class="btn-acao enviar" (click)="confirmCompromisso()">Salvar</button>
+      </div>
     </div>
   </div>
-</div>
-
 </div>
