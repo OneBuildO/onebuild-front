@@ -19,6 +19,17 @@ interface MonthObj {
   index: number;
 }
 
+interface Evento {
+  date: string;
+  time?: string;
+  title: string;
+  description: string;
+  color: string;
+  link?: string;
+  // mentions?: string;
+}
+
+
 @Component({
   selector: 'app-agenda-de-processos',
   templateUrl: './agenda-de-processos.component.html',
@@ -42,6 +53,12 @@ export class AgendaDeProcessosComponent implements OnInit {
   compTitulo = '';
   compDescricao = '';
   compColor = '#ffeeba';
+
+  compTime:  string = '';
+  compLink:  string = '';
+
+  showMiniCalendar = false;
+  selectedDate = new Date();
 
   constructor(
     private router: Router,
@@ -103,31 +120,54 @@ export class AgendaDeProcessosComponent implements OnInit {
     }
   }
 
-  openCompromissoModal(date: Date): void {
-    this.modalDate    = date;
-    this.compTitulo   = '';
-    this.compDescricao= '';
-    this.compColor    = '#ffeeba';
-    this.showCompModal= true;
+   openCompromissoModal(date: Date): void {
+    this.modalDate     = date;
+    this.compTitulo    = '';
+    this.compDescricao = '';
+    this.compColor     = '#ffeeba';
+    this.compTime      = '';
+    this.compLink      = '';
+    // this.compMentions = '';
+    this.showCompModal = true;
+  }
+
+  confirmCompromisso(): void {
+    const iso = this.modalDate.toISOString().substring(0, 10);
+    this.eventos.push({
+      date:        iso,
+      time:        this.compTime,
+      title:       this.compTitulo,
+      description: this.compDescricao,
+      color:       this.compColor,
+      link:        this.compLink,
+      // mentions:    this.compMentions
+    });
+    this.closeCompModal();
   }
 
   closeCompModal(): void {
     this.showCompModal = false;
   }
 
-  confirmCompromisso(): void {
-    const iso = this.modalDate.toISOString().substring(0, 10);
-    this.eventos.push({
-      date: iso,
-      title: this.compTitulo,
-      description: this.compDescricao,
-      color: this.compColor
-    });
-    this.closeCompModal();
-  }
 
   getEventosByDate(date: Date): Evento[] {
     const iso = date.toISOString().substring(0, 10);
     return this.eventos.filter(e => e.date === iso);
+  }
+
+  isToday(date: Date): boolean {
+    const today = new Date();
+    return date.getDate() === today.getDate()
+        && date.getMonth() === today.getMonth()
+        && date.getFullYear() === today.getFullYear();
+  }
+
+  onMiniDateSelected(date: Date) {
+    // Quando o usuário escolhe uma data no mini-calendário,
+    // você pode navegar direto pra esse mês e opcionalmente abrir o modal:
+    this.selectedYear  = date.getFullYear();
+    this.selectedMonthFilter = date.getMonth();
+    this.applyFilters();
+    this.openCompromissoModal(date);
   }
 }

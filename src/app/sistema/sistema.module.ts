@@ -29,6 +29,8 @@ import { VisualizarPromocoesComponent } from './servicos/visualizar-promocoes/vi
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
 import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule }   from '@angular/material/core';
 
 
 @NgModule({
@@ -64,6 +66,8 @@ import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/d
     ReactiveFormsModule,
     NgApexchartsModule,
     FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     NgxMaskModule.forRoot(),
   ]
 })

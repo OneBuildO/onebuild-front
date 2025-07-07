@@ -1,35 +1,31 @@
+// src/custom-theme.scss
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// 1. IMPORTS — devem ficar sempre no topo, antes de qualquer outra regra
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+@use 'sass:map';
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+// 2. CORE STYLES (inclui estilos básicos do Material)
+//    — só inclua uma vez em toda a aplicação
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
+// 3. PALETTES — defina as cores primárias, de destaque e de aviso
 $app-onebuild-primary: mat.define-palette(mat.$indigo-palette);
-$app-onebuild-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$app-onebuild-accent:  mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$app-onebuild-warn:    mat.define-palette(mat.$red-palette);
 
-// The warn palette is optional (defaults to red).
-$app-onebuild-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
+// 4. THEME OBJECT — combine as paletas em um tema claro
 $app-onebuild-theme: mat.define-light-theme((
   color: (
     primary: $app-onebuild-primary,
-    accent: $app-onebuild-accent,
-    warn: $app-onebuild-warn,
+    accent:  $app-onebuild-accent,
+    warn:    $app-onebuild-warn,
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+// 5. INCLUIR OS ESTILOS DE COMPONENTES do Angular Material
+//    Você pode optar por importar individualmente cada mixin de componente
+//    ou usar este atalho que gera todos de uma vez.
 @include mat.all-component-themes($app-onebuild-theme);
 
+// 6. A partir daqui, seu CSS/SCSS customizado para a aplicação
+//    (variáveis, mixins ou estilos globais podem vir abaixo)

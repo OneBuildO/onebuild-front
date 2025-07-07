@@ -37,6 +37,8 @@
   padding: 32px 0;
   padding-top: 40px;
   align-items: center;
+  position: relative;    /* referência para posicionamento absoluto do mini-calendar */
+  overflow: visible;  
 }
 
 .breadcrumb {
@@ -358,12 +360,149 @@ tr:hover {
 .date-label { position:absolute; top:4px; left:4px; font-size:0.8rem; font-weight:600; }
 .post-it { position:absolute; bottom:4px; left:4px; right:4px; padding:4px; font-size:0.75rem; border-radius:4px; box-shadow:2px 2px 6px rgba(0,0,0,0.2); word-wrap:break-word; }
 
-/* modal */
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;  /* fica na frente de tudo */
+}
+
 .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; }
-.modal-content { background:#fff; border-radius:8px; padding:24px; width:90%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.15); position:relative; }
+.modal-content { background:#fff; border-radius:8px; padding:24px; width:90%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.15); position:relative; margin-top: 60px;}
 .modal-close { position:absolute; top:12px; right:12px; background:none; color: #000 ;border:none; font-size:24px; cursor:pointer; }
 .modal-body { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
 .modal-footer { display:flex; justify-content:flex-end; gap:8px; }
 .btn-acao { padding:8px 16px; border:none; border-radius:4px; cursor:pointer; }
-.btn-acao.voltar { background:#6c757d; color:#fff; }
 .btn-acao.enviar { background:#007bff; color:#fff; }
+
+
+/* Botão de fechar com fundo transparente e borda arredondada */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.modal-close-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Cabeçalho com tags de data e hora */
+.modal-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.date-tag,
+.time-tag {
+  display: inline-block;
+  background: #f1f1f1;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+/* Inputs e textarea */
+.modal-body label {
+  margin-top: 12px;
+  display: block;
+  font-weight: 500;
+}
+.modal-body input[type="time"],
+.modal-body input[type="url"],
+.modal-body input[type="text"],
+.modal-body textarea {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+/* Botão Salvar um pouco mais arredondado/longo */
+.btn-acao.enviar {
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.field-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end; /* alinha labels/inputs pela base */
+  margin-bottom: 12px;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+.field-group label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+#comp-color {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* círculo pequeno atrás do número */
+.day-cell.today .date-label {
+  background-color: #CB8642;
+  color: #fff;
+  display: inline-flex;            /* para centralizar o texto */
+  align-items: center;
+  justify-content: center;
+  width: 28px;                     /* tamanho do círculo */
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.9rem;               /* ajuste o tamanho da fonte se quiser */
+  font-weight: 600;
+}
+
+
+.toggle-mini-calendar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 16px;
+}
+.toggle-mini-calendar img {
+  width: 24px;
+  height: 24px;
+}
+
+.mini-calendar {
+  position: absolute;        /* posiciona relativo ao .breadcrumb-container */
+  top: 100%;                 /* justo abaixo dos filtros */
+  right: 0;                  /* alinhado à direita do breadcrumb-container */
+  margin-top: 8px;           /* um espacinho */
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  z-index: 1000;
+  overflow: visible;         /* garante que nada seja cortado */
+}
+
+
+/* Se quiser limitar o tamanho */
+.mini-calendar ::ng-deep mat-calendar {
+  width: 280px;
+  height: auto;
+}
+

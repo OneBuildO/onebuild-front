@@ -7,6 +7,11 @@
 
     <div class="header-user">
       <div class="usuario">
+
+         <a routerLink="/usuario/notificacoes" class="sidebar-link-a">
+          <img src="assets/icones/notificacao.svg" alt="home icon" />
+        </a>
+        
         <!-- Foto do usuário, ou fallback com inicial e cor -->
         <div class="user-photo" *ngIf="fotoUsuario; else fallbackPhoto">
           <img [src]="fotoUsuario" alt="Foto do Usuário" />
@@ -57,7 +62,7 @@
 
       <mat-nav-list class="sidebar-content">
         <div>
-          <h3 class="sidebar-title">HOME</h3>
+          <h3 class="sidebar-title">Home</h3>
 
           <div class="sidebar-list">
            <a *ngIf="dashboardLink" [routerLink]="dashboardLink" class="sidebar-link" [ngClass]="{'active-link': isActive(dashboardLink)}">
@@ -103,7 +108,7 @@
               <a routerLink="/usuario/agenda-de-processos"
                 class="sidebar-link"
                 [ngClass]="{'active-link': isActive('/usuario/agenda-de-processos')}">
-                <img src="assets/icones/agenda.svg" alt="home icon" />
+                <img src="assets/icones/cale.svg" alt="home icon" />
                 <span>Agenda</span>
               </a>
 
