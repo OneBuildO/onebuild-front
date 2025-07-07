@@ -333,3 +333,80 @@ tr:hover {
     width: 0;
   }
 }
+
+
+/* atividades.component.css */
+.gantt-container {
+  font-family: Arial, sans-serif;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* GRID GERAL: 1 coluna fixa (labels) + 6 colunas iguais (semanas) */
+.gantt-header,
+.gantt-row {
+  display: grid;
+  grid-template-columns: 150px repeat(6, 1fr);
+  align-items: center;
+}
+
+.gantt-header {
+  background: #fafafa;
+  border-bottom: 2px solid #ddd;
+}
+
+.gantt-cell {
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  border-right: 1px solid #e0e0e0;
+}
+
+.gantt-cell:last-child {
+  border-right: none;
+}
+
+/* Célula de label (task names) */
+.label-cell {
+  background: #2c3e50;
+  color: #fff;
+  text-align: left;
+  padding-left: 16px;
+  font-weight: 500;
+  border-right: 2px solid #2c3e50;
+}
+
+/* Cada gantt-row */
+.gantt-row {
+  height: 40px;
+  border-bottom: 1px solid #ececec;
+}
+
+.gantt-row:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Área do gráfico (6 colunas) */
+.gantt-chart {
+  position: relative;
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* A barra em si */
+.bar {
+  background: #e67e22;
+  border-radius: 4px;
+  height: 16px;
+  align-self: center;
+  /* A posição real é definida inline via grid-column */
+}
+
+/* Hover opcional */
+.bar:hover {
+  opacity: 0.8;
+}
+
