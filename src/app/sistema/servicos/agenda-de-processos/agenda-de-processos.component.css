@@ -350,7 +350,7 @@ tr:hover {
 
 /* calendário mensal */
 .month-calendar { margin:0 32px 32px; }
-.month-header { text-align:center; font-size:1.2rem; font-weight:600; margin-bottom:8px; }
+.month-header { text-align:center; font-size:1.5rem; font-weight:600; margin-bottom:38px; }
 .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); border:1px solid #ccc; }
 .day-name, .day-cell { border:1px solid #ccc; padding:4px; }
 .day-name { text-align:center; font-weight:400; background:#f4f4f4; }
@@ -506,46 +506,42 @@ tr:hover {
   padding-left: 0;
 }
 
-/* 2) o calendário grande ocupa mais espaço */
 .month-calendar {
   flex: 3;
 }
 
-/* 4. Mini-Calendário “Quadrado” */
 .mini-calendar-container {
-  width: 280px;
-  margin: 0 auto;
+  width: 240px;     
+  margin: 0 auto 16px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 16px;
+  padding: 12px;
 }
 
-/* 5. Forçar o mat-calendar a ocupar todo o container */
 .mini-calendar-container ::ng-deep mat-calendar {
   width: 100%;
   height: auto;
+  font-size: 0.85rem; /* diminui fonte dos cabeçalhos */
+}
+.mini-calendar-container ::ng-deep .mat-calendar-header {
+  padding: 0 4px;
 }
 
-/* 6. Ajustes no Cabeçalho do Calendário */
-.mini-calendar-container ::ng-deep .mat-calendar-header {
-  padding: 0 8px;
-  margin-bottom: 8px;
-}
 .mini-calendar-container ::ng-deep .mat-calendar-period-button {
-  font-size: 0.9rem;
-  padding: 4px 8px;
+  font-size: 0.8rem;
+  padding: 2px 6px;
 }
+
 .mini-calendar-container ::ng-deep .mat-calendar-previous-button,
 .mini-calendar-container ::ng-deep .mat-calendar-next-button {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
 }
 
-/* 7. Nomes dos Dias (S M T ...) */
 .mini-calendar-container ::ng-deep .mat-calendar-table-header th {
-  font-size: 0.75rem;
-  height: 24px;
+  font-size: 0.65rem;
+  height: 20px;
   padding: 0;
 }
 
@@ -554,8 +550,6 @@ tr:hover {
   padding: 0;
 }
 .mini-calendar-container ::ng-deep .mat-calendar-body-cell {
-    top: 5%;
-    left: 5%;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -563,14 +557,70 @@ tr:hover {
     box-sizing: border-box;
     width: 20%;
     height: 28%;
-    line-height: 1;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 999px;
 }
 
 /* 9. Destaques (hoje / selecionado) */
 .mini-calendar-container ::ng-deep .mat-calendar-body-today-button,
 .mini-calendar-container ::ng-deep .mat-calendar-body-selected {
   border-radius: 50%;
+  background-color: #CB8642;
+  color: #fff;
+  font-weight: 600;
+  width: 28px;
+  height: 28px;
+  font-weight: 600;
+  left: 10px;
+  margin-bottom: 15px;
 }
+
+/* painel de eventos do dia */
+.day-details {
+  background: #fdfdfd;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* título do dia */
+.day-title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  text-align: center;
+  text-transform: capitalize; /* para Domingo → domingo */
+}
+
+/* cada evento */
+.event-item {
+  display: flex;
+  flex-direction: column;
+  border-left: 4px solid; /* a cor vem via ngStyle */
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+}
+
+.event-time {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.event-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 2px 0;
+}
+
+.event-desc {
+  font-size: 0.8rem;
+  color: #444;
+}
+
+.no-events {
+  text-align: center;
+  color: #888;
+  margin: 8px 0;
+}
+
+
+

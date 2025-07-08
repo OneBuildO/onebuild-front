@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="banner">
     <h1>Agenda</h1>
-    <p>Um espaço onde você pode administrar a agenda de seus projetos.</p>
+    <p>Um espaço onde você pode administrar a agenda de seus projetos</p>
   </div>
 
   <div class="breadcrumb-container">
@@ -52,6 +52,29 @@
         [(selected)]="selectedDate"
         (selectedChange)="onMiniDateSelected($event)">
       </mat-calendar>
+
+        <!-- dentro de .mini-calendar-container, após o mat-calendar -->
+  <div class="day-details">
+    <h3 class="day-title">
+      {{ selectedDate | date:'EEEE, dd/MM/yyyy' }}
+    </h3>
+
+    <ng-container *ngIf="getEventosByDate(selectedDate).length; else none">
+      <div
+        class="event-item"
+        *ngFor="let ev of getEventosByDate(selectedDate)"
+        [ngStyle]="{'background-color': ev.color, 'border-left-color': darken(ev.color, 20)}">
+        <div class="event-time">{{ ev.time || '—:—' }}</div>
+        <div class="event-title">{{ ev.title }}</div>
+        <div class="event-desc" *ngIf="ev.description">{{ ev.description }}</div>
+      </div>
+    </ng-container>
+
+    <ng-template #none>
+      <p class="no-events">Nenhum compromisso para este dia.</p>
+    </ng-template>
+  </div>
+
     </div>
   </div>
 

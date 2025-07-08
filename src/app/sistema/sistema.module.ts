@@ -30,8 +30,11 @@ import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promoco
 import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
 import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule }   from '@angular/material/core';
-
+import {  LOCALE_ID } from '@angular/core';
+import localePt from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -69,6 +72,10 @@ import { MatNativeDateModule }   from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
-  ]
+  ],
+    providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+  ],
 })
 export class SistemaModule { }

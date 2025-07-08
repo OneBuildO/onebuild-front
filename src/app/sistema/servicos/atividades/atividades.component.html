@@ -1,26 +1,28 @@
 <div class="main-container">
   <div class="banner">
     <h1>Atividades</h1>
-    <p>Um espaço onde você pode administrar suas atividades.</p>
+    <p>Gerencie o cronograma da obra dos seus clientes de forma dinâmica.</p>
   </div>
 
-  <div class="breadcrumb-container">
-    <div class="breadcrumb">
-      <a (click)="onVoltarClick()">Dashboard &gt; </a> 
-      <span class="breadcrumb-highlight"> Atividades</span>
-    </div>
-    <div class="actions">
-      <div class="search-container">
-        <!-- Campo de busca pode ficar aqui -->
-      </div>
-      <!--<button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
-        -->
-    </div>
+  <div class="filters">
+    <label>
+      Cliente:
+      <select [(ngModel)]="selectedClient" (change)="onClientChange()">
+        <option *ngFor="let c of clients" [value]="c.id">{{ c.nome }}</option>
+      </select>
+    </label>
+
+    <label *ngIf="projects.length">
+      Projeto:
+      <select [(ngModel)]="selectedProject" (change)="onProjectChange()">
+        <option *ngFor="let p of projects" [value]="p.id">{{ p.nome }}</option>
+      </select>
+    </label>
   </div>
 
   <div class="gantt-section">
-    <h2>Cronograma de Obras</h2>
+    <h2>Cronograma de Obras - Quadro Gantt</h2>
+    <pre>Cliente selecionado: {{ selectedClient }}, Projeto selecionado: {{ selectedProject }}</pre>
     <div id="gantt_chart"></div>
   </div>
-
 </div>

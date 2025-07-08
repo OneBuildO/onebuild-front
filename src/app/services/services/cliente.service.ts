@@ -5,6 +5,7 @@ import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/c
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from './api-response-dto';
 import { ClienteProjetoDTO } from 'src/app/sistema/servicos/visualizar-clientes/cliente-projeto-dto';
+import { AtividadeDTO } from 'src/app/sistema/servicos/atividades/AtividadeDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,30 @@ export class ClienteService {
         return throwError(() => new Error(errorMessage));
       })
     );
+  }
+
+    /** Obtém atividades de um projeto para Gantt */
+  getActivities(projetoId: string): Observable<AtividadeDTO[]> {
+    const url = `${environment.apiURLBase}/api/projeto/${projetoId}/atividades`;
+    return this.httpCliente
+      .get<ApiResponse<AtividadeDTO[]>>(url)
+      .pipe(
+        map(res => res.response),
+        catchError(this.handleError('Erro ao obter atividades'))
+      );
+  }
+
+  private handleError(message: string) {
+    return (error: any) => {
+      let errorMsg = message;
+      if (error.error instanceof ErrorEvent) {
+        errorMsg = `${message}: ${error.error.message}`;
+      } else if (error.status) {
+        errorMsg = `${message}: ${error.status} - ${error.message}`;
+      }
+      console.error(errorMsg);
+      return throwError(() => new Error(errorMsg));
+    };
   }
 
 

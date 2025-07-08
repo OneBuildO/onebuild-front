@@ -170,4 +170,19 @@ export class AgendaDeProcessosComponent implements OnInit {
     this.applyFilters();
     this.openCompromissoModal(date);
   }
+
+  // agenda-de-processos.component.ts
+  darken(col: string, amount: number): string {
+    // remove o “#”
+    let c = col.replace('#', '');
+    const num = parseInt(c, 16);
+    let r = (num >> 16) - amount;
+    let g = ((num >> 8) & 0x00FF) - amount;
+    let b = (num & 0x0000FF) - amount;
+    r = r < 0 ? 0 : r;
+    g = g < 0 ? 0 : g;
+    b = b < 0 ? 0 : b;
+    return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+  }
+
 }
