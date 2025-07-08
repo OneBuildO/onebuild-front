@@ -18,6 +18,16 @@
   overflow: hidden;
 }
 
+.subMain-container-novidades {
+  margin: 24px 32px 24px;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
 .progress-bar-container {
   width: 100%;
   height: 6px;
@@ -463,4 +473,250 @@
 }
 .timeline-item.right .btn-acao.comentar {
   float: right;
+}
+
+.timeline {
+  position: relative;
+  margin: 40px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background: #ddd;
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  position: relative;
+  width: 45%;
+  margin-bottom: 40px;
+}
+.timeline-item.left { left: 0; }
+.timeline-item.right { left: 55%; }
+
+.marker {
+  position: absolute;
+  top: 20px;
+  left: -12px;
+  width: 24px;
+  height: 24px;
+  background: #007bff;
+  border: 4px solid #fff;
+  border-radius: 50%;
+}
+.timeline-item.left .marker {
+  right: -12px;
+  left: auto;
+}
+
+.content {
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.novidade-header h3 {
+  margin: 0 0 4px;
+}
+.novidade-header small {
+  color: #666;
+  font-size: 0.85rem;
+}
+.label-arquiteto {
+  background: #1135ff;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-right: 4px;
+}
+
+.comments-section {
+  margin-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+.comment {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border-left: 4px solid #28a745;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.label-cliente {
+  color: #28a745;
+}
+.label-arquiteto.comment-header strong {
+  color: #1135ff;
+}
+
+.btn-comment {
+  margin-top: 12px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-comment:hover {
+  background: #217a35;
+}
+
+
+/* container do avatar (foto ou inicial) */
+.comment-avatar {
+  float: left;
+  margin-right: 12px;
+}
+
+/* carrega img ou inicial */
+.comment-avatar img,
+.user-initial {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* corpo do comentário ajustado para alinhar ao lado */
+.comment-body {
+  overflow: hidden; /* para conter o float */
+}
+
+/* exemplo de cores para rótulos */
+.label-cliente {
+  color: #28a745;
+}
+.label-arquiteto {
+  color: #1135ff;
+}
+
+/* espaçamento e borda */
+.comment {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-left: 4px solid #28a745;
+}
+
+
+.timeline {
+  position: relative;
+  margin: 40px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background: #ddd;
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  position: relative;
+  width: 45%;
+  margin-bottom: 40px;
+}
+.timeline-item.left { left: 0; }
+.timeline-item.right { left: 55%; }
+
+.marker {
+  position: absolute;
+  top: 20px;
+  left: -12px;
+  width: 24px;
+  height: 24px;
+  background: #007bff;
+  border: 4px solid #fff;
+  border-radius: 50%;
+}
+.timeline-item.left .marker {
+  right: -12px;
+  left: auto;
+}
+
+.content {
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.novidade-header h3 {
+  margin: 0 0 4px;
+}
+.novidade-header small {
+  color: #666;
+  font-size: 0.85rem;
+}
+.label-arquiteto {
+  background: #1135ff;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-right: 4px;
+}
+
+.comments-section {
+  margin-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+.comment {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border-left: 4px solid #28a745;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.label-cliente {
+  color: #28a745;
+}
+.label-arquiteto.comment-header strong {
+  color: #1135ff;
+}
+
+.btn-comment {
+  margin-top: 12px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-comment:hover {
+  background: #217a35;
 }

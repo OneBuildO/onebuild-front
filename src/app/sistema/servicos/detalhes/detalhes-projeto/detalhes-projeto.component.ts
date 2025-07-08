@@ -14,6 +14,16 @@ import { Permissao } from 'src/app/login/permissao';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 
+interface Novidade {
+  titulo: string;
+  descricao: string;
+  status: string;
+  imagemUrl?: string;
+  data: Date;
+  comments: { autor: string; descricao: string; data: Date }[];  // novo campo
+}
+
+
 @Component({
   selector: 'app-detalhes-projeto',
   templateUrl: './detalhes-projeto.component.html',
@@ -52,6 +62,7 @@ export class DetalhesProjetoComponent implements OnInit {
     status: string;
     imagemUrl?: string;
     data: Date;
+    comments: { autor: string; descricao: string; data: Date }[];  // novo campo
   }[] = [];
 
   // comentário por item
@@ -223,22 +234,32 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
 
+// ao criar novidades:
+enviarNovidades(): void {
+  const nova: Novidade = {
+    titulo: this.novidadesTitulo,
+    descricao: this.novidadesDescricao,
+    status: this.novidadesStatus,
+    imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
+    data: new Date(),
+    comments: []   // inicia sem comentários
+  };
+  this.novidadesList.unshift(nova);
+  this.fecharNovidadesModal();
+}
 
-
-   enviarNovidades(): void {
-    // montar o objeto de novidade
-    const nova = {
-      titulo: this.novidadesTitulo,
-      descricao: this.novidadesDescricao,
-      status: this.novidadesStatus,
-      imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
-      data: new Date()
-    };
-    // adiciona no início da lista (mais recente em cima)
-    this.novidadesList.unshift(nova);
-
-    this.fecharNovidadesModal();
-  }
+// ao enviar comentário:
+enviarComentario(): void {
+  if (this.comentarioTargetIndex == null) return;
+  const alvo = this.novidadesList[this.comentarioTargetIndex];
+  const autor = this.isClient() ? 'Cliente' : 'Arquiteto';
+  alvo.comments.unshift({
+    autor,
+    descricao: this.comentarioDescricao,
+    data: new Date()
+  });
+  this.fecharComentarioModal();
+}
 
   // abre modal de comentário para um item específico
   openComentarioModal(idx: number): void {
@@ -248,13 +269,6 @@ export class DetalhesProjetoComponent implements OnInit {
     this.showComentarioModal = true;
   }
 
-  enviarComentario(): void {
-    if (this.comentarioTargetIndex === null) return;
-    const alvo = this.novidadesList[this.comentarioTargetIndex];
-    console.log(`Comentário em "${alvo.titulo}":`, this.comentarioTitulo, this.comentarioDescricao);
-    // TODO: salvar comentario via serviço…
-    this.fecharComentarioModal();
-  }
 
   fecharComentarioModal(): void {
     this.showComentarioModal = false;
