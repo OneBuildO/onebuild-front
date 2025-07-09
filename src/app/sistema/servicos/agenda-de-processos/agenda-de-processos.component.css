@@ -67,14 +67,53 @@
   font-weight: 550;
 }
 
-/* buscar e button */
+
 .actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  gap: 16px;
 }
+
+.view-toggle {
+  display: flex;
+  gap: 8px;               /* espaço entre Semana, Mês e Ano */
+}
+
+.toggle-btn {
+  background: #333;        /* fundo cinza-escuro */
+  color: #fff;             /* texto branco */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-btn:hover {
+  background: #000;        /* on hover fica preto */
+}
+
+.toggle-btn.active {
+  background: #000;        /* ativo em preto */
+}
+
+.btn-add {
+  background: #333;        /* mesmo tom do toggle */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 16px;       /* separa do grupo de toggles */
+  transition: background 0.2s;
+}
+
+.btn-add:hover {
+  background: #000;
+}
+
 
 .search-container {
   width: 400px;
@@ -623,4 +662,14 @@ tr:hover {
 }
 
 
+.modal-title-container {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
 

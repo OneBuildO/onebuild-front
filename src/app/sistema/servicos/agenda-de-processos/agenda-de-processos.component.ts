@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
 
+type ViewMode = 'week' | 'month' | 'year';
+
 interface Evento {
-  date: string;   // ISO date e.g. '2025-07-15'
+  date: string;   // ISO yyyy-MM-dd
+  time?: string;
   title: string;
-  description: string;
+  description?: string;
   color: string;
+  link?: string;
 }
 
 interface CalendarDay {
@@ -19,59 +23,51 @@ interface MonthObj {
   index: number;
 }
 
-interface Evento {
-  date: string;
-  time?: string;
-  title: string;
-  description: string;
-  color: string;
-  link?: string;
-  // mentions?: string;
-}
-
-
 @Component({
   selector: 'app-agenda-de-processos',
   templateUrl: './agenda-de-processos.component.html',
   styleUrls: ['./agenda-de-processos.component.css']
 })
 export class AgendaDeProcessosComponent implements OnInit {
-  dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-  meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  // labels de dias e meses
+  dayNames = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  meses    = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+              'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
   monthObjects: MonthObj[] = [];
-  yearOptions: number[] = [];
+  yearOptions: number[]    = [];
 
+  // estado do app
+  viewMode: ViewMode = 'month';
   selectedYear!: number;
-  selectedMonthFilter!: number;   
-  filteredMonths: MonthObj[] = [];
+  selectedMonthFilter!: number;
   monthDays: CalendarDay[] = [];
-  eventos: Evento[] = [];
+  eventos: Evento[]        = [];
 
+  // modal de compromisso
   showCompModal = false;
   modalDate!: Date;
-  compTitulo = '';
-  compDescricao = '';
-  compColor = '#ffeeba';
+  compTitulo     = '';
+  compDescricao  = '';
+  compColor      = '#ffeeba';
+  compTime       = '';
+  compLink       = '';
 
-  compTime:  string = '';
-  compLink:  string = '';
-
-  showMiniCalendar = false;
+  // mini-calendar
   selectedDate = new Date();
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {
-    // popula objetos de mês e anos
-    this.monthObjects = this.meses.map((m, i) => ({ name: m, index: i }));
-    for (let y = 2000; y <= 2100; y++) {
-      this.yearOptions.push(y);
-    }
-    // inicializa com data de hoje
+    // preenche meses
+    this.monthObjects = this.meses.map((m,i) => ({ name: m, index: i }));
+    // preenche anos
+    for (let y = 2000; y <= 2100; y++) this.yearOptions.push(y);
+
+    // inicializa com hoje
     const today = new Date();
-    this.selectedYear = today.getFullYear();
+    this.selectedYear        = today.getFullYear();
     this.selectedMonthFilter = today.getMonth();
   }
 
@@ -83,9 +79,18 @@ export class AgendaDeProcessosComponent implements OnInit {
     this.router.navigate([ this.authService.getHomeRouteForRole() ]);
   }
 
+  // troca de visão: week, month ou year
+  setView(mode: ViewMode) {
+    this.viewMode = mode;
+  }
+
+  // botão +
+  onAddClick() {
+    this.openCompromissoModal(this.selectedDate);
+  }
+
+  // Geração de dias do mês
   applyFilters(): void {
-    // filtra só o mês selecionado e gera dias
-    this.filteredMonths = this.monthObjects.filter(m => m.index === this.selectedMonthFilter);
     this.generateMonthDays();
   }
 
@@ -93,54 +98,50 @@ export class AgendaDeProcessosComponent implements OnInit {
     this.monthDays = [];
     const m = this.selectedMonthFilter;
     const first = new Date(this.selectedYear, m, 1);
-    const last  = new Date(this.selectedYear, m + 1, 0);
+    const last  = new Date(this.selectedYear, m+1, 0);
     const startDay = first.getDay();
 
-    // pré-lacunas (dias do mês anterior)
-    for (let i = 0; i < startDay; i++) {
+    // dias do mês anterior
+    for (let i=0; i<startDay; i++) {
       this.monthDays.push({
         date: new Date(this.selectedYear, m, 1 - startDay + i),
         otherMonth: true
       });
     }
     // dias do mês atual
-    for (let d = 1; d <= last.getDate(); d++) {
-      this.monthDays.push({
-        date: new Date(this.selectedYear, m, d),
-        otherMonth: false
-      });
+    for (let d=1; d<=last.getDate(); d++) {
+      this.monthDays.push({ date: new Date(this.selectedYear, m, d), otherMonth: false });
     }
-    // pós-lacunas (dias do próximo mês)
+    // pós-lacunas
     while (this.monthDays.length % 7 !== 0) {
-      const prev = this.monthDays[this.monthDays.length - 1].date;
+      const prev = this.monthDays[this.monthDays.length-1].date.getDate();
       this.monthDays.push({
-        date: new Date(this.selectedYear, m, prev.getDate() + 1),
+        date: new Date(this.selectedYear, m, prev+1),
         otherMonth: true
       });
     }
   }
 
-   openCompromissoModal(date: Date): void {
+  // Modal
+  openCompromissoModal(date: Date): void {
     this.modalDate     = date;
     this.compTitulo    = '';
     this.compDescricao = '';
     this.compColor     = '#ffeeba';
     this.compTime      = '';
     this.compLink      = '';
-    // this.compMentions = '';
     this.showCompModal = true;
   }
 
   confirmCompromisso(): void {
-    const iso = this.modalDate.toISOString().substring(0, 10);
+    const iso = this.modalDate.toISOString().slice(0,10);
     this.eventos.push({
       date:        iso,
       time:        this.compTime,
       title:       this.compTitulo,
       description: this.compDescricao,
       color:       this.compColor,
-      link:        this.compLink,
-      // mentions:    this.compMentions
+      link:        this.compLink
     });
     this.closeCompModal();
   }
@@ -149,40 +150,39 @@ export class AgendaDeProcessosComponent implements OnInit {
     this.showCompModal = false;
   }
 
-
+  // filtros de eventos
   getEventosByDate(date: Date): Evento[] {
-    const iso = date.toISOString().substring(0, 10);
+    const iso = date.toISOString().slice(0,10);
     return this.eventos.filter(e => e.date === iso);
   }
 
+  getEventosByMonth(month: number): Evento[] {
+    return this.eventos.filter(e => {
+      const d = new Date(e.date);
+      return d.getMonth() === month;
+    });
+  }
+
   isToday(date: Date): boolean {
-    const today = new Date();
-    return date.getDate() === today.getDate()
-        && date.getMonth() === today.getMonth()
-        && date.getFullYear() === today.getFullYear();
+    const t = new Date();
+    return date.getDate()===t.getDate() &&
+           date.getMonth()===t.getMonth() &&
+           date.getFullYear()===t.getFullYear();
   }
 
   onMiniDateSelected(date: Date) {
-    // Quando o usuário escolhe uma data no mini-calendário,
-    // você pode navegar direto pra esse mês e opcionalmente abrir o modal:
-    this.selectedYear  = date.getFullYear();
+    this.selectedDate        = date;
+    this.selectedYear        = date.getFullYear();
     this.selectedMonthFilter = date.getMonth();
     this.applyFilters();
-    this.openCompromissoModal(date);
   }
 
-  // agenda-de-processos.component.ts
+  // Utility para escurecer cor
   darken(col: string, amount: number): string {
-    // remove o “#”
-    let c = col.replace('#', '');
-    const num = parseInt(c, 16);
-    let r = (num >> 16) - amount;
-    let g = ((num >> 8) & 0x00FF) - amount;
-    let b = (num & 0x0000FF) - amount;
-    r = r < 0 ? 0 : r;
-    g = g < 0 ? 0 : g;
-    b = b < 0 ? 0 : b;
-    return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+    let c = col.replace('#','');
+    const num = parseInt(c,16);
+    let r = (num>>16)-amount, g = ((num>>8)&0xFF)-amount, b = (num&0xFF)-amount;
+    r = Math.max(r,0); g = Math.max(g,0); b = Math.max(b,0);
+    return '#' + ((r<<16)|(g<<8)|b).toString(16).padStart(6,'0');
   }
-
 }

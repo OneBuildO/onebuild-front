@@ -23,6 +23,47 @@
   margin-top: 8px;
 }
 
+
+/* Breadcrumb e buscar */
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 0;
+  padding-top: 40px;
+  align-items: center;
+  position: relative;    /* referência para posicionamento absoluto do mini-calendar */
+  overflow: visible;  
+}
+
+.breadcrumb {
+  font-size: 1rem;
+  color: #666261;
+  width: 50%;
+  margin: 0;
+}
+
+.breadcrumb a {
+  color: #666;
+  font-size: 16px;
+  text-decoration: none;
+  cursor:pointer;
+}
+
+.breadcrumb a:hover {
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.breadcrumb-highlight {
+  margin-left: 5px;
+  color: #CB8642;
+  font-size: 16px;
+  font-weight: 550;
+}
+
+
+
 .filters {
   display: flex;
   gap: 16px;

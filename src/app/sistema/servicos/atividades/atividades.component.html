@@ -3,26 +3,49 @@
     <h1>Atividades</h1>
     <p>Gerencie o cronograma da obra dos seus clientes de forma dinâmica.</p>
   </div>
+  <div class="breadcrumb-container">
+    <div class="breadcrumb">
+      <a (click)="onVoltarClick()">Dashboard &gt;</a>
+      <span class="breadcrumb-highlight">Atividades</span>
+    </div>
+  </div>
 
-  <div class="filters">
+  <!-- Só exibe o filtro de clientes depois que a lista chegou -->
+  <div class="filters" *ngIf="clients.length">
     <label>
       Cliente:
-      <select [(ngModel)]="selectedClient" (change)="onClientChange()">
-        <option *ngFor="let c of clients" [value]="c.id">{{ c.nome }}</option>
+      <select
+        [(ngModel)]="selectedClient"
+        (ngModelChange)="onClientChange()"
+      >
+        <option *ngFor="let c of clients" [ngValue]="c">
+          {{ c.nome }}
+        </option>
       </select>
     </label>
 
+    <!-- Só exibe o filtro de projetos se houver projetos filtrados -->
     <label *ngIf="projects.length">
       Projeto:
-      <select [(ngModel)]="selectedProject" (change)="onProjectChange()">
-        <option *ngFor="let p of projects" [value]="p.id">{{ p.nome }}</option>
+      <select
+        [(ngModel)]="selectedProject"
+        (ngModelChange)="onProjectChange()"
+      >
+        <option *ngFor="let p of projects" [ngValue]="p">
+          {{ p.nomeProjeto }}
+        </option>
       </select>
     </label>
   </div>
 
-  <div class="gantt-section">
-    <h2>Cronograma de Obras - Quadro Gantt</h2>
-    <pre>Cliente selecionado: {{ selectedClient }}, Projeto selecionado: {{ selectedProject }}</pre>
+  <!-- Só exibe o Gantt depois que um cliente e um projeto estiverem definidos -->
+  <div class="gantt-section"
+       *ngIf="selectedClient && selectedProject">
+    <h2>Cronograma de Obras – Quadro Gantt</h2>
+    <pre>
+Cliente selecionado: {{ selectedClient?.nome }},
+Projeto selecionado: {{ selectedProject?.nomeProjeto }}
+    </pre>
     <div id="gantt_chart"></div>
   </div>
 </div>
