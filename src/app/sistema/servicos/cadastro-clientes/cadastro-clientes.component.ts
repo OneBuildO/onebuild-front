@@ -43,7 +43,6 @@ export class CadastroClientesComponent implements OnInit {
     email: new FormControl('', {validators: [Validators.required]}),
     senha: new FormControl('', {validators: [Validators.required]}),
     confirmarSenha: new FormControl('', {validators: [Validators.required]}),
-    nomeProjeto: new FormControl('', {validators: [Validators.required]}),
     contato: new FormControl('',),  // Contato é opcional, sem Validators.required
     estado: new FormControl('', {validators: [Validators.required]}),
     cidade: new FormControl('', {validators: [Validators.required]}),
@@ -67,7 +66,6 @@ export class CadastroClientesComponent implements OnInit {
       this.clienteForm.setValue({
         id: cliente.id ?? null,
         nome: cliente.nome,
-        nomeProjeto: cliente.nomeProjeto,
         contato: cliente.contato,
         estado: estado,
         cidade: cidade,
@@ -85,7 +83,6 @@ export class CadastroClientesComponent implements OnInit {
     } else {
       this.clienteForm.reset({
         nome: '',
-        nomeProjeto: '',
         contato: '',
         estado: '',
         cidade: '',
@@ -141,7 +138,6 @@ export class CadastroClientesComponent implements OnInit {
       email: dados.email ?? '',
       senha: dados.senha ?? '',
       confirmarSenha: dados.confirmarSenha ?? '',
-      nomeProjeto: dados.nomeProjeto ?? '',
       contato: dados.contato ?? '',
       cidade: dados.cidade ?? '',
       estado: dados.estado ?? '',
@@ -199,7 +195,6 @@ export class CadastroClientesComponent implements OnInit {
             id:            cliente.id,
             nome:          cliente.nome,
             email:         cliente.email,
-            nomeProjeto:   cliente.nomeProjeto,  
             contato:       cliente.contato,
             estado:        cliente.estado,
             cidade:        cliente.cidade,

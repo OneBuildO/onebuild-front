@@ -25,6 +25,7 @@ export class CadastroProjetoComponent implements OnInit {
   projetoForm = this.formBuilder.group({
     id: new FormControl<number | null>(null),
     cliente: new FormControl('', [Validators.required]),
+    nomeProjeto: new FormControl('', [Validators.required]),
     arquivos: new FormControl<File[]>([]),
     plantaBaixa: new FormControl<File[]>([]),
     categoria: new FormControl('', [Validators.required]), 
@@ -94,9 +95,11 @@ export class CadastroProjetoComponent implements OnInit {
 
       this.projetoService.obterProjeto(this.projetoId).subscribe({
         next: ({ response: projeto }) => {
+          console.log("Ta aqui: ", projeto);
           this.projetoForm.patchValue({
             id: projeto.id,
             cliente: projeto.idCliente,
+            nomeProjeto: projeto.nomeProjeto,
             categoria: projeto.categoria,
             dataLimiteOrcamento: projeto.dataLimiteOrcamento,
             observacoes: projeto.observacoes,
@@ -205,6 +208,7 @@ export class CadastroProjetoComponent implements OnInit {
     const projetoDTO: ProjetoResumoDTO = {
       id: fv.id ?? 0,
       idCliente: fv.cliente!,
+      nomeProjeto: fv.nomeProjeto!,
       observacoes: fv.observacoes ?? '',
       categoria: fv.categoria ?? '',
       estado: fv.estado!,
@@ -214,7 +218,7 @@ export class CadastroProjetoComponent implements OnInit {
       publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
       status: fv.status!
     };
-
+    
     const novosArquivos = fv.arquivos || [];
     const novasPlantas = fv.plantaBaixa || [];
 

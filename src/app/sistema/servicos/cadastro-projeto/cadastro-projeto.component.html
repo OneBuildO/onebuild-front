@@ -34,6 +34,28 @@
         </select>
       </div>
 
+      <!-- CAMPO NOME DO PROJETO -->
+      <div id="campo-valor">
+        <label class="form-label required" for="nomeProjeto">
+          Nome do projeto
+        </label>
+        <input
+          type="text"
+          id="nome-projeto"
+          formControlName="nomeProjeto"
+          placeholder="Digite o nome do projeto"
+        />
+        <small
+          *ngIf="
+            submited &&
+            projetoForm.get('nomeProjeto')?.invalid
+          "
+          class="text-red-500 text-left"
+        >
+          Nome do projeto é obrigatório.
+        </small>
+      </div>
+
       <!-- UPLOAD DE ARQUIVOS -->
       <div class="input-arquivo" id="campo-titulo">
         <label class="form-label" for="arquivos">Arquivos</label>
