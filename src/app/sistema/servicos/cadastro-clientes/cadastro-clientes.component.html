@@ -151,14 +151,20 @@
         <div id="sucess-message" class="alerts-container alert-success" *ngIf="successMessage">
           {{ successMessage }}
         </div>
-        <div class=" alerts-container alert-danger" *ngIf="errorMessage">
+        <div class="alerts-container alert-danger" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>
       </div>
 
-      <button id="btn-cadastrar-cupom" type="submit">
+      <!-- loading bar aparece aqui -->
+      <div *ngIf="isLoading" class="loading-bar"></div>
+
+      <button id="btn-cadastrar-cupom"
+              type="submit"
+              [disabled]="isLoading">
         {{ isEditMode ? 'Atualizar cliente' : 'Cadastrar cliente' }}
       </button>
+
 
       <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">
         As senhas não coincidem.

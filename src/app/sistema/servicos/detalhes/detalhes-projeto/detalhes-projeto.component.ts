@@ -42,6 +42,8 @@ export class DetalhesProjetoComponent implements OnInit {
   carregando: boolean = true;
   erro?: string;
 
+   allowedToAddNovidades = false;
+
   // Controle do modal de novidades
   showNovidadesModal = false;
   novidadesTitulo = '';
@@ -94,6 +96,17 @@ export class DetalhesProjetoComponent implements OnInit {
     if (this.projetoId) {
       this.carregarDetalhes();
     }
+      this.authService.obterPerfilUsuario().subscribe(
+      usuario => {
+        const papel = usuario.tipoUsuario.toUpperCase();
+        this.allowedToAddNovidades =
+          papel === 'ADMIN' ||
+          papel === 'ARQUITETO';
+      },
+      err => {
+        console.error('Não foi possível obter perfil:', err);
+      }
+    );
   }
 
   carregarDetalhes(): void {

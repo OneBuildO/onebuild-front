@@ -9,10 +9,19 @@
     </div>
   </div>
 
-  <div class="actions" *ngIf="detalheProjeto">
-    <h1>{{ detalheProjeto.nomeProjeto || '—' }}</h1>
-    <p>Cliente: {{ detalheProjeto.nomeCliente || '—' }}</p>
+  <div *ngIf="detalheProjeto" class="header-with-button">
+    <div class="project-info">
+      <h1>{{ detalheProjeto.nomeProjeto || '—' }}</h1>
+      <p>Cliente: {{ detalheProjeto.nomeCliente || '—' }}</p>
+    </div>
+      <button *ngIf="allowedToAddNovidades"
+          class="btn-novidades-square"
+          (click)="openNovidadesModal()">
+    Adicionar Novidades
+  </button>
   </div>
+
+
 </div>
 <!-- INFORMAÇÕES GERAIS DO PROJETO -->
 <div class="subMain-container">
@@ -128,12 +137,6 @@
 </div>
 
   <div class="subMain-container-novidades">
-
-    <div class="button-grid" >
-      <button class="btn-novidades" (click)="openNovidadesModal()">
-        Adicionar Novidades
-      </button>
-    </div>
 
     <div class="timeline">
       <div

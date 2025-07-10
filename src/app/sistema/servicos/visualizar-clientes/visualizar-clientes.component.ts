@@ -4,7 +4,6 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
-import { ClienteProjetoDTO } from './cliente-projeto-dto';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -13,25 +12,20 @@ import { ClienteProjetoDTO } from './cliente-projeto-dto';
 })
 export class VisualizarClientesComponent implements OnInit {
 
-  termoBusca: string = '';
-  mensagemBusca: string = '';
+  termoBusca = '';
+  mensagemBusca = '';
   isLoading = false;
-  successMessage: string = '';
+  successMessage = '';
   messageTimeout: any;
 
-  selectedCliente:any = null;
+  // para paginação
+  clientes: ClienteCadastroDTO[] = [];
+  clientesPaginados: ClienteCadastroDTO[] = [];
   itensPorPagina = 6;
   paginaAtual = 1;
+  totalItens = 0;
 
-  clientes: ClienteCadastroDTO[] = [];
-  
-  clientesPaginados: ClienteCadastroDTO[] = []; 
   erro: string | null = null;
-
-  totalItens: number = 0;
-
-  selectedLoja: any = null;
-
 
   constructor(
     private router: Router,
@@ -43,46 +37,34 @@ export class VisualizarClientesComponent implements OnInit {
   ngOnInit(): void {
     this.exibirMensagemDeSucesso();
     this.fetchClientes();
-    this.atualizarPaginacao();
   }
 
   cadastrarCliente(): void {
     this.router.navigate(['/usuario/cadastro-cliente']);
   }
 
-  onSearch(searchTerm: string) {
-    
-  }
-
-  atualizarPaginacao(): void { 
-  }
-
-
-  onPaginaMudou(novaPagina: number) {
-    this.paginaAtual = novaPagina;
-    this.atualizarPaginacao();
-  }
-
-  fetchClientes(): void {
+  private fetchClientes(): void {
     this.clienteService.obterTodosClientes().subscribe({
-      next: (res) => {
-        if (res && res.statusCode === 200) {
-          this.clientesPaginados = res.response ?? [];
-          console.log(res.response);
+      next: res => {
+        if (res?.statusCode === 200) {
+          this.clientes = res.response ?? [];
           this.erro = null;
         } else {
           this.erro = 'Erro ao buscar clientes.';
-          this.clientesPaginados = [];
+          this.clientes = [];
         }
+        this.totalItens = this.clientes.length;
+        this.atualizarPaginacao();
       },
-      error: (err) => {
+      error: err => {
         console.error('Erro na API:', err);
         this.erro = 'Erro ao conectar com o servidor.';
-        this.clientesPaginados = [];
+        this.clientes = [];
+        this.totalItens = 0;
+        this.atualizarPaginacao();
       }
     });
   }
-
 
   visualizarCliente(id: string): void {
     this.router.navigate(['/usuario/detalhes-cliente', id]);
@@ -92,86 +74,72 @@ export class VisualizarClientesComponent implements OnInit {
     this.router.navigate(['/usuario/cadastro-cliente', id]);
   }
 
-  getInitial(name?: string): string {
-    return name && name.length > 0 ? name.charAt(0).toUpperCase() : '';
-  }
-
-  getRandomColor(seed?: string): string {
-    const colors = [
-      '#FFB3BA', // Rosa pastel
-      '#FFDFBA', // Laranja pastel
-      '#BAFFC9', // Verde pastel
-      '#BAE1FF', // Azul pastel
-      '#D5BAFF', // Roxo pastel
-    ];
-    const index =
-      seed && seed.length > 0 ? seed.charCodeAt(0) % colors.length : 0;
-    return colors[index];
-  }
-
-  openModalDeletar(cliente: any): void {
-    this.selectedCliente = cliente;
-
+  openModalDeletar(cliente: ClienteCadastroDTO): void {
     this.modalDeleteService.openModal(
       {
         title: 'Remoção de Cliente',
-        description: `Tem certeza que deseja excluir o cliente <strong>${
-          cliente.nome
-        } - ${cliente.estado ?? '-'} - ${cliente.cidade}</strong>?`,
+        description: `Tem certeza que deseja excluir o cliente <strong>${cliente.nome}</strong>?`,
         item: cliente,
         deletarTextoBotao: 'Remover',
         size: 'md',
       },
-      () => {
-        this.deleteCliente(cliente.id);
-      }
+      () => this.deleteCliente(cliente.id!)
     );
-  
   }
 
-  deleteCliente(id:string){
-    const clienteRemovido = this.clientesPaginados.find((e) => e.id === id);
-
-    this.clienteService.deleteClientById(id).subscribe(
-      () => {
-        console.log('Cliente deletado com sucesso!');
+  private deleteCliente(id: string): void {
+    this.clienteService.deleteClientById(id).subscribe({
+      next: () => {
+        this.showMessage('success', 'Cliente apagado com sucesso.');
         this.fetchClientes();
-        this.showMessage(
-          'success',
-          `Cliente "${clienteRemovido?.nome ?? ''} - 
-          ${ clienteRemovido?.estado ?? '-'}" - ${clienteRemovido?.cidade } deletado com sucesso!`
-        );
       },
-      (error) => {
-        console.error('Erro ao deletar o cliente:', error);
+      error: err => {
+        console.error('Erro ao deletar o cliente:', err);
       }
-    );
+    });
   }
 
-  
-  exibirMensagemDeSucesso(): void {
+  /** Atualiza `clientesPaginados` com base em `paginaAtual` e `itensPorPagina` */
+  private atualizarPaginacao(): void {
+    const start = (this.paginaAtual - 1) * this.itensPorPagina;
+    this.clientesPaginados = this.clientes.slice(start, start + this.itensPorPagina);
+  }
+
+  onPaginaMudou(novaPagina: number): void {
+    this.paginaAtual = novaPagina;
+    this.atualizarPaginacao();
+  }
+
+  /** Exibe mensagem passada via state (se houver) */
+  private exibirMensagemDeSucesso(): void {
     const state = window.history.state as { successMessage?: string };
     if (state?.successMessage) {
       this.successMessage = state.successMessage;
-      setTimeout(() => (this.successMessage = ''), 3000);
+      setTimeout(() => this.clearMessage(), 3000);
       window.history.replaceState({}, document.title);
     }
   }
 
-  showMessage(type: 'success' | 'error', msg: string) {
-    this.clearMessage();
-    if (type === 'success') this.successMessage = msg;
-    this.messageTimeout = setTimeout(() => this.clearMessage(), 4000);
+  private showMessage(type: 'success' | 'error', msg: string): void {
+  this.clearMessage();
+  if (type === 'success') {
+    this.successMessage = msg;
+    this.messageTimeout = setTimeout(() => this.clearMessage(), 5000);
   }
+}
 
-  clearMessage() {
-    this.successMessage = '';
-    if (this.messageTimeout) clearTimeout(this.messageTimeout);
+
+  clearMessage(): void {
+  this.successMessage = '';
+  if (this.messageTimeout) {
+    clearTimeout(this.messageTimeout);
+    this.messageTimeout = null;
   }
+}
 
-  onVoltarClick() {
+
+  onVoltarClick(): void {
     const rota = this.authService.getHomeRouteForRole();
     this.router.navigate([rota]);
   }
-  
 }

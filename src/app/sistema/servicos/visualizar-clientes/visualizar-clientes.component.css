@@ -167,16 +167,6 @@ tr:hover {
   font-weight: 500;
 }
 
-.ativo {
-  color: green;
-  font-weight: bold;
-}
-
-.inativo {
-  color: red;
-  font-weight: bold;
-}
-
 .acoes {
   display: flex;
   gap: 8px;
@@ -316,22 +306,22 @@ tr:hover {
   line-height: 1;
 }
 
-.progress-bar-sucess {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-  background: #40812d;
-  opacity: 0.5;
-  pointer-events: none;
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #40812d;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: fadeOut 5s forwards;
 }
 
-@keyframes progressBarAnim {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0;
-  }
+@keyframes fadeOut {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
 }
+

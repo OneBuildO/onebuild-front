@@ -210,3 +210,29 @@ label.required::after {
 .eye-button:focus {
   outline: none;
 }
+
+/* loading bar logo abaixo das mensagens */
+.loading-bar {
+  position: relative;
+  margin: 16px 0;      /* separação das mensagens e do botão */
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(79,70,229,1) 0%,
+    rgba(79,70,229,0.4) 50%,
+    rgba(79,70,229,1) 100%
+  );
+  background-size: 200% 100%;
+  animation: loadingAnimation 1.2s linear infinite;
+}
+
+@keyframes loadingAnimation {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.container-form {
+  position: relative;
+  padding-top: 8px;
+}
