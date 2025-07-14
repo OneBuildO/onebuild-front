@@ -80,61 +80,78 @@
 <!-- Arquivos anexados -->
 <div class="subMain-container">
     <div class="divisao">
-      <p>Arquivos anexados ao projeto</p>
+      <p>Anexos do projeto</p>
       <hr class="line" />
     </div>
 
     <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
-      <div class="data-grid header">
-        <div class="item-data-title"><label>Nome</label></div>
-        <div class="item-data-title"><label>Download</label></div>
-      </div>
+      <section class="data-grid-quad">
 
-      <!-- cada linha com borda -->
-      <div class="data-grid row" *ngFor="let arquivo of arquivosNormais">
-        <div id="foto-e-nome" class="item-data"> 
-          <img [src]="getFileIcon(arquivo.nomeArquivo)" alt="plantaBaixaIcon" style="width: 5%;">
-          {{ arquivo.nomeArquivo || '—' }}
-        </div>
-        <div class="item-data">
-          <button (click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">
-            Baixar
-          </button>
-        </div>
-      </div>
+              <div *ngFor="let arquivo of arquivosNormais">
+
+                <div class="arquivo">
+                  <div class="preview-container"> 
+                    <!-- Imagem -->
+                    <img
+                      *ngIf="isImage(arquivo)"
+                      [src]="getPreviewUrl(arquivo) | async"
+                      class="preview blurred"
+                      alt="pré-visualização"
+                    />
+
+                    <!-- PDF -->
+                    <embed
+                      *ngIf="isPdf(arquivo)"
+                      [src]="getPreviewUrl(arquivo) | async"
+                      type="application/pdf"
+                      class="preview blurred"
+                    />
+
+                    <!-- DOC/DOCX: ícone genérico -->
+                    <img
+                      *ngIf="isDoc(arquivo)"
+                      src="assets/icones/file-icon.svg"
+                      class="preview blurred"
+                      alt="pré-visualização doc"
+                    />
+                  </div>
+          
+                  <div id="acoes" class="data-grid-trio">
+                    <button class="btn-acao visualizar">
+                      <img
+                      src="assets/icones/See.png"
+                      alt="Visualizar"
+                      />
+                    </button>
+                    <button class="btn-acao download"(click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">
+                      <img
+                      src="assets/icones/download-icon.svg"
+                      alt="Download"
+                      />
+                    </button>
+                    <button class="btn-acao delete">
+                      <img
+                      src="assets/icones/Delete.png"
+                      alt="Excluir"
+                      />
+                    </button>
+                  </div>
+        
+                </div>
+        
+              </div>
+
+      </section>
+
     </ng-container>
 
 
   <ng-template #semArquivos>
     <p style="margin-left: 1rem;">Nenhum arquivo encontrado.</p>
   </ng-template>
-
-  <div class="divisao">
-    <p>Planta Baixa</p>
-    <hr class="line" />
-  </div>
-
-  <ng-container *ngIf="plantasBaixas.length > 0; else semPlantas">
-    <div class="data-grid header">
-      <div class="item-data-title"><label>Nome</label></div>
-      <div class="item-data-title"><label>Download</label></div>
-    </div>
-
-    <div class="data-grid row" *ngFor="let planta of plantasBaixas">
-      <div id="foto-e-nome" class="item-data">
-        <img src="/assets/icones/planta-baixa-icon.svg" alt="plantaBaixaIcon" style="width: 5%;">
-        {{ planta.nomeArquivo || '—' }}
-      </div>
-      <div class="item-data">
-        <button (click)="baixarPlantaBaixa(planta.id, planta.nomeArquivo)">Baixar</button>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-template #semPlantas>
-    <p style="margin-left: 1rem;">Nenhuma planta baixa encontrada.</p>
-  </ng-template>
 </div>
+
+
 
   <div class="subMain-container-novidades">
 
