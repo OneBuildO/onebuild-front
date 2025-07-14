@@ -166,7 +166,7 @@ export class VisualizarProjetoComponent implements OnInit {
       const state = window.history.state as { successMessage?: string };
       if (state?.successMessage) {
         this.successMessage = state.successMessage;
-        setTimeout(() => (this.successMessage = ''), 3000);
+        setTimeout(() => (this.successMessage = ''), 6000);
         window.history.replaceState({}, document.title);
       }
     }
@@ -174,7 +174,7 @@ export class VisualizarProjetoComponent implements OnInit {
     showMessage(type: 'success' | 'error', msg: string) {
       this.clearMessage();
       if (type === 'success') this.successMessage = msg;
-      this.messageTimeout = setTimeout(() => this.clearMessage(), 3000);
+      this.messageTimeout = setTimeout(() => this.clearMessage(), 6000);
     }
   
     clearMessage() {

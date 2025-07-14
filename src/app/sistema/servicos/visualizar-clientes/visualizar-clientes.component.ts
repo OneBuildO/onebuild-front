@@ -115,7 +115,7 @@ export class VisualizarClientesComponent implements OnInit {
     const state = window.history.state as { successMessage?: string };
     if (state?.successMessage) {
       this.successMessage = state.successMessage;
-      setTimeout(() => this.clearMessage(), 3000);
+      setTimeout(() => this.clearMessage(), 6000);
       window.history.replaceState({}, document.title);
     }
   }
@@ -124,7 +124,7 @@ export class VisualizarClientesComponent implements OnInit {
   this.clearMessage();
   if (type === 'success') {
     this.successMessage = msg;
-    this.messageTimeout = setTimeout(() => this.clearMessage(), 5000);
+    this.messageTimeout = setTimeout(() => this.clearMessage(), 6000);
   }
 }
 

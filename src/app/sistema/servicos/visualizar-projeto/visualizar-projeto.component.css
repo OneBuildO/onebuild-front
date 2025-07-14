@@ -167,15 +167,6 @@ tr:hover {
   font-weight: 500;
 }
 
-.ativo {
-  color: green;
-  font-weight: bold;
-}
-
-.inativo {
-  color: red;
-  font-weight: bold;
-}
 
 .acoes {
   display: flex;
@@ -314,17 +305,6 @@ tr:hover {
   color: inherit;
   cursor: pointer;
   line-height: 1;
-}
-
-.progress-bar-sucess {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  width: 100%;
-  background: #40812d;
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 @keyframes progressBarAnim {
