@@ -13,6 +13,8 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { Permissao } from 'src/app/login/permissao';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
+import { map, Observable, of } from 'rxjs';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface Novidade {
   titulo: string;
@@ -36,7 +38,7 @@ export class DetalhesProjetoComponent implements OnInit {
   projetoResumo?: ProjetoResumoDTO;
 
   arquivosNormais: ArquivosProjetoDTO[] = [];
-  plantasBaixas: ArquivosProjetoDTO[] = [];
+  // plantasBaixas: ArquivosProjetoDTO[] = [];
 
   projetoId!: number;
   carregando: boolean = true;
@@ -76,12 +78,17 @@ export class DetalhesProjetoComponent implements OnInit {
 
   rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
 
+  //visualização dos arquivos
+  previewUrls = new Map<number, SafeResourceUrl>();
+
+
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
     private dadosService: DadosService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {
@@ -142,20 +149,13 @@ export class DetalhesProjetoComponent implements OnInit {
     this.dadosService.listarArquivosNormais(this.projetoId).subscribe({
       next: (res) => {
         this.arquivosNormais = res.response || [];
+        console.log('Arquivos normais carregados:', this.arquivosNormais);
       },
       error: () => {
         this.erro = "Erro ao carregar arquivos.";
       }
     });
 
-    this.dadosService.listarPlantasBaixas(this.projetoId).subscribe({
-      next: (res) => {
-        this.plantasBaixas = res.response || [];
-      },
-      error: () => {
-        this.erro = "Erro ao carregar plantas baixas.";
-      }
-    });
   }
 
   baixarArquivo(id: number, nomeArquivo: string): void {
@@ -185,17 +185,17 @@ export class DetalhesProjetoComponent implements OnInit {
       error: () => alert('Erro ao baixar a planta baixa.')
     });
   }
+  //----ERA USADO PARA COLOCAR O ICON DE ACORDO COM O TIPO DO ARQUIVO----
+  // getFileType(nome: string): string {
+  //   return nome.split('.').pop()?.toLowerCase() || '';
+  // }
 
-  getFileType(nome: string): string {
-    return nome.split('.').pop()?.toLowerCase() || '';
-  }
-
-  getFileIcon(nome: string): string {
-    const ext = this.getFileType(nome);
-    if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
-    if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
-    return 'assets/icones/file-icon.svg';
-  }
+  // getFileIcon(nome: string): string {
+  //   const ext = this.getFileType(nome);
+  //   if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
+  //   if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
+  //   return 'assets/icones/file-icon.svg';
+  // }
 
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? "Público" : "Privado";
@@ -287,4 +287,39 @@ enviarComentario(): void {
     this.showComentarioModal = false;
     this.comentarioTargetIndex = null;
   }
+
+
+  // helper para saber extensão/MIME
+  isImage(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando imagem:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.(jpe?g|png)$/i);
+  }
+  isPdf(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando PDF:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.pdf$/i);
+  }
+  isDoc(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando DOC/DOCX:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.(docx?|DOCX?)$/i);
+  }
+
+
+  // obtém (e cacheia) a URL de preview
+  getPreviewUrl(arquivo: ArquivosProjetoDTO): Observable<SafeResourceUrl> {
+    // se já tivermos gerado, retorna imediatamente
+    if (this.previewUrls.has(arquivo.id)) {
+      return of(this.previewUrls.get(arquivo.id)!);
+    }
+    return this.dadosService.downloadArquivo(arquivo.id).pipe(
+      map(blob => {
+        const url = URL.createObjectURL(blob);
+        // converte pra um URL “trusted” que o Angular vai aceitar
+        const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.previewUrls.set(arquivo.id, safeUrl);
+        return safeUrl;
+      })
+    );
+  }
+
+
 }
