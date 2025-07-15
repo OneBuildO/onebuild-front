@@ -119,38 +119,38 @@
                   <div><p>{{arquivo.nomeArquivo}}</p></div>
 
                   <div id="acoes" class="data-grid-trio">
-                    <button class="btn-acao visualizar" (click)="visualizarArquivo(arquivo)">
+                    <button class="btn-acao visualizar" (click)="openModalVisualizar(arquivo)">
                       <img
                       src="assets/icones/See.png"
                       alt="Visualizar"
                       />
                     </button>
-                    <button class="btn-acao download"(click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">
+                    <button class="btn-acao download"(click)="openModalDownload(arquivo)">
                       <img
                       src="assets/icones/download-icon.svg"
                       alt="Download"
                       />
                     </button>
-                    <button class="btn-acao delete">
+                    <button class="btn-acao delete" (click)="openModalDeletar(arquivo)">
                       <img
                       src="assets/icones/Delete.png"
                       alt="Excluir"
                       />
                     </button>
                   </div>
-        
                 </div>
-        
               </div>
-
       </section>
-
     </ng-container>
 
 
   <ng-template #semArquivos>
     <p style="margin-left: 1rem;">Nenhum arquivo encontrado.</p>
   </ng-template>
+
+  <div *ngIf="successMessage" class="alert alert-success" style="margin-bottom:0; margin-top: 5px;">
+    <span>{{ successMessage }}</span>
+  </div>
 </div>
 
 
