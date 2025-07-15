@@ -15,6 +15,8 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { map, Observable, of } from 'rxjs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
+import { ModalConfirmationService } from 'src/app/services/services/modal-confirmation.service';
 
 interface Novidade {
   titulo: string;
@@ -44,7 +46,11 @@ export class DetalhesProjetoComponent implements OnInit {
   carregando: boolean = true;
   erro?: string;
 
-   allowedToAddNovidades = false;
+  //mensagem de sucesso
+  successMessage = '';
+  messageTimeout: any;
+
+  allowedToAddNovidades = false;
 
   // Controle do modal de novidades
   showNovidadesModal = false;
@@ -89,6 +95,8 @@ export class DetalhesProjetoComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
+    private modalDeleteService: ModalDeleteService,
+    private modalConfirmationService: ModalConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -223,9 +231,6 @@ export class DetalhesProjetoComponent implements OnInit {
     // TODO: implementar lógica para "Adicionar Novidades"
   }
 
- 
-
-
 
   openNovidadesModal(): void {
     this.showNovidadesModal = true;
@@ -247,32 +252,32 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
 
-// ao criar novidades:
-enviarNovidades(): void {
-  const nova: Novidade = {
-    titulo: this.novidadesTitulo,
-    descricao: this.novidadesDescricao,
-    status: this.novidadesStatus,
-    imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
-    data: new Date(),
-    comments: []   // inicia sem comentários
-  };
-  this.novidadesList.unshift(nova);
-  this.fecharNovidadesModal();
-}
+  // ao criar novidades:
+  enviarNovidades(): void {
+    const nova: Novidade = {
+      titulo: this.novidadesTitulo,
+      descricao: this.novidadesDescricao,
+      status: this.novidadesStatus,
+      imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
+      data: new Date(),
+      comments: []   // inicia sem comentários
+    };
+    this.novidadesList.unshift(nova);
+    this.fecharNovidadesModal();
+  }
 
-// ao enviar comentário:
-enviarComentario(): void {
-  if (this.comentarioTargetIndex == null) return;
-  const alvo = this.novidadesList[this.comentarioTargetIndex];
-  const autor = this.isClient() ? 'Cliente' : 'Arquiteto';
-  alvo.comments.unshift({
-    autor,
-    descricao: this.comentarioDescricao,
-    data: new Date()
-  });
-  this.fecharComentarioModal();
-}
+  // ao enviar comentário:
+  enviarComentario(): void {
+    if (this.comentarioTargetIndex == null) return;
+    const alvo = this.novidadesList[this.comentarioTargetIndex];
+    const autor = this.isClient() ? 'Cliente' : 'Arquiteto';
+    alvo.comments.unshift({
+      autor,
+      descricao: this.comentarioDescricao,
+      data: new Date()
+    });
+    this.fecharComentarioModal();
+  }
 
   // abre modal de comentário para um item específico
   openComentarioModal(idx: number): void {
@@ -288,6 +293,76 @@ enviarComentario(): void {
     this.comentarioTargetIndex = null;
   }
 
+  openModalDeletar(arquivo: ArquivosProjetoDTO): void {
+    this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de Arquivo',
+        description: `Tem certeza que deseja excluir o arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        item: arquivo,
+        deletarTextoBotao: 'Remover',
+        size: 'md',
+      },
+      () => this.deleteProjeto(arquivo.id!)
+    );
+  }
+  
+  deleteProjeto(id: number): void {
+    this.dadosService.excluirArquivo(id).subscribe({
+      next: () => {
+        this.showMessage('success', 'Arquivo apagado com sucesso.');
+        this.arquivosNormais = this.arquivosNormais.filter(a => a.id !== id); //apaga o arquivo da lista
+        this.previewUrls.delete(id); // remove do cache de pré-visualização
+      },
+      error: err => {
+        console.error('Erro ao deletar o arquivo:', err);
+        alert('Erro ao remover o arquivo.');
+      }
+    });
+  }
+
+  /** Chama o modal de confirmação antes de visualizar */
+  openModalVisualizar(arquivo: ArquivosProjetoDTO) {
+  this.modalConfirmationService.open(
+    {
+      title: 'Visualizar Arquivo',
+      description: `Deseja visualizar <strong>${arquivo.nomeArquivo}</strong>?`,
+      iconSrc: 'assets/icones/See.png',
+      confirmButtonText: 'Visualizar',
+      confirmButtonClass: 'btn-acao confirmar'
+    },
+    () => this.visualizarArquivo(arquivo)
+  );
+  }
+
+  /** Chama o modal de confirmação antes de baixar */
+  openModalDownload(arquivo: ArquivosProjetoDTO) {
+    this.modalConfirmationService.open(
+      {
+        title: 'Download do Arquivo',
+        description: `Deseja realizar o download do arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        iconSrc: 'assets/icones/download-icon.svg',
+        confirmButtonText: 'Visualizar',
+        confirmButtonClass: 'btn-acao confirmar'
+      },
+      () => this.baixarArquivo(arquivo.id, arquivo.nomeArquivo)
+    );
+  }
+
+  private showMessage(type: 'success' | 'error', msg: string): void {
+    this.clearMessage();
+    if (type === 'success') {
+      this.successMessage = msg;
+      this.messageTimeout = setTimeout(() => this.clearMessage(), 4000);
+    }
+  }
+
+  clearMessage(): void {
+    this.successMessage = '';
+    if (this.messageTimeout) {
+      clearTimeout(this.messageTimeout);
+      this.messageTimeout = null;
+    }
+  }
 
   // helper para saber extensão/MIME
   isImage(arquivo: ArquivosProjetoDTO) {

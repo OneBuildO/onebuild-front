@@ -88,10 +88,12 @@ export class VisualizarClientesComponent implements OnInit {
   }
 
   private deleteCliente(id: string): void {
+    this.isLoading = true;
     this.clienteService.deleteClientById(id).subscribe({
       next: () => {
         this.showMessage('success', 'Cliente apagado com sucesso.');
         this.fetchClientes();
+        this.isLoading = false;
       },
       error: err => {
         console.error('Erro ao deletar o cliente:', err);
@@ -121,21 +123,21 @@ export class VisualizarClientesComponent implements OnInit {
   }
 
   private showMessage(type: 'success' | 'error', msg: string): void {
-  this.clearMessage();
-  if (type === 'success') {
-    this.successMessage = msg;
-    this.messageTimeout = setTimeout(() => this.clearMessage(), 6000);
+    this.clearMessage();
+    if (type === 'success') {
+      this.successMessage = msg;
+      this.messageTimeout = setTimeout(() => this.clearMessage(), 6000);
+    }
   }
-}
 
 
   clearMessage(): void {
-  this.successMessage = '';
-  if (this.messageTimeout) {
-    clearTimeout(this.messageTimeout);
-    this.messageTimeout = null;
+    this.successMessage = '';
+    if (this.messageTimeout) {
+      clearTimeout(this.messageTimeout);
+      this.messageTimeout = null;
+    }
   }
-}
 
 
   onVoltarClick(): void {

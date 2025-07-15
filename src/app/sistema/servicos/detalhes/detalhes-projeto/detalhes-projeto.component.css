@@ -287,6 +287,11 @@
   transition: background 0.2s;
 }
 
+.btn-confirmar{
+  background-color: var(--accent-color);
+  color:black
+}
+
 .visualizar:hover {
   background: #3d4b123b;
 }

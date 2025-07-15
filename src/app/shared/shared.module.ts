@@ -6,6 +6,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { InputArquivosComponent } from './components/input-arquivos/input-arquivos.component';
 import { ModalDeleteComponent } from './components/modal-delete/modal-delete.component';
+import { ModalConfirmationComponent } from './components/modal-confirmation/modal-confirmation.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ModalDeleteComponent } from './components/modal-delete/modal-delete.com
   ],
   declarations: [
     InputArquivosComponent,
-    ModalDeleteComponent
+    ModalDeleteComponent,
+    ModalConfirmationComponent
   ]
 })
 export class SharedModule { }
