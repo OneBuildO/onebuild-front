@@ -85,7 +85,7 @@
     </div>
 
     <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
-      <section class="data-grid-quad">
+      <section class="data-grid-trio">
 
               <div *ngFor="let arquivo of arquivosNormais">
 
@@ -115,9 +115,11 @@
                       alt="pré-visualização doc"
                     />
                   </div>
-          
+
+                  <div><p>{{arquivo.nomeArquivo}}</p></div>
+
                   <div id="acoes" class="data-grid-trio">
-                    <button class="btn-acao visualizar">
+                    <button class="btn-acao visualizar" (click)="visualizarArquivo(arquivo)">
                       <img
                       src="assets/icones/See.png"
                       alt="Visualizar"
