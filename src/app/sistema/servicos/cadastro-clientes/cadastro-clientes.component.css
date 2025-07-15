@@ -212,13 +212,13 @@ label.required::after {
 }
 
 .loading-bar {
-  position: relative;
-  margin: 16px 0;      
-  height: 4px;
-  width: 100%;
+    position: relative;
+    margin: 16px 0;      
+    height: 4px;
+    width: 100%;
     background: #f4b078;
-  background-size: 200% 100%;
-  animation: loadingAnimation 1.2s linear infinite;
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.2s linear infinite;
 }
 
 @keyframes loadingAnimation {

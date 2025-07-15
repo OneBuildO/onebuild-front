@@ -145,44 +145,6 @@
         </div>
       </section>
 
-      <!-- UPLOAD DE PLANTA BAIXA -->
-      <div class="input-arquivo" id="campo-titulo">
-        <label class="form-label" for="plantaBaixa">Planta baixa</label>
-        <app-input-arquivos
-          [isEditMode]="isEditMode"
-          (arquivosSelecionados)="onPlantaBaixaSelecionados($event)"
-          formControlName="plantaBaixa"
-          accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          [iconSrc]="'assets/icones/planta-baixa-icon.svg'"
-        ></app-input-arquivos>
-
-        <!-- Exibição de erro se arquivos inválidos forem selecionados -->
-      
-      </div>
-
-      <!-- EXISTENTES: PLANTAS BAIXAS -->
-      <div
-        *ngIf="isEditMode && plantaBaixa.length > 0"
-        class="campo-existente"
-      >
-        <label class="form-label">Plantas baixas existentes</label>
-        <ul class="lista-arquivos">
-          <li *ngFor="let planta of plantaBaixa">
-            <a
-              [href]="planta.urlDownload"
-              target="_blank"
-            >
-              {{ planta.nomeArquivo }}
-            </a>
-            <button
-              type="button"
-              (click)="removerArquivoExistente(planta.id, 'planta')"
-            >
-              Remover
-            </button>
-          </li>
-        </ul>
-      </div>
 
       <!-- OBSERVAÇÕES -->
       <div id="campo-titulo">
@@ -346,6 +308,10 @@
         >
           {{ errorMessage }}
         </div>
+      </div>
+      
+      <div class="progress-bar-container" *ngIf="isLoading">
+        <div class="progress-bar"></div>
       </div>
 
       <!-- BOTÃO DE SUBMIT -->

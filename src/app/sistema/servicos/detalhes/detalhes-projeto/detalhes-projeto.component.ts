@@ -321,5 +321,20 @@ enviarComentario(): void {
     );
   }
 
+  /* Abre o arquivo em nova aba para visualização */
+  visualizarArquivo(arquivo: ArquivosProjetoDTO): void {
+    this.dadosService.downloadArquivo(arquivo.id).subscribe({
+      next: blob => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        // opcional: revogar depois de algum tempo
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      },
+      error: () => {
+        alert('Erro ao carregar pré-visualização.');
+      }
+    });
+  }
+
 
 }
