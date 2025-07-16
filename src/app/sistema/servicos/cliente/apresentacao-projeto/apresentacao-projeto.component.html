@@ -11,6 +11,12 @@
       <span class="breadcrumb-highlight">Projetos</span>
     -->
     </div>
+
+    <div class="actions">
+      <div class="search-container">
+        <app-search (searchChange)="onSearch($event)"></app-search>
+      </div>
+    </div>
   </div>
 
   <!-- Mensagem de erro -->
@@ -25,8 +31,8 @@
   </div>
 
   <!-- Tabela -->
-  <div class="tabela-container" *ngIf="!isLoading && projetos.length">
-    <table>
+  <div class="tabela-container" *ngIf="!isLoading">
+    <table *ngIf="projetosPaginados.length > 0">
       <thead>
         <tr>
           <th>Cliente</th>
@@ -39,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of projetos">
+        <tr *ngFor="let p of projetosPaginados">
           <td>{{ p.cliente || '-' }}</td>
           <td>{{ p.nomeProjeto || '-' }}</td>
           <td>{{ traduzirStatusDoProjeto(p.status) || '-' }}</td>
@@ -58,5 +64,30 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="projetosPaginados.length === 0">
+    <ng-container *ngIf="mensagemBusca; else semProjetos">
+      <div>
+        <div class="alert alert-warning text-center">
+          {{ mensagemBusca }}
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #semProjetos>
+      <div class="no-data-message">
+        <img src="assets/imgs/no-data.svg" alt="Sem dados" />
+        <p>Não há projetos cadastrados.</p>
+      </div>
+    </ng-template>
+  </div>  
+
+  <div class="pagination" *ngIf="projetosPaginados.length > 0">
+    <app-pagination
+      [paginaAtual]="paginaAtual"
+      [totalItens]="totalItens"
+      [itensPorPagina]="itensPorPagina"
+      (paginaMudou)="onPaginaMudou($event)">
+    </app-pagination>
   </div>
 </div>

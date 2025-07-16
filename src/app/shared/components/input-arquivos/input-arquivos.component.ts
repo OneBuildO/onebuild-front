@@ -78,9 +78,9 @@ export class InputArquivosComponent implements ControlValueAccessor, OnInit {
   adicionarArquivos(novosArquivos: File[]): void {
     this.isEditMode = false;
 
-    // Verifica se o número total de arquivos não excede o limite de 3
-    if (this.arquivos.length + novosArquivos.length > 3) {
-      this.errorMessage = 'Você pode enviar no máximo 3 arquivos.';
+    // Verifica se o número total de arquivos não excede o limite de 6
+    if (this.arquivos.length + novosArquivos.length > 6) {
+      this.errorMessage = 'Você pode enviar no máximo 6 arquivos.';
       return;
     }
 

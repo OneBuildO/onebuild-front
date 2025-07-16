@@ -121,7 +121,10 @@
               [valueValidation]="cadastroForm.get('confirmPassword')?.value?.toString()"
             ></validation-error>
           </div>
-    
+
+          <div class="progress-bar-container" *ngIf="isLoading">
+            <div class="progress-bar"></div>
+          </div>
     
           <div *ngIf="isEditing" class="button-container">
             <button type="submit" class="btn button-confirm" [disabled]="isLoading">

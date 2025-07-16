@@ -105,10 +105,14 @@ export class MeuPerfilComponent implements OnInit {
     event.preventDefault();
     this.submited = true;
     this.serverErrors = [];
-
-    if (this.cadastroForm.invalid || !this.isSenhaValida()) return;
-
     this.isLoading = true;
+
+    
+    if (this.cadastroForm.invalid || !this.isSenhaValida()) {
+      this.isLoading = false;
+      return;
+    }
+
 
     const dadosCadastro: CadastroUsuarioDTO = {
       nome: this.cadastroForm.controls.nome.value,

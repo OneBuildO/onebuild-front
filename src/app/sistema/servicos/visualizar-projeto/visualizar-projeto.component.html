@@ -12,15 +12,11 @@
        -->
     </div>
     <div class="actions">
-     <!-- <div class="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nome ou cidade"
-          [(ngModel)]="termoBusca"
-          (input)="onSearch(termoBusca)"
-        />
-      </div>-->
+      <div class="search-container">
+        <app-search (searchChange)="onSearch($event)"></app-search>
+      </div>
       <button class="btn-cadastrar" (click)="cadastrarProjeto()">Cadastrar Projeto</button>
+
     </div>
   </div>
 
@@ -105,4 +101,13 @@
       </div>
     </ng-template>
   </div>
+
+  <div class="pagination">
+    <app-pagination
+      [paginaAtual]="paginaAtual"
+      [totalItens]="totalItens"
+      [itensPorPagina]="itensPorPagina"
+      (paginaMudou)="onPaginaMudou($event)">
+    </app-pagination>
+  </div> 
 </div>

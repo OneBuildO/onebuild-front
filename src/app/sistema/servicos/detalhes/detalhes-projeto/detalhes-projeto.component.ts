@@ -13,6 +13,10 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { Permissao } from 'src/app/login/permissao';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
+import { map, Observable, of } from 'rxjs';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
+import { ModalConfirmationService } from 'src/app/services/services/modal-confirmation.service';
 
 interface Novidade {
   titulo: string;
@@ -36,13 +40,17 @@ export class DetalhesProjetoComponent implements OnInit {
   projetoResumo?: ProjetoResumoDTO;
 
   arquivosNormais: ArquivosProjetoDTO[] = [];
-  plantasBaixas: ArquivosProjetoDTO[] = [];
+  // plantasBaixas: ArquivosProjetoDTO[] = [];
 
   projetoId!: number;
   carregando: boolean = true;
   erro?: string;
 
-   allowedToAddNovidades = false;
+  //mensagem de sucesso
+  successMessage = '';
+  messageTimeout: any;
+
+  allowedToAddNovidades = false;
 
   // Controle do modal de novidades
   showNovidadesModal = false;
@@ -76,12 +84,19 @@ export class DetalhesProjetoComponent implements OnInit {
 
   rotaOrigem: 'visualizar-projeto' | 'apresentacao-do-projeto' = 'visualizar-projeto';
 
+  //visualização dos arquivos
+  previewUrls = new Map<number, SafeResourceUrl>();
+
+
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
     private dadosService: DadosService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer,
+    private modalDeleteService: ModalDeleteService,
+    private modalConfirmationService: ModalConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -142,20 +157,13 @@ export class DetalhesProjetoComponent implements OnInit {
     this.dadosService.listarArquivosNormais(this.projetoId).subscribe({
       next: (res) => {
         this.arquivosNormais = res.response || [];
+        console.log('Arquivos normais carregados:', this.arquivosNormais);
       },
       error: () => {
         this.erro = "Erro ao carregar arquivos.";
       }
     });
 
-    this.dadosService.listarPlantasBaixas(this.projetoId).subscribe({
-      next: (res) => {
-        this.plantasBaixas = res.response || [];
-      },
-      error: () => {
-        this.erro = "Erro ao carregar plantas baixas.";
-      }
-    });
   }
 
   baixarArquivo(id: number, nomeArquivo: string): void {
@@ -185,17 +193,17 @@ export class DetalhesProjetoComponent implements OnInit {
       error: () => alert('Erro ao baixar a planta baixa.')
     });
   }
+  //----ERA USADO PARA COLOCAR O ICON DE ACORDO COM O TIPO DO ARQUIVO----
+  // getFileType(nome: string): string {
+  //   return nome.split('.').pop()?.toLowerCase() || '';
+  // }
 
-  getFileType(nome: string): string {
-    return nome.split('.').pop()?.toLowerCase() || '';
-  }
-
-  getFileIcon(nome: string): string {
-    const ext = this.getFileType(nome);
-    if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
-    if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
-    return 'assets/icones/file-icon.svg';
-  }
+  // getFileIcon(nome: string): string {
+  //   const ext = this.getFileType(nome);
+  //   if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
+  //   if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
+  //   return 'assets/icones/file-icon.svg';
+  // }
 
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? "Público" : "Privado";
@@ -223,9 +231,6 @@ export class DetalhesProjetoComponent implements OnInit {
     // TODO: implementar lógica para "Adicionar Novidades"
   }
 
- 
-
-
 
   openNovidadesModal(): void {
     this.showNovidadesModal = true;
@@ -247,32 +252,32 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
 
-// ao criar novidades:
-enviarNovidades(): void {
-  const nova: Novidade = {
-    titulo: this.novidadesTitulo,
-    descricao: this.novidadesDescricao,
-    status: this.novidadesStatus,
-    imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
-    data: new Date(),
-    comments: []   // inicia sem comentários
-  };
-  this.novidadesList.unshift(nova);
-  this.fecharNovidadesModal();
-}
+  // ao criar novidades:
+  enviarNovidades(): void {
+    const nova: Novidade = {
+      titulo: this.novidadesTitulo,
+      descricao: this.novidadesDescricao,
+      status: this.novidadesStatus,
+      imagemUrl: this.novidadesImagemFile ? URL.createObjectURL(this.novidadesImagemFile) : undefined,
+      data: new Date(),
+      comments: []   // inicia sem comentários
+    };
+    this.novidadesList.unshift(nova);
+    this.fecharNovidadesModal();
+  }
 
-// ao enviar comentário:
-enviarComentario(): void {
-  if (this.comentarioTargetIndex == null) return;
-  const alvo = this.novidadesList[this.comentarioTargetIndex];
-  const autor = this.isClient() ? 'Cliente' : 'Arquiteto';
-  alvo.comments.unshift({
-    autor,
-    descricao: this.comentarioDescricao,
-    data: new Date()
-  });
-  this.fecharComentarioModal();
-}
+  // ao enviar comentário:
+  enviarComentario(): void {
+    if (this.comentarioTargetIndex == null) return;
+    const alvo = this.novidadesList[this.comentarioTargetIndex];
+    const autor = this.isClient() ? 'Cliente' : 'Arquiteto';
+    alvo.comments.unshift({
+      autor,
+      descricao: this.comentarioDescricao,
+      data: new Date()
+    });
+    this.fecharComentarioModal();
+  }
 
   // abre modal de comentário para um item específico
   openComentarioModal(idx: number): void {
@@ -287,4 +292,124 @@ enviarComentario(): void {
     this.showComentarioModal = false;
     this.comentarioTargetIndex = null;
   }
+
+  openModalDeletar(arquivo: ArquivosProjetoDTO): void {
+    this.modalDeleteService.openModal(
+      {
+        title: 'Exclusão de Arquivo',
+        description: `Tem certeza que deseja excluir o arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        item: arquivo,
+        deletarTextoBotao: 'Excluir',
+        size: 'md',
+      },
+      () => this.deleteProjeto(arquivo.id!)
+    );
+  }
+  
+  deleteProjeto(id: number): void {
+    this.dadosService.excluirArquivo(id).subscribe({
+      next: () => {
+        this.showMessage('success', 'Arquivo apagado com sucesso.');
+        this.arquivosNormais = this.arquivosNormais.filter(a => a.id !== id); //apaga o arquivo da lista
+        this.previewUrls.delete(id); // remove do cache de pré-visualização
+      },
+      error: err => {
+        console.error('Erro ao deletar o arquivo:', err);
+        alert('Erro ao remover o arquivo.');
+      }
+    });
+  }
+
+  /** Chama o modal de confirmação antes de visualizar */
+  openModalVisualizar(arquivo: ArquivosProjetoDTO) {
+  this.modalConfirmationService.open(
+    {
+      title: 'Visualizar Arquivo',
+      description: `Deseja visualizar <strong>${arquivo.nomeArquivo}</strong>?`,
+      iconSrc: 'assets/icones/See.png',
+      confirmButtonText: 'Visualizar',
+      confirmButtonClass: 'btn-acao confirmar'
+    },
+    () => this.visualizarArquivo(arquivo)
+  );
+  }
+
+  /** Chama o modal de confirmação antes de baixar */
+  openModalDownload(arquivo: ArquivosProjetoDTO) {
+    this.modalConfirmationService.open(
+      {
+        title: 'Download do Arquivo',
+        description: `Deseja realizar o download do arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        iconSrc: 'assets/icones/download-icon.svg',
+        confirmButtonText: 'Visualizar',
+        confirmButtonClass: 'btn-acao confirmar'
+      },
+      () => this.baixarArquivo(arquivo.id, arquivo.nomeArquivo)
+    );
+  }
+
+  private showMessage(type: 'success' | 'error', msg: string): void {
+    this.clearMessage();
+    if (type === 'success') {
+      this.successMessage = msg;
+      this.messageTimeout = setTimeout(() => this.clearMessage(), 4000);
+    }
+  }
+
+  clearMessage(): void {
+    this.successMessage = '';
+    if (this.messageTimeout) {
+      clearTimeout(this.messageTimeout);
+      this.messageTimeout = null;
+    }
+  }
+
+  // helper para saber extensão/MIME
+  isImage(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando imagem:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.(jpe?g|png)$/i);
+  }
+  isPdf(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando PDF:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.pdf$/i);
+  }
+  isDoc(arquivo: ArquivosProjetoDTO) {
+    console.log('Verificando DOC/DOCX:', arquivo.nomeArquivo);
+    return arquivo.nomeArquivo.match(/\.(docx?|DOCX?)$/i);
+  }
+
+
+  // obtém (e cacheia) a URL de preview
+  getPreviewUrl(arquivo: ArquivosProjetoDTO): Observable<SafeResourceUrl> {
+    // se já tivermos gerado, retorna imediatamente
+    if (this.previewUrls.has(arquivo.id)) {
+      return of(this.previewUrls.get(arquivo.id)!);
+    }
+    return this.dadosService.downloadArquivo(arquivo.id).pipe(
+      map(blob => {
+        const url = URL.createObjectURL(blob);
+        // converte pra um URL “trusted” que o Angular vai aceitar
+        const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.previewUrls.set(arquivo.id, safeUrl);
+        return safeUrl;
+      })
+    );
+  }
+
+  /* Abre o arquivo em nova aba para visualização */
+  visualizarArquivo(arquivo: ArquivosProjetoDTO): void {
+    this.dadosService.downloadArquivo(arquivo.id).subscribe({
+      next: blob => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        // opcional: revogar depois de algum tempo
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      },
+      error: () => {
+        alert('Erro ao carregar pré-visualização.');
+      }
+    });
+  }
+
+
 }

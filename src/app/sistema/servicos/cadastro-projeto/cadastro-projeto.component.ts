@@ -41,12 +41,13 @@ export class CadastroProjetoComponent implements OnInit {
   submited = false;
   isEditMode = false;
   projetoId: number | null = null;
+  isLoading:boolean = false;
 
   arquivosProjeto: ArquivosProjetoDTO[] = [];
-  plantaBaixa: ArquivosProjetoDTO[] = [];
+  // plantaBaixa: ArquivosProjetoDTO[] = [];
 
   arquivosRemoverIds: number[] = [];
-  plantasRemoverIds: number[] = [];
+  plantasRemoverIds: number[] = []; //não está sendo usado, mas mantido para estrutura
 
   clientes: ProjetoUsuarioDTO[] = [];
   listaCidades: any[] = [];
@@ -123,14 +124,14 @@ export class CadastroProjetoComponent implements OnInit {
             }
           });
 
-          this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
-            next: (res: ApiResponse<ArquivosProjetoDTO[]>) => {
-              this.plantaBaixa = res.response;
-            },
-            error: () => {
-              this.plantaBaixa = [];
-            }
-          });
+          // this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
+          //   next: (res: ApiResponse<ArquivosProjetoDTO[]>) => {
+          //     this.plantaBaixa = res.response;
+          //   },
+          //   error: () => {
+          //     this.plantaBaixa = [];
+          //   }
+          // });
         },
         error: () => {
           this.errorMessage = 'Erro ao carregar dados do projeto para edição.';
@@ -170,13 +171,6 @@ export class CadastroProjetoComponent implements OnInit {
     this.projetoForm.get('arquivos')?.setValue(arquivosValidos);
   }
 
-  onPlantaBaixaSelecionados(arquivos: File[]): void {
-    const arquivosValidos = this.validarArquivos(arquivos);
-    if (arquivosValidos.length < arquivos.length) {
-      this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
-    }
-    this.projetoForm.get('plantaBaixa')?.setValue(arquivosValidos);
-  }
 
   // Função para validar os arquivos
   private validarArquivos(arquivos: File[]): File[] {
@@ -188,17 +182,19 @@ export class CadastroProjetoComponent implements OnInit {
       this.arquivosRemoverIds.push(id);
       this.arquivosProjeto = this.arquivosProjeto.filter(a => a.id !== id);
     } else {
-      this.plantasRemoverIds.push(id);
-      this.plantaBaixa = this.plantaBaixa.filter(p => p.id !== id);
+      // this.plantasRemoverIds.push(id);
     }
   }
 
   onSubmit(): void {
     this.submited = true;
+    this.isLoading = true;
     this.projetoForm.markAllAsTouched();
 
     if (this.projetoForm.invalid) {
       this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
+      this.successMessage = null;
+      this.isLoading = false;
       return;
     }
 
@@ -229,13 +225,14 @@ export class CadastroProjetoComponent implements OnInit {
         novosArquivos,
         novasPlantas,
         this.arquivosRemoverIds,
-        this.plantasRemoverIds
+        this.plantasRemoverIds //deixei so para manter a estrutura, mas não está sendo usado
       ).subscribe({
         next: () => {
+          this.isLoading = false;
           this.successMessage = 'Projeto atualizado com sucesso!';
 
           this.arquivosRemoverIds = [];
-          this.plantasRemoverIds = [];
+          // this.plantasRemoverIds = [];
           this.projetoForm.get('arquivos')?.reset([]);
           this.projetoForm.get('plantaBaixa')?.reset([]);
           
@@ -245,13 +242,14 @@ export class CadastroProjetoComponent implements OnInit {
             error: () => this.arquivosProjeto = []
           });
 
-          this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
-            next: res => this.plantaBaixa = res.response,
-            error: () => this.plantaBaixa = []
-          });
+          // this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
+          //   next: res => this.plantaBaixa = res.response,
+          //   error: () => this.plantaBaixa = []
+          // });
         },
         error: () => {
           this.errorMessage = 'Erro ao atualizar projeto.';
+          this.isLoading = false;
         }
       });
 
@@ -262,6 +260,7 @@ export class CadastroProjetoComponent implements OnInit {
         novasPlantas
       ).subscribe({
         next: () => {
+          this.isLoading = false;
           this.successMessage = 'Projeto cadastrado com sucesso!';
           
           this.projetoForm.reset({
@@ -270,11 +269,12 @@ export class CadastroProjetoComponent implements OnInit {
           });
 
           this.arquivosProjeto = [];
-          this.plantaBaixa = [];
+          // this.plantaBaixa = [];
           this.submited = false;
         },
         error: () => {
           this.errorMessage = 'Erro ao cadastrar projeto.';
+          this.isLoading = false;
         }
       });
     }
