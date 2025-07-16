@@ -183,20 +183,22 @@ tr:hover {
 }
 
 .btn-acao {
-  border: none;
-  background: #e4e4e4b5;
-  cursor: pointer;
-  border-radius: 50%;
+  width: 40px;             
+  height: 40px;
+  border-radius: 50%;       
+  padding: 0;              
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  background: #e4e4e4b5;    
+  transition: background 0.2s;
 }
 
 .btn-acao img {
-  width: 18px;
-  height: 18px;
+  width: 60%;               /* escala a imagem dentro do círculo */
+  height: 60%;
+  object-fit: contain;
+  border-radius: 50%;
 }
 
 .visualizar:hover {
@@ -286,7 +288,7 @@ tr:hover {
 .progress-bar {
   width: 0;
   height: 100%;
-  background-color: #007bff;
+  background-color: var(--accent-color);
   animation: progress-animation 2s infinite linear;
 }
 
