@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 import { ApiResponse } from './api-response-dto';
 import { ProjetoUsuarioDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-usuario-dto';
@@ -62,6 +62,23 @@ export class ProjetoService {
   obterProjeto(id: number): Observable<ApiResponse<ProjetoResumoDTO>> {
     return this.httpCliente.get<ApiResponse<ProjetoResumoDTO>>(`${this.apiUrl}/obter-projeto/${id}`);
   }
+
+  buscarProjetosPorNome(nome: string): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+      const url = `${this.apiUrl}/search/${encodeURIComponent(nome)}`;
+      return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(url).pipe(
+        map((response) => response),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'Erro ao buscar usuários por nome.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Erro: ${error.error.message}`;
+          } else if (error.status) {
+            errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+    }
 
   atualizarProjeto(
     id: number,
