@@ -14,7 +14,7 @@ import { ApiResponse } from 'src/app/services/services/api-response-dto';
 export class ApresentacaoProjetoComponent implements OnInit {
   projetos: ProjetosDisponiveisDTO[] = [];
   mensagemBusca: string = '';
-  isLoading = true;
+  isLoading = false;
   errorMsg: string | null = null;
 
   itensPorPagina = 6;
@@ -30,46 +30,38 @@ export class ApresentacaoProjetoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchProjetos();
+    this.fetchMeusProjetos();
   }
 
-  fetchProjetos(): void {
+    fetchMeusProjetos(): void {
       this.isLoading = true;
-      this.projetoService.obterProjetos().subscribe({
-        next: (res) => {
+  
+      this.projetoService.getMeusProjetos().subscribe(
+        (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
+          this.projetos = res.response;
+          this.totalItens = this.projetos.length; 
+          this.totalPaginas = Math.ceil(
+            this.projetos.length / this.itensPorPagina
+          );
+          console.log(res.response);
+          this.atualizarPaginacao();
           this.isLoading = false;
-          if (res.statusCode === 200 && res.response) {
-            this.projetos = res.response;
-            this.totalItens = this.projetos.length; 
-            this.totalPaginas = Math.ceil(
-              this.projetos.length / this.itensPorPagina
-            );
-            this.atualizarPaginacao(); 
-          } else {
-            this.projetos = [];
-            this.totalItens = 0;
-            this.projetosPaginados = []; 
-            this.mensagemBusca = 'Nenhum projeto encontrado.';
-          }
-          this.cdr.detectChanges(); 
         },
-        error: (err) => {
+        (error) => {
+          console.error('Erro ao carregar projetos:', error);
           this.isLoading = false;
-          console.error('Erro ao buscar projetos:', err);
-          this.mensagemBusca = 'Erro ao conectar com o servidor.';
-          this.cdr.detectChanges(); 
         }
-      });
+      );
     }
 
     onSearch(searchTerm: string) {
        if (!searchTerm || searchTerm.trim() === '') {
          this.mensagemBusca = '';
-         this.fetchProjetos();
+         this.fetchMeusProjetos();
          return;
        }
        this.isLoading = true;
-       this.projetoService.buscarProjetosPorNome(searchTerm).subscribe(
+       this.projetoService.buscarProjetosPorNomeLogado(searchTerm).subscribe(
          (projetos: ApiResponse<ProjetosDisponiveisDTO[]>) => {
            this.projetos = projetos.response;
            this.paginaAtual = 1;
@@ -77,7 +69,6 @@ export class ApresentacaoProjetoComponent implements OnInit {
            this.totalPaginas = Math.ceil(
              this.projetos.length / this.itensPorPagina
            );
-           console.log('Projetos após busca:', this.projetos);
            this.atualizarPaginacao();
            this.isLoading = false;
            if (!projetos || projetos.response.length === 0) {
