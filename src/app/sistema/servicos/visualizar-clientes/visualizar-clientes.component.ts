@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
+import { ApiResponse } from 'src/app/services/services/api-response-dto';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -18,11 +19,11 @@ export class VisualizarClientesComponent implements OnInit {
   successMessage = '';
   messageTimeout: any;
 
-  // para paginação
   clientes: ClienteCadastroDTO[] = [];
   clientesPaginados: ClienteCadastroDTO[] = [];
   itensPorPagina = 6;
   paginaAtual = 1;
+  totalPaginas = 0; 
   totalItens = 0;
 
   erro: string | null = null;
@@ -43,27 +44,59 @@ export class VisualizarClientesComponent implements OnInit {
     this.router.navigate(['/usuario/cadastro-cliente']);
   }
 
-  private fetchClientes(): void {
-    this.clienteService.obterTodosClientes().subscribe({
-      next: res => {
-        if (res?.statusCode === 200) {
-          this.clientes = res.response ?? [];
-          this.erro = null;
-        } else {
-          this.erro = 'Erro ao buscar clientes.';
-          this.clientes = [];
-        }
-        this.totalItens = this.clientes.length;
+  fetchClientes(): void {
+    this.isLoading = true;
+
+    this.clienteService.obterTodosClientes().subscribe(
+      (cliente: ApiResponse<ClienteCadastroDTO[]>) => {
+        this.clientes = cliente.response;
+        this.totalItens = this.clientes.length; 
+        this.totalPaginas = Math.ceil(
+          this.clientes.length / this.itensPorPagina
+        );
         this.atualizarPaginacao();
+        this.isLoading = false;
       },
-      error: err => {
-        console.error('Erro na API:', err);
-        this.erro = 'Erro ao conectar com o servidor.';
-        this.clientes = [];
-        this.totalItens = 0;
-        this.atualizarPaginacao();
+      (error) => {
+        console.error('Erro ao carregar colaboradores:', error);
+        this.isLoading = false;
       }
-    });
+    );
+  }
+
+
+  onSearch(searchTerm: string) {
+    if (!searchTerm || searchTerm.trim() === '') {
+      this.mensagemBusca = '';
+      this.fetchClientes();
+      return;
+    }
+    this.isLoading = true;
+    this.clienteService.buscarUsuariosPorNome(searchTerm).subscribe(
+      (cliente: ApiResponse<ClienteCadastroDTO[]>) => {
+        this.clientes = cliente.response;
+        this.paginaAtual = 1;
+        this.totalItens = this.clientes.length;
+        this.totalPaginas = Math.ceil(
+          this.clientes.length / this.itensPorPagina
+        );
+        this.atualizarPaginacao();
+        this.isLoading = false;
+        if (!cliente || cliente.response.length === 0) {
+          this.mensagemBusca = 'Busca não encontrada';
+        }
+      },
+      (error) => {
+        console.error('Erro ao buscar colaboradores:', error);
+        this.isLoading = false;
+        if (error.message && error.message.includes('404')) {
+          this.clientes = [];
+          this.totalItens = 0; 
+          this.atualizarPaginacao();
+          this.mensagemBusca = 'Busca não encontrada';
+        }
+      }
+    );
   }
 
   visualizarCliente(id: string): void {
@@ -78,7 +111,7 @@ export class VisualizarClientesComponent implements OnInit {
     this.modalDeleteService.openModal(
       {
         title: 'Remoção de Cliente',
-        description: `Tem certeza que deseja excluir o cliente <strong>${cliente.nome}</strong>?`,
+        description: `Tem certeza que deseja excluir o cliente <strong>${cliente.nome}</strong>?`, 
         item: cliente,
         deletarTextoBotao: 'Remover',
         size: 'md',
@@ -101,10 +134,10 @@ export class VisualizarClientesComponent implements OnInit {
     });
   }
 
-  /** Atualiza `clientesPaginados` com base em `paginaAtual` e `itensPorPagina` */
-  private atualizarPaginacao(): void {
-    const start = (this.paginaAtual - 1) * this.itensPorPagina;
-    this.clientesPaginados = this.clientes.slice(start, start + this.itensPorPagina);
+  atualizarPaginacao(): void {
+    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+    const fim = inicio + this.itensPorPagina;
+    this.clientesPaginados = this.clientes.slice(inicio, fim);
   }
 
   onPaginaMudou(novaPagina: number): void {
@@ -112,7 +145,6 @@ export class VisualizarClientesComponent implements OnInit {
     this.atualizarPaginacao();
   }
 
-  /** Exibe mensagem passada via state (se houver) */
   private exibirMensagemDeSucesso(): void {
     const state = window.history.state as { successMessage?: string };
     if (state?.successMessage) {

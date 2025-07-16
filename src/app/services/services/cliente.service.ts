@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from "../../../environments/environment";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from './api-response-dto';
@@ -25,6 +25,22 @@ export class ClienteService {
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 
+  buscarUsuariosPorNome(nome: string): Observable<ApiResponse<ClienteCadastroDTO[]>> {
+    const url = `${this.apiUrl}/search-cliente/${encodeURIComponent(nome)}`;
+    return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url).pipe(
+      map((response) => response),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Erro ao buscar usuários por nome.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
 
   deleteClientById(id: string):Observable<void>{
       const url = `${this.apiUrl}/deletar/${id}`;
@@ -102,7 +118,4 @@ export class ClienteService {
       return throwError(() => new Error(errorMsg));
     };
   }
-
-
-
 }

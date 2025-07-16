@@ -18,7 +18,7 @@
     </div>
     <div class="actions">
       <div class="search-container">
-        <!-- Campo de busca pode ficar aqui -->
+          <app-search (searchChange)="onSearch($event)"></app-search>
       </div>
       <button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
     </div>
@@ -90,4 +90,13 @@
       </div>
     </ng-template>
   </div>
+
+  <div class="pagination">
+    <app-pagination
+    [paginaAtual]="paginaAtual"
+    [totalItens]="totalItens"
+    [itensPorPagina]="itensPorPagina"
+    (paginaMudou)="onPaginaMudou($event)">
+    </app-pagination>
+  </div> 
 </div>

@@ -45,8 +45,8 @@
        *ngIf="selectedClient && selectedProject">
     <h2>Cronograma de Obras – Quadro Gantt</h2>
     <pre>
-Cliente selecionado: {{ selectedClient?.nome }},
-Projeto selecionado: {{ selectedProject?.nomeProjeto }}
+      Cliente selecionado: {{ selectedClient.nome }},
+      Projeto selecionado: {{ selectedProject.nomeProjeto }}
     </pre>
     <div id="gantt_chart"></div>
   </div>
