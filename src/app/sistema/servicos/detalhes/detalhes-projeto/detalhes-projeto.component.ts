@@ -296,10 +296,10 @@ export class DetalhesProjetoComponent implements OnInit {
   openModalDeletar(arquivo: ArquivosProjetoDTO): void {
     this.modalDeleteService.openModal(
       {
-        title: 'Remoção de Arquivo',
+        title: 'Exclusão de Arquivo',
         description: `Tem certeza que deseja excluir o arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
         item: arquivo,
-        deletarTextoBotao: 'Remover',
+        deletarTextoBotao: 'Excluir',
         size: 'md',
       },
       () => this.deleteProjeto(arquivo.id!)

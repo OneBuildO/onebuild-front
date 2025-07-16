@@ -97,25 +97,25 @@ export class VisualizarProjetoComponent implements OnInit {
   }
 
 
-    fetchProjetos(): void {
-      this.isLoading = true;
+  fetchProjetos(): void {
+    this.isLoading = true;
   
-      this.projetoService.obterProjetos().subscribe(
-        (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
-          this.projetos = res.response;
-          this.totalItens = this.projetos.length; 
-          this.totalPaginas = Math.ceil(
-            this.projetos.length / this.itensPorPagina
-          );
-          this.atualizarPaginacao();
-          this.isLoading = false;
-        },
-        (error) => {
-          console.error('Erro ao carregar projetos:', error);
-          this.isLoading = false;
-        }
-      );
-    }
+    this.projetoService.obterProjetos().subscribe(
+      (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
+        this.projetos = res.response;
+        this.totalItens = this.projetos.length; 
+        this.totalPaginas = Math.ceil(
+          this.projetos.length / this.itensPorPagina
+        );
+        this.atualizarPaginacao();
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Erro ao carregar projetos:', error);
+        this.isLoading = false;
+      }
+    );
+  }
 
   traduzirStatusDoProjeto(statusProjeto: string): string {
     return StatusDoProjetoDescricoes[statusProjeto as StatusDoProjeto];
