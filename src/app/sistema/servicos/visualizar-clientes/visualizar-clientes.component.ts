@@ -87,7 +87,7 @@ export class VisualizarClientesComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erro ao buscar colaboradores:', error);
+        console.error('Erro ao buscar clientes:', error);
         this.isLoading = false;
         if (error.message && error.message.includes('404')) {
           this.clientes = [];
