@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
+import { Evento } from './evento';
+import { EventoService } from 'src/app/services/services/evento.service';
+import { ApiResponse } from 'src/app/services/services/api-response-dto';
 
 type ViewMode = 'week' | 'month' | 'year';
 
-interface Evento {
-  date: string;   // ISO yyyy-MM-dd
-  time?: string;
-  title: string;
-  description?: string;
-  color: string;
-  link?: string;
-}
+// interface Evento {
+//   date: string;   // ISO yyyy-MM-dd
+//   time?: string;
+//   title: string;
+//   description?: string;
+//   color: string;
+//   link?: string;
+// } 
 
 interface CalendarDay {
   date: Date;
@@ -42,7 +45,9 @@ export class AgendaDeProcessosComponent implements OnInit {
   selectedYear!: number;
   selectedMonthFilter!: number;
   monthDays: CalendarDay[] = [];
-  eventos: Evento[]        = [];
+  eventos: Evento[] = [];
+
+  weekDays: Date[] = [];
 
   // modal de compromisso
   showCompModal = false;
@@ -58,7 +63,8 @@ export class AgendaDeProcessosComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private eventoService: EventoService
   ) {
     // preenche meses
     this.monthObjects = this.meses.map((m,i) => ({ name: m, index: i }));
@@ -72,8 +78,10 @@ export class AgendaDeProcessosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadEventos();
     this.applyFilters();
   }
+
 
   onVoltarClick(): void {
     this.router.navigate([ this.authService.getHomeRouteForRole() ]);
@@ -82,6 +90,7 @@ export class AgendaDeProcessosComponent implements OnInit {
   // troca de visão: week, month ou year
   setView(mode: ViewMode) {
     this.viewMode = mode;
+    this.applyFilters();   
   }
 
   // botão +
@@ -91,8 +100,28 @@ export class AgendaDeProcessosComponent implements OnInit {
 
   // Geração de dias do mês
   applyFilters(): void {
-    this.generateMonthDays();
+    if (this.viewMode === 'week') {
+      this.generateWeekDays();
+    } else {
+      this.generateMonthDays();
+    }
   }
+
+  // gera os 7 dias da semana do selectedDate (domingo → sábado)
+  private generateWeekDays(): void {
+    this.weekDays = [];
+    const d = new Date(this.selectedDate);
+    // início da semana (domingo)
+    const start = new Date(d);
+    start.setDate(d.getDate() - d.getDay());
+
+    for (let i = 0; i < 7; i++) {
+      const wd = new Date(start);
+      wd.setDate(start.getDate() + i);
+      this.weekDays.push(wd);
+    }
+  }
+
 
   generateMonthDays(): void {
     this.monthDays = [];
@@ -135,15 +164,39 @@ export class AgendaDeProcessosComponent implements OnInit {
 
   confirmCompromisso(): void {
     const iso = this.modalDate.toISOString().slice(0,10);
-    this.eventos.push({
-      date:        iso,
-      time:        this.compTime,
-      title:       this.compTitulo,
+
+    const evento:Evento = {
+      date: iso,
+      time: this.compTime,
+      title: this.compTitulo,
       description: this.compDescricao,
-      color:       this.compColor,
-      link:        this.compLink
-    });
-    this.closeCompModal();
+      color: this.compColor,
+      link: this.compLink
+    };
+
+    this.eventoService.salvar(evento)
+      .subscribe({
+        next: (res: ApiResponse<Evento>) => {
+          // aqui res.data é o Evento criado (com id)
+          this.eventos.push(res.response);
+          this.applyFilters();
+          this.closeCompModal();
+        },
+        error: err => console.error('Falha ao salvar evento:', err)
+      });
+  }
+
+
+  private loadEventos(): void {
+    this.eventoService.listarTodos()
+      .subscribe({
+        next: (res: ApiResponse<Evento[]>) => {
+          // desembrulha o .data vindo do seu service
+          this.eventos = res.response;
+          this.applyFilters();
+        },
+        error: err => console.error('Erro ao carregar eventos', err)
+      });
   }
 
   closeCompModal(): void {

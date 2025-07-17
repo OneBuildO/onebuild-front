@@ -80,21 +80,21 @@ export class ProjetoService {
       );
     }
 
-      buscarProjetosPorNomeLogado(nome: string): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
-      const url = `${this.apiUrl}/search/me/${encodeURIComponent(nome)}`;
-      return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(url).pipe(
-        map((response) => response),
-        catchError((error: HttpErrorResponse) => {
-          let errorMessage = 'Erro ao buscar usuários por nome.';
-          if (error.error instanceof ErrorEvent) {
-            errorMessage = `Erro: ${error.error.message}`;
-          } else if (error.status) {
-            errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
-          }
-          console.error(errorMessage);
-          return throwError(() => new Error(errorMessage));
-        })
-      );
+  buscarProjetosPorNomeLogado(nome: string): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+    const url = `${this.apiUrl}/search/me/${encodeURIComponent(nome)}`;
+    return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(url).pipe(
+      map((response) => response),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Erro ao buscar usuários por nome.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
     }
 
   atualizarProjeto(
