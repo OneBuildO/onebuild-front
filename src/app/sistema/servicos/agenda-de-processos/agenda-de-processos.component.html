@@ -32,7 +32,32 @@
   <div class="calendar-wrapper">
     <!-- VISÃO SEMANAL -->
     <ng-container *ngIf="viewMode==='week'">
-      <p>🔹 Aqui vai seu calendário SEMANAL</p>
+      <div class="month-calendar">
+        <!-- cabeçalho (você pode personalizar o texto) -->
+        <div class="month-header">
+          Semana de {{ weekDays[0] | date:'dd/MM' }}  
+          – {{ weekDays[6] | date:'dd/MM/yyyy' }}
+        </div>
+
+        <div class="calendar-grid">
+          <!-- nomes dos dias, igual ao mensal -->
+          <div class="day-name" *ngFor="let d of dayNames">{{ d }}</div>
+
+          <!-- células só da semana -->
+          <div class="day-cell"
+              *ngFor="let d of weekDays"
+              [class.other-month]="d.getMonth() !== selectedDate.getMonth()"
+              [class.today]="isToday(d)"
+              (click)="openCompromissoModal(d)">
+            <span class="date-label">{{ d.getDate() }}</span>
+            <ng-container *ngFor="let ev of getEventosByDate(d)">
+              <div class="post-it" [style.background-color]="ev.color">
+                {{ ev.title }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
     </ng-container>
 
     <!-- VISÃO MENSAL -->

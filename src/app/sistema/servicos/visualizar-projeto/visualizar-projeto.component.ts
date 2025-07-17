@@ -102,13 +102,13 @@ export class VisualizarProjetoComponent implements OnInit {
   
     this.projetoService.obterProjetos().subscribe(
       (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
+        this.isLoading = false;
         this.projetos = res.response;
         this.totalItens = this.projetos.length; 
         this.totalPaginas = Math.ceil(
           this.projetos.length / this.itensPorPagina
         );
         this.atualizarPaginacao();
-        this.isLoading = false;
       },
       (error) => {
         console.error('Erro ao carregar projetos:', error);

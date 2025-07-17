@@ -383,8 +383,8 @@ tr:hover {
 /* tabela ano */
 .year-calendar { width:100%; border-collapse:collapse; margin:0 32px 32px; }
 .year-calendar th, .year-calendar td { border:1px solid #ccc; padding:8px; }
-.year-calendar th { background:#f4f4f4; font-weight:600; text-align:center; }
-.month-label { background:#000; color:#fff; text-align:center; font-weight:600; }
+.year-calendar th {color: var(--gradient-primary); background:var(--gradient-primary); font-weight:600; text-align:center; }
+.month-label { background:var(--bg-color-dark); color:#fff; text-align:center; font-weight:600; }
 .day-cell-empty { min-height:80px; }
 
 /* calendário mensal */
