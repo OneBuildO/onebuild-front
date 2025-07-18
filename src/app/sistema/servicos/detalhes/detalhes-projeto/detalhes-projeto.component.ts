@@ -341,7 +341,7 @@ export class DetalhesProjetoComponent implements OnInit {
         title: 'Download do Arquivo',
         description: `Deseja realizar o download do arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
         iconSrc: 'assets/icones/download-icon.svg',
-        confirmButtonText: 'Visualizar',
+        confirmButtonText: 'Download',
         confirmButtonClass: 'btn-acao confirmar'
       },
       () => this.baixarArquivo(arquivo.id, arquivo.nomeArquivo)
