@@ -1,38 +1,23 @@
 <div class="main-container">
   <div class="banner">
     <h1>Atividades</h1>
-    <p>Gerencie o cronograma da obra dos seus clientes de forma dinâmica.</p>
-  </div>
-  <div class="breadcrumb-container">
-    <div class="breadcrumb">
-      <!--
-      <a (click)="onVoltarClick()">Dashboard &gt;</a>
-      <span class="breadcrumb-highlight">Atividades</span>
-      -->
-    </div>
+    <p>Gerencie suas atividades por cliente e projeto.</p>
   </div>
 
-  <!-- Só exibe o filtro de clientes depois que a lista chegou -->
+  <!-- filtros -->
   <div class="filters" *ngIf="clients.length">
     <label>
       Cliente:
-      <select
-        [(ngModel)]="selectedClient"
-        (ngModelChange)="onClientChange()"
-      >
+      <select [(ngModel)]="selectedClient" (ngModelChange)="onClientChange()">
         <option *ngFor="let c of clients" [ngValue]="c">
           {{ c.nome }}
         </option>
       </select>
     </label>
 
-    <!-- Só exibe o filtro de projetos se houver projetos filtrados -->
     <label *ngIf="projects.length">
       Projeto:
-      <select
-        [(ngModel)]="selectedProject"
-        (ngModelChange)="onProjectChange()"
-      >
+      <select [(ngModel)]="selectedProject" (ngModelChange)="onProjectChange()">
         <option *ngFor="let p of projects" [ngValue]="p">
           {{ p.nomeProjeto }}
         </option>
@@ -40,14 +25,48 @@
     </label>
   </div>
 
-  <!-- Só exibe o Gantt depois que um cliente e um projeto estiverem definidos -->
-  <div class="gantt-section"
-       *ngIf="selectedClient && selectedProject">
-    <h2>Cronograma de Obras – Quadro Gantt</h2>
-    <pre>
-      Cliente selecionado: {{ selectedClient.nome }},
-      Projeto selecionado: {{ selectedProject.nomeProjeto }}
-    </pre>
-    <div id="gantt_chart"></div>
+  <!-- quadro Kanban -->
+  <div class="subMain-container">
+    <div class="kanban-board">
+      <div
+        class="kanban-column"
+        *ngFor="let status of statuses"
+      >
+        <h3
+          class="kanban-column-title"
+          [ngStyle]="{
+            'color': statusColors[status],
+            'background': statusColors[status] + '15',
+            'border': '2px solid ' + statusColors[status] + '33'
+          }"
+        >
+          <span
+            class="kanban-dot"
+            [ngStyle]="{'background': statusColors[status]}"
+          ></span>
+          {{ statusLabels[status] }}
+          <span class="kanban-count">({{ atividades[status].length }})</span>
+        </h3>
+
+        <div
+          cdkDropList
+          [id]="status"
+          [cdkDropListData]="atividades[status]"
+          [cdkDropListConnectedTo]="statuses"
+          class="task-list"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            *ngFor="let atividade of atividades[status]"
+            cdkDrag
+            class="kanban-card"
+          >
+            <h4>{{ atividade.nome }}</h4>
+            <p>Entrega: {{ atividade.dateDaEntrega | date:'shortDate' }}</p>
+            <span class="priority">{{ atividade.prioridade }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

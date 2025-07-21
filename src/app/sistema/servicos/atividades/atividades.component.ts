@@ -1,51 +1,84 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
+
+import { AuthService } from 'src/app/services/services/auth.service';
+import { AtividadeService } from 'src/app/services/services/atividade.service';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { ClienteService } from 'src/app/services/services/cliente.service';
+
 import { ProjetoUsuarioDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-usuario-dto';
 import { ProjetosDisponiveisDTO } from 'src/app/sistema/servicos/cadastro-projeto/projetos-disponiveis-dto';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/services/auth.service';
 
-declare const google: any;
+import { Atividade } from './atividade';
+import { Status } from './status';
+
+interface Tasks {
+  [coluna: string]: Atividade[];
+}
 
 @Component({
   selector: 'app-atividades',
   templateUrl: './atividades.component.html',
-  styleUrls: ['./atividades.component.css']
+  styleUrls: ['./atividades.component.css'],
 })
 export class AtividadesComponent implements OnInit, OnDestroy {
-  // listas completas vindas do back-end
-  clients: ProjetoUsuarioDTO[]          = [];
+  // filtros de cliente/projeto
+  clients: ProjetoUsuarioDTO[] = [];
   allProjects: ProjetosDisponiveisDTO[] = [];
-
-  // arrays filtrados / variáveis de seleção
-  projects: ProjetosDisponiveisDTO[]    = [];
+  projects: ProjetosDisponiveisDTO[] = [];
   selectedClient!: ProjetoUsuarioDTO;
   selectedProject!: ProjetosDisponiveisDTO;
 
-  private chart: any;
+  // Kanban
+  statuses = ['backlog', 'emProgresso', 'revisao', 'concluido'];
+  statusLabels: Record<string, string> = {
+    backlog: 'A fazer',
+    emProgresso: 'Em andamento',
+    revisao: 'Revisão',
+    concluido: 'Concluído',
+  };
+  statusColors: Record<string, string> = {
+    backlog: '#a22bc6',
+    emProgresso: '#3498db',
+    revisao: '#f39c12',
+    concluido: '#1D7206',
+  };
+  atividades: Tasks = {
+    backlog: [],
+    emProgresso: [],
+    revisao: [],
+    concluido: [],
+  };
+  dropListIds: string[] = [];
+
   private subs = new Subscription();
 
   constructor(
     private router: Router,
     private authService: AuthService,
+    private atividadeService: AtividadeService,
     private projetoService: ProjetoService,
-    private clienteService: ClienteService,
-    private zone: NgZone
+    private clienteService: ClienteService
   ) {}
 
   ngOnInit(): void {
+    this.dropListIds = this.statuses.slice();
+
     // carrega clientes e projetos em paralelo
     this.subs.add(
       forkJoin({
         clientes: this.projetoService.obterClientes(),
-        projetos : this.projetoService.obterProjetos()
+        projetos: this.projetoService.obterProjetos(),
       }).subscribe(({ clientes, projetos }) => {
-        this.clients     = clientes.response;
+        this.clients = clientes.response;
         this.allProjects = projetos.response;
 
-        // inicializamos as seleções com o primeiro de cada lista
         if (this.clients.length) {
           this.selectedClient = this.clients[0];
           this.filterProjects();
@@ -54,84 +87,115 @@ export class AtividadesComponent implements OnInit, OnDestroy {
           this.selectedProject = this.projects[0];
         }
 
-        // desenha o Gantt
-        google.charts.load('current', { packages: ['gantt'] });
-        google.charts.setOnLoadCallback(() =>
-          this.zone.run(() => this.drawChart())
-        );
+        this.loadAtividades();
       })
     );
-
-    window.addEventListener('resize', this.redrawOnResize);
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-    window.removeEventListener('resize', this.redrawOnResize);
   }
 
   onClientChange(): void {
     this.filterProjects();
-    // sempre escolha o primeiro projeto após trocar o cliente
     if (this.projects.length) {
       this.selectedProject = this.projects[0];
     }
-    this.drawChart();
-  }
-
-  onVoltarClick(): void {
-    this.router.navigate([ this.authService.getHomeRouteForRole() ]);
+    this.loadAtividades();
   }
 
   onProjectChange(): void {
-    this.drawChart();
+    this.loadAtividades();
   }
 
   private filterProjects(): void {
-    // filtra pelo nome do cliente (é assim que ProjetosDisponiveisDTO.cliente vem da API)
     this.projects = this.allProjects.filter(
       p => p.cliente === this.selectedClient.nome
     );
   }
 
-  private drawChart(): void {
-    const container = document.getElementById('gantt_chart');
-    if (!container || !google?.visualization) { return; }
-
-    const data = new google.visualization.DataTable();
-    data.addColumn('string', 'ID');
-    data.addColumn('string', 'Tarefa');
-    data.addColumn('string', 'Recurso');
-    data.addColumn('date',   'Início');
-    data.addColumn('date',   'Fim');
-    data.addColumn('number', 'Duração');
-    data.addColumn('number', '% Concluído');
-    data.addColumn('string', 'Dependências');
-
-    // aqui você usaria ClienteService.getActivities(this.selectedProject.idProjeto)
-    // para montar as linhas verdadeiras do seu Gantt.  
-    // Exemplo estático:
-    data.addRows([
-      ['T01','Levantamento','Topografia', new Date(2025,6,1), new Date(2025,6,5), null,100,null],
-      ['T02','Limpeza','Obra',             new Date(2025,6,6), new Date(2025,6,8), null,  0,'T01'],
-      ['T03','Marcação','Obra',            new Date(2025,6,9), new Date(2025,6,10),null, 0,'T02']
-    ]);
-
-    const options = {
-      height: data.getNumberOfRows() * 40 + 80,
-      gantt: {
-        trackHeight: 30,
-        criticalPathEnabled: true,
-        arrow:         { angle: 90, width: 2, color: '#CB8642', radius: 0 },
-        labelStyle:    { fontName: 'Roboto', fontSize: 12 }
-      }
-    };
-
-    if (!this.chart) {
-      this.chart = new google.visualization.Gantt(container);
-    }
-    this.chart.draw(data, options);
+  private loadAtividades(): void {
+    // endpoint que recebe idCliente e idProjeto
+    this.atividadeService
+      .getAtividadesByProjeto(
+        this.selectedClient.id,
+        this.selectedProject.idProjeto
+      )
+      .subscribe((ativs: Atividade[]) => {
+        // limpa colunas
+        this.statuses.forEach(col => (this.atividades[col] = []));
+        // distribui por coluna
+        ativs.forEach(a => {
+          // garantir que a.status é do tipo Status
+          const st = (a.status as Status) ?? Status.A_FAZER;
+          const coluna = this.mapStatusToColuna(st);
+          this.atividades[coluna]?.push({ ...a, status: st });
+        });
+      });
   }
 
-  private redrawOnResize = () => this.zone.run(() => this.drawChart());
+  drop(event: CdkDragDrop<Atividade[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      const atividade = event.previousContainer.data[event.previousIndex];
+      const novoStatus: Status = this.mapColunaToStatus(event.container.id);
+
+      // move visual
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+
+      atividade.status = novoStatus;
+
+      // persiste no back-end
+      this.atividadeService
+        .atualizarStatusAtividade(atividade.id!, novoStatus)
+        .subscribe({
+          error: () => {
+            // rollback em caso de falha
+            transferArrayItem(
+              event.container.data,
+              event.previousContainer.data,
+              event.currentIndex,
+              event.previousIndex
+            );
+            atividade.status = this.mapColunaToStatus(
+              event.previousContainer.id
+            );
+          },
+        });
+    }
+  }
+
+  // mapeia do enum Status para o nome da coluna Kanban
+  private statusToColunaMap: Record<Status, string> = {
+    [Status.A_FAZER]: 'backlog',
+    [Status.EM_PROGRESSO]: 'emProgresso',
+    [Status.REVISAO]: 'revisao',
+    [Status.CONCLUIDO]: 'concluido',
+  };
+
+  private mapStatusToColuna(status: Status): string {
+    return this.statusToColunaMap[status] ?? 'backlog';
+  }
+
+  // mapeia do nome da coluna Kanban para o enum Status
+  private colunaToStatusMap: Record<string, Status> = {
+    backlog: Status.A_FAZER,
+    emProgresso: Status.EM_PROGRESSO,
+    revisao: Status.REVISAO,
+    concluido: Status.CONCLUIDO,
+  };
+
+  private mapColunaToStatus(coluna: string): Status {
+    return this.colunaToStatusMap[coluna] ?? Status.A_FAZER;
+  }
 }

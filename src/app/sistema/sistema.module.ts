@@ -34,6 +34,8 @@ import {  LOCALE_ID } from '@angular/core';
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -63,6 +65,9 @@ registerLocaleData(localePt);
     DetalhesProjetoComponent
   ],
   imports: [
+    BrowserModule,    
+    FormsModule,      
+    DragDropModule,   
     CommonModule,
     SistemaRoutingModule,
     SharedModule,
