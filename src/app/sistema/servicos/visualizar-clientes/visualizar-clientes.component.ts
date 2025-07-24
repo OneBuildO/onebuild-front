@@ -5,6 +5,7 @@ import { ClienteCadastroDTO } from '../cadastro-clientes/cliente-cadastro-dto';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
 import { ApiResponse } from 'src/app/services/services/api-response-dto';
+import { UsuarioService } from 'src/app/services/services/usuario.service';
 
 @Component({
   selector: 'app-visualizar-clientes',
@@ -31,6 +32,7 @@ export class VisualizarClientesComponent implements OnInit {
   constructor(
     private router: Router,
     private clienteService: ClienteService,
+    private usuarioService: UsuarioService,
     private modalDeleteService: ModalDeleteService,
     private authService: AuthService
   ) {}
@@ -47,7 +49,7 @@ export class VisualizarClientesComponent implements OnInit {
   fetchClientes(): void {
     this.isLoading = true;
 
-    this.clienteService.obterTodosClientes().subscribe(
+    this.usuarioService.getClientesDoUsuario().subscribe(
       (cliente: ApiResponse<ClienteCadastroDTO[]>) => {
         this.clientes = cliente.response;
         this.totalItens = this.clientes.length; 

@@ -43,7 +43,6 @@ export class ApresentacaoProjetoComponent implements OnInit {
           this.totalPaginas = Math.ceil(
             this.projetos.length / this.itensPorPagina
           );
-          console.log(res.response);
           this.atualizarPaginacao();
           this.isLoading = false;
         },
