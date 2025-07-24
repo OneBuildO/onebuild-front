@@ -5,13 +5,14 @@ import {first, Observable} from "rxjs";
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
 import {AuthService} from "./auth.service";
 import { Usuario } from 'src/app/login/usuario';
-import { catchError, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { AdminEstatisticaDTO } from 'src/app/sistema/dashboards/painel-admin/AdminEstatisticaDTO';
 import { map } from 'rxjs/operators';
+import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
+import { ApiResponse } from './api-response-dto';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
+  apiUrl: string = environment.apiURLBase + "/api/usuarios"; 
 
   private readonly _apiBaseUrl = `${environment.apiURLBase}`;
 
@@ -20,6 +21,11 @@ export class UsuarioService {
     private readonly authService : AuthService,
   ) {}
 
+
+  getClientesDoUsuario(): Observable<ApiResponse<ClienteCadastroDTO[]>> {
+    const url = `${this.apiUrl}/obter-clientes`;
+    return this.httpClient.get<ApiResponse<ClienteCadastroDTO[]>>(url);
+  }
 
   saveUser(newUser : CadastroUsuarioDTO){
     return this.httpClient.post(`${this._apiBaseUrl}/api/usuarios/novo`, newUser, {responseType: "text"})
