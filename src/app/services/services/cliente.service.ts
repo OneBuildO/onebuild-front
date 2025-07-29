@@ -20,7 +20,7 @@ export class ClienteService {
   }
 
   obterTodosClientes(): Observable<ApiResponse<ClienteCadastroDTO[]>> {
-    const url = `${this.apiUrl}/obter-todo  s-clientes`;
+    const url = `${this.apiUrl}/obter-todos-clientes`;
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 
