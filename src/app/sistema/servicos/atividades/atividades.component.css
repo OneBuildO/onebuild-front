@@ -232,9 +232,14 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  overflow-y: auto;       /* se o modal for mais alto, toda a área de fundo rola */
+  padding: 20px;          /* dá um “respiro” no topo/embaixo */
+  align-items: start;     /* faz o modal começar lá no topo do viewport */
 }
 
 .modal-window {
+  max-height: 90vh;       /* nunca maior que 90% da altura da tela */
+  overflow-y: auto;       /* adiciona scroll vertical, se necessário */
   background: #fff;
   padding: 24px;
   border-radius: 8px;

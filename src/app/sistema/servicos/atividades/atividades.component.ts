@@ -36,16 +36,16 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   clients: ProjetoUsuarioDTO[] = [];//listas usadas para filtrar as atividades e clientes
   allProjects: ProjetosDisponiveisDTO[] = [];//listas usadas para filtrar as atividades e clientes
   projects: ProjetosDisponiveisDTO[] = []; //listas usadas para filtrar as atividades e clientes
-  selectedClient!: ProjetoUsuarioDTO;
-  selectedProject!: ProjetosDisponiveisDTO;
+  selectedClient: ProjetoUsuarioDTO | null = null;
+  selectedProject: ProjetosDisponiveisDTO | null = null;
 
 
   // ── listas para o form de cadastro da atividade ──
   formClients: ProjetoUsuarioDTO[] = [];
   formAllProjects: ProjetosDisponiveisDTO[] = [];
   formProjects: ProjetosDisponiveisDTO[] = [];
-  formSelectedCliente!: ProjetoUsuarioDTO
-  formSelectedProject!: ProjetosDisponiveisDTO;
+  formSelectedCliente: ProjetoUsuarioDTO | null = null;
+  formSelectedProject: ProjetosDisponiveisDTO | null = null;
 
   // Kanban
   statuses = ['backlog', 'emProgresso', 'revisao', 'concluido'];
@@ -103,27 +103,27 @@ export class AtividadesComponent implements OnInit, OnDestroy {
         this.formAllProjects   = [...this.allProjects];
 
 
-        if (this.clients.length) {
-          this.selectedClient = this.clients[0];
-          this.filterProjects();
-        }
+        // if (this.clients.length) {
+        //   this.selectedClient = this.clients[0];
+        //   this.filterProjects();
+        // }
 
-        if (this.formClients.length) {
-          this.formSelectedCliente = this.formClients[0]
-        }
+        // if (this.formClients.length) {
+        //   this.formSelectedCliente = this.formClients[0]
+        // }
 
-        if (this.projects.length) {
-          this.selectedProject = this.projects[0];
-        }
+        // if (this.projects.length) {
+        //   this.selectedProject = this.projects[0];
+        // }
 
-        if (this.formProjects.length) {
-          this.formSelectedProject = this.formProjects[0];
-        }
+        // if (this.formProjects.length) {
+        //   this.formSelectedProject = this.formProjects[0];
+        // }
 
-        this.loadAtividades();
+        // this.loadAtividades();
 
         // projetos iniciais do form (do primeiro cliente)
-        this.onFormClienteChange(this.formSelectedCliente.nome);
+        // this.onFormClienteChange(this.formSelectedCliente.nome);
       })
     );
 
@@ -155,17 +155,13 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     this.formProjects = this.formAllProjects
       .filter(p => p.cliente === clienteNome);
     
-    if (this.formProjects.length) {
-      this.formSelectedProject = this.formProjects[0];
-    }
+    // if (this.formProjects.length) {
+    //   this.formSelectedProject = this.formProjects[0];
+    // }
   }
 
   onClientChange(): void {
     this.filterProjects();
-    if (this.projects.length) {
-      this.selectedProject = this.projects[0];
-    }
-    this.loadAtividades();
   }
 
   onProjectChange(): void {
@@ -174,7 +170,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
   private filterProjects(): void {
     this.projects = this.allProjects.filter(
-      p => p.cliente === this.selectedClient.nome
+      p => p.cliente === this.selectedClient!.nome
     );
   }
 
@@ -182,8 +178,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     // endpoint que recebe idCliente e idProjeto
     this.atividadeService
       .getAtividadesByProjeto(
-        this.selectedClient.id,
-        this.selectedProject.idProjeto
+        this.selectedClient!.id,
+        this.selectedProject!.idProjeto
       )
       .subscribe((ativs: Atividade[]) => {
         // limpa colunas
