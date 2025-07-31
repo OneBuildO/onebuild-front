@@ -72,11 +72,15 @@
   box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 20px;
+  background-color: var(--lm-sidebar-primary);
 }
 
 .filters label {
   font-size: 14px;
-  color: #333;
+  color: #fff;
+  padding: 15px;
+  justify-content: center;
+  text-align: center;
 }
 
 .filters select {
@@ -142,7 +146,7 @@
   margin: 0;
   max-width: 100%;
   min-height: 75vh;
-  background: #cfcfcf;
+  background: #fff;
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
@@ -164,7 +168,7 @@
 
 .kanban-column {
   min-width: 320px;
-  background: #f1f2f4;
+  background: #ccc;
   padding: 16px;
   border-radius: 24px;
   min-height: 120px;
