@@ -5,7 +5,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription, filter, forkJoin } from 'rxjs';
 
 import { AuthService } from 'src/app/services/services/auth.service';
 import { AtividadeService } from 'src/app/services/services/atividade.service';
@@ -17,6 +17,10 @@ import { ProjetosDisponiveisDTO } from 'src/app/sistema/servicos/cadastro-projet
 
 import { Atividade } from './atividade';
 import { Status } from './status';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Prioridade } from './prioridade';
+import { PrioridadeDescricao } from './PrioridadeDescricao';
+import { StatusDescricao } from './StatusDescricao';
 
 interface Tasks {
   [coluna: string]: Atividade[];
@@ -29,11 +33,19 @@ interface Tasks {
 })
 export class AtividadesComponent implements OnInit, OnDestroy {
   // filtros de cliente/projeto
-  clients: ProjetoUsuarioDTO[] = [];
-  allProjects: ProjetosDisponiveisDTO[] = [];
-  projects: ProjetosDisponiveisDTO[] = [];
+  clients: ProjetoUsuarioDTO[] = [];//listas usadas para filtrar as atividades e clientes
+  allProjects: ProjetosDisponiveisDTO[] = [];//listas usadas para filtrar as atividades e clientes
+  projects: ProjetosDisponiveisDTO[] = []; //listas usadas para filtrar as atividades e clientes
   selectedClient!: ProjetoUsuarioDTO;
   selectedProject!: ProjetosDisponiveisDTO;
+
+
+  // ── listas para o form de cadastro da atividade ──
+  formClients: ProjetoUsuarioDTO[] = [];
+  formAllProjects: ProjetosDisponiveisDTO[] = [];
+  formProjects: ProjetosDisponiveisDTO[] = [];
+  formSelectedCliente!: ProjetoUsuarioDTO
+  formSelectedProject!: ProjetosDisponiveisDTO;
 
   // Kanban
   statuses = ['backlog', 'emProgresso', 'revisao', 'concluido'];
@@ -56,6 +68,13 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     concluido: [],
   };
   dropListIds: string[] = [];
+  
+  Prioridade = Prioridade;
+  Status = Status;
+  showModalCadastro:boolean = false;
+  
+  readonly PrioridadeDescricao = PrioridadeDescricao
+  readonly StatusDescricao = StatusDescricao
 
   private subs = new Subscription();
 
@@ -64,7 +83,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private atividadeService: AtividadeService,
     private projetoService: ProjetoService,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private form:FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -78,22 +98,66 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       }).subscribe(({ clientes, projetos }) => {
         this.clients = clientes.response;
         this.allProjects = projetos.response;
+        // para o form de cadastro
+        this.formClients       = [...this.clients];
+        this.formAllProjects   = [...this.allProjects];
+
 
         if (this.clients.length) {
           this.selectedClient = this.clients[0];
           this.filterProjects();
         }
+
+        if (this.formClients.length) {
+          this.formSelectedCliente = this.formClients[0]
+        }
+
         if (this.projects.length) {
           this.selectedProject = this.projects[0];
         }
 
+        if (this.formProjects.length) {
+          this.formSelectedProject = this.formProjects[0];
+        }
+
         this.loadAtividades();
+
+        // projetos iniciais do form (do primeiro cliente)
+        this.onFormClienteChange(this.formSelectedCliente.nome);
       })
     );
+
+
+    this.atividadeForm.get('cliente')!
+      .valueChanges
+      .subscribe(cliente => {
+        if (!cliente) {
+          // limpa projeto se quiser
+          this.atividadeForm.get('projeto')!.setValue(null);
+          return;
+        }
+
+
+        // só chega aqui quando cliente !== null
+        this.formProjects = this.formAllProjects
+          .filter(p => p.cliente === cliente.nome);
+
+          // opcional: zera o projeto anterior, para forçar nova escolha
+        this.atividadeForm.get('projeto')!.setValue(null);
+      });
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  onFormClienteChange(clienteNome: string) {
+    this.formProjects = this.formAllProjects
+      .filter(p => p.cliente === clienteNome);
+    
+    if (this.formProjects.length) {
+      this.formSelectedProject = this.formProjects[0];
+    }
   }
 
   onClientChange(): void {
@@ -197,5 +261,40 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
   private mapColunaToStatus(coluna: string): Status {
     return this.colunaToStatusMap[coluna] ?? Status.A_FAZER;
+  }
+  
+  atividadeForm = this.form.group({
+    nome : new FormControl('', {validators: Validators.required}),
+    descricao : new FormControl('', {validators: Validators.required}),
+    cliente: new FormControl<ProjetoUsuarioDTO|null>(null, Validators.required),
+    projeto: new FormControl<ProjetosDisponiveisDTO|null>(null, Validators.required),
+    dataDeInicio : new FormControl('', {validators: Validators.required}),
+    dataDeEntrega : new FormControl('', {validators: Validators.required}),
+    prioridade : new FormControl('', {validators: Validators.required}),
+    status : new FormControl('', {validators: Validators.required}),
+  });
+
+  openModal(): void {
+    this.atividadeForm.reset({
+      nome: '',
+      descricao: '',
+      cliente: null,
+      projeto:null,
+      dataDeInicio : '',
+      dataDeEntrega : '',
+      prioridade: '',
+      status: '',
+    });
+    this.showModalCadastro = true;
+  }
+
+  closeModal(): void {
+    this.showModalCadastro = false;
+    //this.novaAtividade = {};
+  }
+
+
+  onSubmitAtividade(){
+
   }
 }

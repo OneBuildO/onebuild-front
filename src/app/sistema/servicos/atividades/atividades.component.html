@@ -23,6 +23,10 @@
         </option>
       </select>
     </label>
+
+    <button (click)="openModal()">
+      Cadastrar Atividade +
+    </button>
   </div>
 
   <!-- quadro Kanban -->
@@ -67,6 +71,88 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- modal -->
+  <div class="modal-backdrop" *ngIf="showModalCadastro">
+    <div class="modal-window">
+      
+      <div class="modal-container-title">
+        <h2>Cadastrar Atividade</h2>
+        <button class="modal-close-btn" (click)="closeModal()" aria-label="Fechar">
+          &times;
+        </button>
+      </div>
+
+      <form [formGroup]="atividadeForm"  (ngSubmit)="onSubmitAtividade()">
+        <label>
+          Cliente:
+        </label>
+        <select formControlName="cliente">
+          <option [value]="''" disabled selected hidden>Selecione o cliente.</option>
+          <option *ngFor="let c of formClients" [ngValue]="c">
+            {{ c.nome }}
+          </option>
+        </select>
+
+        <label>
+          Projeto:
+          <select formControlName="projeto">
+            <option [value]="''" disabled selected hidden>Selecione o projeto.</option>
+            <option  *ngFor="let p of formProjects" [ngValue]="p">
+              {{ p.nomeProjeto }}
+            </option>
+          </select>
+        </label>
+
+        <label>
+          Nome:
+          <input type="text" formControlName="nome" name="nome" required />
+        </label>
+
+        <label>
+          Descrição:
+          <textarea formControlName="descricao"></textarea>
+        </label>
+
+        <div class="dual-grid">
+          <label>
+            Data de início:
+            <input type="date" formControlName="dataDeInicio" />
+          </label>
+
+          <label>
+            Data de entrega:
+            <input type="date" formControlName="dataDeEntrega" />
+          </label>
+
+        </div>
+        <label>Prioridade:</label>
+        <select formControlName="prioridade">
+          <option [value]="''" disabled selected hidden>Selecione a prioridade.</option>
+          <option
+            *ngFor="let p of (Prioridade | keyvalue)"
+            [ngValue]="p.value">
+            {{ PrioridadeDescricao[p.value] }}
+          </option>
+        </select>
+
+        <label>Status da atividade:</label>
+        <select formControlName="status">
+          <option [value]="''" disabled selected hidden>Selecione o status.</option>
+          <option
+            *ngFor="let s of (Status | keyvalue)"
+            [ngValue]="s.value">
+            {{ StatusDescricao[s.value] }}
+          </option>
+        </select>
+
+        <div class="modal-actions">
+          <button type="button" (click)="closeModal()" class="cancel-button">Cancelar</button>
+          <button type="submit" class="cadastrar-button">Salvar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
