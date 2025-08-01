@@ -1,6 +1,6 @@
 <div class="main-container">
   <div class="progress-bar-container" *ngIf="carregando">
-      <div class="progress-bar"></div>
+    <div class="progress-bar"></div>
   </div>
   <div class="breadcrumb-container">
     <div class="back-title">
@@ -14,11 +14,9 @@
       <h1>{{ detalheProjeto.nomeProjeto || '—' }}</h1>
       <p>Cliente: {{ detalheProjeto.nomeCliente || '—' }}</p>
     </div>
-      <button *ngIf="allowedToAddNovidades"
-          class="btn-novidades-square"
-          (click)="openNovidadesModal()">
-    Adicionar Atualizações
-  </button>
+    <button *ngIf="allowedToAddNovidades" class="btn-novidades-square" (click)="openNovidadesModal()">
+      Adicionar Atualizações
+    </button>
   </div>
 
 
@@ -79,69 +77,50 @@
 
 <!-- Arquivos anexados -->
 <div class="subMain-container">
-    <div class="divisao">
-      <p>Anexos do projeto</p>
-      <hr class="line" />
-    </div>
+  <div class="divisao">
+    <p>Anexos do projeto</p>
+    <hr class="line" />
+  </div>
 
-    <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
-      <section class="data-grid-trio">
+  <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
+    <section class="data-grid-trio">
 
-              <div *ngFor="let arquivo of arquivosNormais">
+      <div *ngFor="let arquivo of arquivosNormais">
 
-                <div class="arquivo">
-                  <div class="preview-container"> 
-                    <!-- Imagem -->
-                    <img
-                      *ngIf="isImage(arquivo)"
-                      [src]="getPreviewUrl(arquivo) | async"
-                      class="preview blurred"
-                      alt="pré-visualização"
-                    />
+        <div class="arquivo">
+          <div class="preview-container">
+            <!-- Imagem -->
+            <img *ngIf="isImage(arquivo)" [src]="getPreviewUrl(arquivo) | async" class="preview blurred"
+              alt="pré-visualização" />
 
-                    <!-- PDF -->
-                    <embed
-                      *ngIf="isPdf(arquivo)"
-                      [src]="getPreviewUrl(arquivo) | async"
-                      type="application/pdf"
-                      class="preview blurred"
-                    />
+            <!-- PDF -->
+            <embed *ngIf="isPdf(arquivo)" [src]="getPreviewUrl(arquivo) | async" type="application/pdf"
+              class="preview blurred" />
 
-                    <!-- DOC/DOCX: ícone genérico -->
-                    <img
-                      *ngIf="isDoc(arquivo)"
-                      src="assets/icones/file-icon.svg"
-                      class="preview blurred"
-                      alt="pré-visualização doc"
-                    />
-                  </div>
+            <!-- DOC/DOCX: ícone genérico -->
+            <img *ngIf="isDoc(arquivo)" src="assets/icones/file-icon.svg" class="preview blurred"
+              alt="pré-visualização doc" />
+          </div>
 
-                  <div><p>{{arquivo.nomeArquivo}}</p></div>
+          <div>
+            <p>{{arquivo.nomeArquivo}}</p>
+          </div>
 
-                  <div id="acoes" class="data-grid-trio">
-                    <button class="btn-acao visualizar" (click)="openModalVisualizar(arquivo)">
-                      <img
-                      src="assets/icones/See.png"
-                      alt="Visualizar"
-                      />
-                    </button>
-                    <button class="btn-acao download"(click)="openModalDownload(arquivo)">
-                      <img
-                      src="assets/icones/download-icon.svg"
-                      alt="Download"
-                      />
-                    </button>
-                    <button class="btn-acao delete" (click)="openModalDeletar(arquivo)">
-                      <img
-                      src="assets/icones/Delete.png"
-                      alt="Excluir"
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-      </section>
-    </ng-container>
+          <div id="acoes" class="data-grid-trio">
+            <button class="btn-acao visualizar" (click)="openModalVisualizar(arquivo)">
+              <img src="assets/icones/See.png" alt="Visualizar" />
+            </button>
+            <button class="btn-acao download" (click)="openModalDownload(arquivo)">
+              <img src="assets/icones/download-icon.svg" alt="Download" />
+            </button>
+            <button class="btn-acao delete" (click)="openModalDeletar(arquivo)">
+              <img src="assets/icones/Delete.png" alt="Excluir" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
 
 
   <ng-template #semArquivos>
@@ -154,105 +133,106 @@
 </div>
 
 
-
-  <div class="subMain-container-novidades">
-
-    <div class="timeline">
-      <div
-        class="timeline-item"
-        *ngFor="let nov of novidadesList; let i = index"
-        [ngClass]="{ left: i % 2 === 0, right: i % 2 !== 0 }"
-      >
-        <div class="marker"></div>
-        <div class="content">
-          <!-- cabeçalho da novidade -->
-          <div class="novidade-header">
-            <h3>{{ nov.titulo }}</h3>
-            <small>
-              {{ nov.data | date: 'dd/MM/yyyy HH:mm' }} —
-              <span class="label-arquiteto">Arquiteto</span>
-              • {{ nov.status }}
-            </small>
-          </div>
-
-          <p>{{ nov.descricao }}</p>
-          <img *ngIf="nov.imagemUrl" [src]="nov.imagemUrl" class="nov-img" />
-
-          <!-- seção de comentários (cliente) -->
-          <div class="comments-section" *ngIf="nov.comments?.length">
-            <div class="comment" *ngFor="let c of nov.comments">
-              <div class="comment-header">
-                <strong
-                  [ngClass]="{
-                    'label-cliente': c.autor === 'Cliente',
-                    'label-arquiteto': c.autor === 'Arquiteto'
-                  }"
-                >
-                  {{ c.autor }}
-                </strong>
-                <small>{{ c.data | date: 'dd/MM/yyyy HH:mm' }}</small>
-              </div>
-              <p>{{ c.descricao }}</p>
-            </div>
-          </div>
-
-          <!-- botão comentar só para cliente -->
-          <button
-            *ngIf="isClient()"
-            class="btn-comment"
-            (click)="openComentarioModal(i)"
-          >
-            Comentar
-          </button>
+<div class="subMain-container-novidades">
+  <div class="timeline" *ngIf="novidadesList.length > 0; else semNovidades">
+    <div class="timeline-item" *ngFor="let nov of novidadesList; let i = index"
+      [ngClass]="{ left: i % 2 === 0, right: i % 2 !== 0 }">
+      <div class="marker"></div>
+      <div class="content">
+        <!-- cabeçalho da novidade -->
+        <div class="novidade-header">
+          <h3>{{ nov.titulo }}</h3>
+          <small>
+            {{ nov.data | date: 'dd/MM/yyyy HH:mm' }} —
+            <span class="label-arquiteto">Arquiteto</span>
+            • {{ nov.status }}
+          </small>
         </div>
+
+        <p>{{ nov.descricao }}</p>
+        <img *ngIf="nov.imagemUrl" [src]="nov.imagemUrl" class="nov-img" />
+
+        <!-- seção de comentários (cliente) -->
+        <div class="comments-section" *ngIf="nov.comments?.length">
+          <div class="comment" *ngFor="let c of nov.comments">
+            <div class="comment-header">
+              <strong [ngClass]="{
+          'label-cliente': c.autor === 'Cliente',
+          'label-arquiteto': c.autor === 'Arquiteto'
+        }">
+                {{ c.autor }}
+              </strong>
+              <small>{{ c.data | date: 'dd/MM/yyyy HH:mm' }}</small>
+            </div>
+
+            <!-- Título do comentário -->
+            <h4 class="comment-title" *ngIf="c.titulo">{{ c.titulo }}</h4>
+
+            <!-- Descrição do comentário -->
+            <p>{{ c.descricao }}</p>
+          </div>
+        </div>
+
+
+        <!-- botão comentar só para cliente -->
+        <button *ngIf="isClient()" class="btn-comment" (click)="openComentarioModal(i)">
+          Comentar
+        </button>
       </div>
     </div>
   </div>
 
+  <ng-template #semNovidades>
+    <p style="margin-left: 1rem; font-style: italic;">
+      Nenhuma novidade disponível no momento.
+    </p>
+  </ng-template>
+</div>
 
-  <!-- Modal de comentário (já existente) -->
-  <div class="modal-overlay" *ngIf="showComentarioModal">
-    <div class="modal-content">
-      <button class="modal-close" (click)="fecharComentarioModal()">×</button>
-      <h2>Adicionar Comentário</h2>
-      <div class="modal-body">
-        <label for="titulo">Título</label>
-        <input id="titulo" type="text" [(ngModel)]="comentarioTitulo" />
-        <label for="descricao">Descrição</label>
-        <textarea id="descricao" rows="4" [(ngModel)]="comentarioDescricao"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-acao voltar" (click)="fecharComentarioModal()">Voltar</button>
-        <button class="btn-acao enviar" (click)="enviarComentario()">Enviar</button>
-      </div>
+
+<!-- Modal de comentário (já existente) -->
+<div class="modal-overlay" *ngIf="showComentarioModal">
+  <div class="modal-content">
+    <button class="modal-close" (click)="fecharComentarioModal()">×</button>
+    <h2>Adicionar Comentário</h2>
+    <div class="modal-body">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" [(ngModel)]="comentarioTitulo" />
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" rows="4" [(ngModel)]="comentarioDescricao"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-acao voltar" (click)="fecharComentarioModal()">Voltar</button>
+      <button class="btn-acao enviar" (click)="enviarComentario()">Enviar</button>
     </div>
   </div>
+</div>
 
-  <!-- Novo Modal de “Adicionar Novidades” -->
-  <div class="modal-overlay" *ngIf="showNovidadesModal">
-    <div class="modal-content">
-      <button class="modal-close" (click)="fecharNovidadesModal()">×</button>
-      <h2>Adicionar Novidades</h2>
-      <div class="modal-body">
-        <label for="nov-titulo">Título</label>
-        <input id="nov-titulo" type="text" [(ngModel)]="novidadesTitulo" />
+<!-- Novo Modal de “Adicionar Novidades” -->
+<div class="modal-overlay" *ngIf="showNovidadesModal">
+  <div class="modal-content">
+    <button class="modal-close" (click)="fecharNovidadesModal()">×</button>
+    <h2>Adicionar Novidades</h2>
+    <div class="modal-body">
+      <label for="nov-titulo">Título</label>
+      <input id="nov-titulo" type="text" [(ngModel)]="novidadesTitulo" />
 
-        <label for="nov-descricao">Descrição</label>
-        <textarea id="nov-descricao" rows="4" [(ngModel)]="novidadesDescricao"></textarea>
+      <label for="nov-descricao">Descrição</label>
+      <textarea id="nov-descricao" rows="4" [(ngModel)]="novidadesDescricao"></textarea>
 
-        <label for="nov-status">Status da Obra</label>
-        <select id="nov-status" [(ngModel)]="novidadesStatus">
-          <option value="" disabled selected>Selecione...</option>
-          <option *ngFor="let s of listaStatusObra" [value]="s">{{ s }}</option>
-        </select>
+      <label for="nov-status">Status da Obra</label>
+      <select id="nov-status" [(ngModel)]="novidadesStatus">
+        <option value="" disabled selected>Selecione...</option>
+        <option *ngFor="let s of listaStatusObra" [value]="s.value.trim()">{{ s.label }}</option>
+      </select>
 
-        <label for="nov-imagem">Imagem</label>
-        <input id="nov-imagem" type="file" (change)="onImagemChange($event)" />
-      </div>
-      <div class="modal-footer">
-        <button class="btn-acao voltar" (click)="fecharNovidadesModal()">Voltar</button>
-        <button class="btn-acao enviar" (click)="enviarNovidades()">Enviar</button>
-      </div>
+
+      <label for="nov-imagem">Imagem</label>
+      <input id="nov-imagem" type="file" (change)="onImagemChange($event)" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-acao voltar" (click)="fecharNovidadesModal()">Voltar</button>
+      <button class="btn-acao enviar" (click)="enviarNovidades()">Enviar</button>
     </div>
   </div>
-
+</div>

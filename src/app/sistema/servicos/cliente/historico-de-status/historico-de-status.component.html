@@ -1,4 +1,5 @@
 <div class="main-container">
+  <!-- Banner e breadcrumb -->
   <div class="banner">
     <h1>Histórico</h1>
     <p>Um espaço onde você pode visualizar o histórico de movimentação.</p>
@@ -6,17 +7,59 @@
 
   <div class="breadcrumb-container">
     <div class="breadcrumb">
-      <!--
-      <a (click)="onVoltarClick()">Dashboard &gt; </a> 
-      <span class="breadcrumb-highlight"> Histórico</span>
-    -->
+      <!-- Breadcrumb desativado -->
     </div>
+
     <div class="actions">
       <div class="search-container">
-        <!-- Campo de busca pode ficar aqui -->
+        <!-- Componente de busca removido -->
+        <input type="text" placeholder="Buscar projeto..." />
       </div>
-      <!--<button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
-        -->
     </div>
+  </div>
+
+  <!-- Mensagem de erro -->
+  <div class="alert alert-error" *ngIf="errorMsg">
+    {{ errorMsg }}
+    <button class="close-btn" (click)="errorMsg = null">&times;</button>
+  </div>
+
+  <!-- Loading -->
+  <div class="progress-bar-container" *ngIf="isLoading">
+    <div class="progress-bar"></div>
+  </div>
+
+  <!-- Tabela -->
+  <div class="tabela-container" *ngIf="!isLoading && projetos.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome do arquiteto</th>
+          <th>Projeto</th>
+          <th>Status</th>
+          <th>Data/Hora</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of projetos">
+          <td>{{ p.nomeArquiteto || '-' }}</td>
+          <td>{{ p.nomeProjeto || '-' }}</td>
+          <td>{{ traduzirProjeto(p.status) || '-' }}</td>
+          <td>{{ p.dataAtualizacaoo | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <button class="btn-acao visualizar" title="Visualizar" (click)="visualizarProjeto(p.idProjeto)">
+              <img src="assets/icones/See.png" alt="Ver" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Caso não haja nenhum projeto -->
+  <div class="no-data-message" *ngIf="!isLoading && projetos.length === 0 && !errorMsg">
+    <img src="assets/imgs/no-data.svg" alt="Sem dados" />
+    <p>Não há projetos cadastrados.</p>
   </div>
 </div>

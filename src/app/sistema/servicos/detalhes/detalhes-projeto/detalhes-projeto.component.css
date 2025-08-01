@@ -821,3 +821,9 @@
 .btn-comment:hover {
   background: #217a35;
 }
+
+.comment-title {
+  margin: 0.25rem 0;
+  font-weight: bold;
+  font-size: 1rem;
+}

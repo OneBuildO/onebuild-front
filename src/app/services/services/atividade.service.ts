@@ -26,9 +26,9 @@ export class AtividadeService {
 
   /** Retorna todas as atividades */
   getAtividades(): Observable<Atividade[]> {
-    return this.http.get<Atividade[]>(this.apiURL).pipe(
-      catchError(this.handleError('buscar as atividades'))
-    );
+    return this.http
+      .get<Atividade[]>(this.apiURL)
+      .pipe(catchError(this.handleError('buscar as atividades')));
   }
 
   /** Retorna as atividades de um dado cliente + projeto */

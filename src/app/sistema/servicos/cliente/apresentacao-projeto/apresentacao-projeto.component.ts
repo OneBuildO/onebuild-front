@@ -23,11 +23,12 @@ export class ApresentacaoProjetoComponent implements OnInit {
   totalPaginas = 0;
   totalItens: number = 0;
 
+  
   constructor(
     private router: Router,
     private projetoService: ProjetoService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchMeusProjetos();
