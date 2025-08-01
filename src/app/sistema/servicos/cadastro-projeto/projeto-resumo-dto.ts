@@ -1,5 +1,4 @@
 import { StatusDoProjeto } from "./statusDoProjeto";
-
 export interface ProjetoResumoDTO {
     id: number | null | undefined;
     idCliente: string;
