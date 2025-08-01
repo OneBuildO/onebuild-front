@@ -9,7 +9,7 @@
     <label>
       Cliente:
       <select [(ngModel)]="selectedClient" (ngModelChange)="onClientChange()">
-        <option [value]="null" disabled  hidden>Selecione o cliente.</option>
+        <option [value]="null" disabled  hidden>Selecione.</option>
         <option *ngFor="let c of clients" [ngValue]="c">
           {{ c.nome }}
         </option>
@@ -19,7 +19,7 @@
     <label *ngIf="projects.length">
       Projeto:
       <select [(ngModel)]="selectedProject" (ngModelChange)="onProjectChange()">
-        <option [value]="null" disabled hidden>Selecione o projeto.</option>
+        <option [value]="null" disabled hidden>Selecione.</option>
         <option *ngFor="let p of projects" [ngValue]="p">
           {{ p.nomeProjeto }}
         </option>
@@ -103,7 +103,7 @@
           Cliente:
         </label>
         <select formControlName="cliente">
-          <option [value]="null" disabled hidden>Selecione o cliente.</option>
+          <option [value]="null" disabled hidden>Selecione.</option>
           <option *ngFor="let c of formClients" [ngValue]="c">
             {{ c.nome }}
           </option>
@@ -112,7 +112,7 @@
         <label>
           Projeto:
           <select formControlName="projeto">
-            <option [value]="null" disabled hidden>Selecione o projeto.</option>
+            <option [value]="null" disabled hidden>Selecione.</option>
             <option  *ngFor="let p of formProjects" [ngValue]="p">
               {{ p.nomeProjeto }}
             </option>
