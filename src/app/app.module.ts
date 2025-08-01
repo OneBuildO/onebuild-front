@@ -16,6 +16,10 @@ import { LayoutComponent } from './layout/layout.component';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule }   from '@angular/material/core';
+import { DetalhesProgressoProjetoComponent } from './sistema/detalhes-progresso-projeto/detalhes-progresso-projeto.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,7 @@ import { MatNativeDateModule }   from '@angular/material/core';
     TelaCadastroComponent,
     TelaRecuperarSenhaComponent,
     LayoutComponent,
+    DetalhesProgressoProjetoComponent,
     
   ],
   imports: [
@@ -38,6 +43,9 @@ import { MatNativeDateModule }   from '@angular/material/core';
     NgApexchartsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatStepperModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   providers: [
     AuthService,
