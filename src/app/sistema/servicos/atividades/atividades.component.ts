@@ -127,7 +127,6 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       })
     );
 
-
     this.atividadeForm.get('cliente')!
       .valueChanges
       .subscribe(cliente => {
@@ -136,7 +135,6 @@ export class AtividadesComponent implements OnInit, OnDestroy {
           this.atividadeForm.get('projeto')!.setValue(null);
           return;
         }
-
 
         // só chega aqui quando cliente !== null
         this.formProjects = this.formAllProjects
@@ -162,6 +160,13 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
   onClientChange(): void {
     this.filterProjects();
+    // 2) Zera a seleção de projeto
+    this.selectedProject = null;
+
+    // 3) Reseta o Kanban limpando todas as colunas
+    this.statuses.forEach(status => {
+      this.atividades[status] = [];
+    });
   }
 
   onProjectChange(): void {
@@ -175,23 +180,21 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   }
 
   private loadAtividades(): void {
-    // endpoint que recebe idCliente e idProjeto
+    if (!this.selectedProject) return;
     this.atividadeService
-      .getAtividadesByProjeto(
-        this.selectedClient!.id,
-        this.selectedProject!.idProjeto
-      )
-      .subscribe((ativs: Atividade[]) => {
-        // limpa colunas
-        this.statuses.forEach(col => (this.atividades[col] = []));
-        // distribui por coluna
-        ativs.forEach(a => {
-          // garantir que a.status é do tipo Status
-          const st = (a.status as Status) ?? Status.A_FAZER;
-          const coluna = this.mapStatusToColuna(st);
-          this.atividades[coluna]?.push({ ...a, status: st });
-        });
-      });
+      .getAtividadesByProjeto(this.selectedProject.idProjeto)
+      .subscribe(
+        ativs => {
+          console.log("Deu certo!",ativs);
+          console.log("Atividades:", this.atividades)
+          this.statuses.forEach(s => (this.atividades[s] = []));
+          ativs.forEach(a => {
+            const coluna = this.mapStatusToColuna(a.status!);
+            this.atividades[coluna].push(a);
+          });
+        },
+        err => console.error(err)
+      );
   }
 
   drop(event: CdkDragDrop<Atividade[]>): void {
@@ -258,6 +261,19 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   private mapColunaToStatus(coluna: string): Status {
     return this.colunaToStatusMap[coluna] ?? Status.A_FAZER;
   }
+
+  getPriorityClass(prioridade : Prioridade): string {
+    switch (prioridade) {
+      case Prioridade.ALTA:
+        return 'priority-high';
+      case Prioridade.MEDIA:
+        return 'priority-medium';
+      case Prioridade.BAIXA:
+        return 'priority-low';
+      default:
+        return '';
+    }
+  }
   
   atividadeForm = this.form.group({
     nome : new FormControl('', {validators: Validators.required}),
@@ -291,6 +307,21 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
 
   onSubmitAtividade(){
+    // if (this.atividadeForm.invalid) {
+    //   this.atividadeForm.markAllAsTouched();
+    //   return;
+    // }
 
+    // const atividade : Atividade = {
+
+    //   nome: this.atividadeForm.value.nome!, 
+    //   descricao: this.atividadeForm.value.descricao!,
+    //   //cliente: this.atividadeForm.value.cliente!,
+    //   projeto: this.atividadeForm.value.projeto?.idProjeto!,
+    //   dataDeInicio: this.atividadeForm.value.dataDeInicio!,
+    //   dataDeEntrega: this.atividadeForm.value.dataDeEntrega!,
+    //   status: this.atividadeForm.value.status!,
+
+    // }
   }
 }

@@ -62,14 +62,25 @@
           class="task-list"
           (cdkDropListDropped)="drop($event)"
         >
+
           <div
             *ngFor="let atividade of atividades[status]"
             cdkDrag
             class="kanban-card"
           >
-            <h4>{{ atividade.nome }}</h4>
-            <p>Entrega: {{ atividade.dateDaEntrega | date:'shortDate' }}</p>
-            <span class="priority">{{ atividade.prioridade }}</span>
+            <div class="card">
+              <h4>{{ atividade.nome }}</h4>
+              <p>{{atividade.descricao}}</p>
+              <div class="date">
+                <p>Inicio: {{ atividade.dataDeInicio | date:'shortDate' }}</p>
+                <p>Entrega: {{ atividade.dataDeEntrega | date:'shortDate' }}</p>
+              </div>
+              <div class="tags">
+                <span class="priority-tag" [ngClass]="getPriorityClass(atividade.prioridade)">
+                  {{ atividade.prioridade }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
