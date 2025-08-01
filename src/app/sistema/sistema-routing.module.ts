@@ -25,6 +25,7 @@ import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadast
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
 import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
+import { DetalhesProgressoProjetoComponent } from './detalhes-progresso-projeto/detalhes-progresso-projeto.component';
 
 const routes: Routes = [
   {
@@ -67,7 +68,10 @@ const routes: Routes = [
 
       //visualizacao detalhada
       {path:'detalhes-cliente/:id', component: DetalhesClienteComponent},
-      {path:'detalhes-projeto/:id', component: DetalhesProjetoComponent}
+      {path:'detalhes-projeto/:id', component: DetalhesProjetoComponent},
+
+      // visualizacao detalhada do progresso do projeto
+      {path:'detalhes-progresso-projeto/:id', component: DetalhesProgressoProjetoComponent}
     ]
   }
 ];
