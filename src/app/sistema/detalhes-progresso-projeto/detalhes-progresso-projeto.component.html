@@ -1,0 +1,115 @@
+<div class="main-container">
+    <div class="progress-bar-container" *ngIf="carregando">
+        <div class="progress-bar"></div>
+    </div>
+    <div class="breadcrumb-container">
+        <div class="back-title">
+            <img src="assets/icones/voltar-icon.svg" alt="Voltar" class="back-icon" (click)="onVoltar()" />
+            <span>Progresso do projeto</span>
+        </div>
+    </div>
+
+    <div *ngIf="detalheProjeto" class="header-with-button">
+        <div class="project-info">
+            <h1>{{ nomeUsuario }}</h1>
+        </div>
+    </div>
+
+    <div *ngIf="detalheProjeto" class="header-with-button">
+        <div class="project-info">
+            <h1>Nome do projeto: {{ detalheProjeto.nomeProjeto || '—' }}</h1>
+        </div>
+    </div>
+</div>
+
+<div class="subMain-container-novidades">
+
+    <!-- BARRA DE PROGRESSO DO PROJETO -->
+    <mat-horizontal-stepper>
+        <mat-step *ngFor="let etapa of etapas">
+            <ng-template matStepLabel>
+                <div class="etapa-label">
+                    <img [src]="etapa.img" class="etapa-icon" alt="Etapa" />
+                    {{ etapa.label }}
+                </div>
+            </ng-template>
+
+            <p>{{ etapa.descricao }}</p>
+        </mat-step>
+    </mat-horizontal-stepper>
+
+
+    <!-- LINHA DO TEMPO DO PROJETO -->
+    <div class="timeline" *ngIf="novidadesList.length > 0; else semNovidades">
+        <div class="timeline-item" *ngFor="let nov of novidadesList; let i = index"
+            [ngClass]="{ left: i % 2 === 0, right: i % 2 !== 0 }">
+            <div class="marker"></div>
+            <div class="content">
+                <!-- cabeçalho da novidade -->
+                <div class="novidade-header">
+                    <h3>{{ nov.titulo }}</h3>
+                    <small>
+                        {{ nov.data | date: 'dd/MM/yyyy HH:mm' }} —
+                        <span class="label-arquiteto">Arquiteto</span>
+                        • {{ nov.status }}
+                    </small>
+                </div>
+
+                <p>{{ nov.descricao }}</p>
+                <img *ngIf="nov.imagemUrl" [src]="nov.imagemUrl" class="nov-img" />
+
+                <!-- seção de comentários (cliente) -->
+                <div class="comments-section" *ngIf="nov.comments?.length">
+                    <div class="comment" *ngFor="let c of nov.comments">
+                        <div class="comment-header">
+                            <strong [ngClass]="{
+          'label-cliente': c.autor === 'Cliente',
+          'label-arquiteto': c.autor === 'Arquiteto'
+        }">
+                                {{ c.autor }}
+                            </strong>
+                            <small>{{ c.data | date: 'dd/MM/yyyy HH:mm' }}</small>
+                        </div>
+
+                        <!-- Título do comentário -->
+                        <h4 class="comment-title" *ngIf="c.titulo">{{ c.titulo }}</h4>
+
+                        <!-- Descrição do comentário -->
+                        <p>{{ c.descricao }}</p>
+                    </div>
+                </div>
+
+
+                <!-- botão comentar só para cliente -->
+                <button *ngIf="isClient()" class="btn-comment" (click)="openComentarioModal(i)">
+                    Comentar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #semNovidades>
+        <p style="margin-left: 1rem; font-style: italic;">
+            Nenhuma novidade disponível no momento.
+        </p>
+    </ng-template>
+</div>
+
+
+<!-- Modal de comentário (já existente) -->
+<div class="modal-overlay" *ngIf="showComentarioModal">
+    <div class="modal-content">
+        <button class="modal-close" (click)="fecharComentarioModal()">×</button>
+        <h2>Adicionar Comentário</h2>
+        <div class="modal-body">
+            <label for="titulo">Título</label>
+            <input id="titulo" type="text" [(ngModel)]="comentarioTitulo" />
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" rows="4" [(ngModel)]="comentarioDescricao"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-acao voltar" (click)="fecharComentarioModal()">Voltar</button>
+            <button class="btn-acao enviar" (click)="enviarComentario()">Enviar</button>
+        </div>
+    </div>
+</div>
