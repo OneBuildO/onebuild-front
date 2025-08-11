@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
@@ -38,6 +38,23 @@ export class AtividadeService {
       .pipe(
         map(apiRes => apiRes.response),      
         catchError(this.handleError('buscar atividades por projeto')));
+  }
+
+
+  getAtividadesByProjetoECliente(
+    projetoId: number | string,
+    clienteId: number | string
+  ): Observable<Atividade[]> {
+    const params = new HttpParams()
+      .set('projetoId', String(projetoId))
+      .set('clienteId', String(clienteId));
+
+    return this.http
+      .get<ApiResponse<Atividade[]>>(this.apiURL, { params })
+      .pipe(
+        map(apiRes => apiRes.response),
+        catchError(this.handleError('buscar atividades por projeto e cliente'))
+      );
   }
 
   /** Atualiza o status de uma atividade */

@@ -192,7 +192,7 @@ export class AgendaDeProcessosComponent implements OnInit {
       .subscribe({
         next: (res: ApiResponse<Evento[]>) => {
           // desembrulha o .data vindo do seu service
-          this.eventos = res.response;
+          this.eventos = res.response ?? [];
           this.applyFilters();
         },
         error: err => console.error('Erro ao carregar eventos', err)

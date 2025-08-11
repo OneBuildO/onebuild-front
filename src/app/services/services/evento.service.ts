@@ -16,7 +16,7 @@ export class EventoService {
 
 
   listarTodos(): Observable<ApiResponse<Evento[]>> {
-    return this.http.get<ApiResponse<Evento[]>>(`${this.apiUrl}/obter-eventos`);
+    return this.http.get<ApiResponse<Evento[]>>(`${this.apiUrl}/obter-eventos-por-usuario`);
   }
 
   salvar(evento: Evento): Observable<ApiResponse<Evento>>{
