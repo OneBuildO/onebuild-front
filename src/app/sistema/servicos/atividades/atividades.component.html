@@ -72,7 +72,7 @@
               <h4>{{ atividade.nome }}</h4>
               <p>{{atividade.descricao}}</p>
               <div class="date">
-                <p>Inicio: {{ atividade.dataDeInicio | date:'shortDate' }}</p>
+                <p>Início: {{ atividade.dataDeInicio | date:'shortDate' }}</p>
                 <p>Entrega: {{ atividade.dataDeEntrega | date:'shortDate' }}</p>
               </div>
               <div class="tags">
@@ -167,7 +167,7 @@
         </div>
         <label>Prioridade:</label>
         <select formControlName="prioridade">
-          <option [value]="null" disabled selected hidden>Selecione a prioridade.</option>
+          <option [value]="null" disabled selected hidden>Selecione a prioridade</option>
           <option
             *ngFor="let p of (Prioridade | keyvalue)"
             [ngValue]="p.value">
@@ -182,7 +182,7 @@
 
         <label>Status:</label>
         <select formControlName="status">
-          <option [value]="null" disabled selected hidden>Selecione o status.</option>
+          <option [value]="null" disabled selected hidden>Selecione o status</option>
           <option
             *ngFor="let s of (Status | keyvalue)"
             [ngValue]="s.value">
