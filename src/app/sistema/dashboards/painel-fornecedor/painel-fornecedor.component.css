@@ -336,3 +336,73 @@ font-weight: 500;
 .botao-link:hover {
   background-color: #a5642f;
 }
+
+.projetos-section {
+  background: #f4f4f4;
+  padding: 24px;
+  border-radius: 16px;
+  margin-top: 32px;
+}
+
+.projetos-section h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #000000;
+  font-weight: 500;
+}
+
+.projetos-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.projeto-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;   /* centraliza horizontalmente os filhos */
+  text-align: center;    /* centraliza textos */
+}
+
+.projeto-card h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 4px 0;
+  text-align: center;
+}
+
+.projeto-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.projeto-meta p {
+  margin: 0;
+  font-size: 14px;
+  color: #4d4a49;
+  text-align: center;
+}
+
+.projeto-meta p span {
+  font-weight: 600;
+  color: #222;
+}
+
+.projeto-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center; 
+}
+
+.projeto-actions .botao-link {
+  cursor: pointer;
+  border: none;
+}

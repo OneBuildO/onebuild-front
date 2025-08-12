@@ -83,6 +83,34 @@ export class PainelFornecedorComponent implements OnInit {
       
         public Permissao = Permissao;
         cargoUsuario!: Permissao;
+
+        projetos = [
+          {
+            nomeProjeto: 'Residencial Aurora',
+            nomeCliente: 'Construtora Horizonte',
+            endereco: 'Av. Beira Mar, 1234 - Fortaleza/CE',
+            link: '/projetos/aurora'
+          },
+          {
+            nomeProjeto: 'Ed. Vista Mar',
+            nomeCliente: 'Grupo Atlântico',
+            endereco: 'Rua das Dunas, 85 - Aquiraz/CE',
+            link: '/projetos/vista-mar'
+          },
+          {
+            nomeProjeto: 'Parque das Flores',
+            nomeCliente: 'VerdeVida Empreendimentos',
+            endereco: 'Av. Central, 2500 - Eusébio/CE',
+            link: '/projetos/parque-das-flores'
+          },
+          {
+            nomeProjeto: 'Smart Office Tower',
+            nomeCliente: 'Prime Business',
+            endereco: 'R. Rocha Lima, 900 - Fortaleza/CE',
+            link: '/projetos/smart-office'
+          }
+        ];
+        
       
         constructor(
           private apiService: ClimaService,

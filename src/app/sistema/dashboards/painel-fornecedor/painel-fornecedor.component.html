@@ -22,6 +22,26 @@
     </div>
   </div>
 
+  <div class="projetos-section">
+    <h3>Projetos Disponíveis em sua Região</h3>
+  
+    <div class="projetos-cards">
+      <div class="projeto-card" *ngFor="let p of projetos | slice:0:4">
+        <h4>{{ p.nomeProjeto }}</h4>
+  
+        <div class="projeto-meta">
+          <p><span>Cliente:</span> {{ p.nomeCliente }}</p>
+          <p><span>Endereço:</span> {{ p.endereco }}</p>
+        </div>
+  
+        <div class="projeto-actions">
+          <a class="botao-link" [routerLink]="p.link || '/projetos'">Saiba mais</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
 
     <div class="noticias-feed">
   <h3> Notícias sobre Arquitetura e Construção Civil</h3>

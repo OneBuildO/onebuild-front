@@ -1,1 +1,95 @@
-<p>visualizar-promocoes-geral works!</p>
+<div class="main-container">
+    <div class="banner">
+      <h1>Promoções e Anúncios</h1>
+      <p>Um espaço onde você pode acompanhar e gerenciar suas promoções e anúncios.</p>
+    </div>
+<!-- Ações / Busca -->
+<div class="breadcrumb-container">
+    <div class="breadcrumb"></div>
+    <div class="actions">
+      <div class="search-container"></div>
+  
+      <!-- Botão que abre o modal -->
+      <button class="btn-cadastrar" (click)="abrirModal()">Cadastrar promoção</button>
+    </div>
+  </div>
+  
+  <!-- MODAL CADASTRAR PROMOÇÃO -->
+  <div class="modal-backdrop" *ngIf="isModalOpen" (click)="fecharModal()"></div>
+  <div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+    <button class="close-btn" (click)="fecharModal()" aria-label="Fechar">×</button>
+    <h3>Cadastrar promoção</h3>
+  
+    <form (ngSubmit)="salvarPromocao()" #promoForm="ngForm" novalidate>
+      <div class="form-grid">
+        <div class="form-group file-group">
+          <label>Imagem do produto</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)">
+          <img *ngIf="novaPromocao.previewUrl" [src]="novaPromocao.previewUrl" class="preview-img" alt="Pré-visualização">
+        </div>
+  
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" [(ngModel)]="novaPromocao.titulo" name="titulo" required placeholder="Ex.: Notebook Pro 14”">
+        </div>
+  
+        <div class="form-group full">
+          <label>Descrição</label>
+          <textarea rows="3" [(ngModel)]="novaPromocao.descricao" name="descricao" required
+                    placeholder="Fale sobre características e condições da promoção"></textarea>
+        </div>
+  
+        <div class="form-group">
+          <label>Valor (R$)</label>
+          <input type="number" step="0.01" min="0" [(ngModel)]="novaPromocao.valor" name="valor" required placeholder="1499.90">
+        </div>
+  
+        <div class="form-group">
+          <label>Validade</label>
+          <input type="date" [(ngModel)]="novaPromocao.validade" name="validade" required>
+        </div>
+      </div>
+  
+      <div class="modal-actions">
+        <button type="button" class="btn-outline" (click)="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn-cadastrar" [disabled]="promoForm.invalid">Salvar promoção</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- SECTIONS DE ANÚNCIOS -->
+  <section class="anuncios-section">
+    <h3>Todos os anúncios</h3>
+    <div class="anuncios-grid">
+      <article class="anuncio-card" *ngFor="let a of anuncios">
+        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
+        <h4>{{ a.titulo }}</h4>
+        <p class="desc">{{ a.descricao }}</p>
+        <div class="meta-row">
+          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
+          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </article>
+    </div>
+  </section>
+  
+  <section class="anuncios-section">
+    <h3>Meus anúncios</h3>
+    <div class="anuncios-grid">
+      <article class="anuncio-card" *ngFor="let a of meusAnuncios">
+        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
+        <h4>{{ a.titulo }}</h4>
+        <p class="desc">{{ a.descricao }}</p>
+        <div class="meta-row">
+          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
+          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-acao edit" (click)="editarAnuncio(a)">Editar</button>
+          <button class="btn-acao delete" (click)="removerAnuncio(a)">Excluir</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+  
