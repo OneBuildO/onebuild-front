@@ -344,6 +344,12 @@
   resize: none;
 }
 
+.modal-window small{
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;

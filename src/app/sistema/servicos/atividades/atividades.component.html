@@ -108,7 +108,10 @@
             {{ c.nome }}
           </option>
         </select>
-
+        <small *ngIf="submited && atividadeForm.get('cliente')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Por favor, selecione um cliente.
+        </small>
         <label>
           Projeto:
           <select formControlName="projeto">
@@ -118,49 +121,78 @@
             </option>
           </select>
         </label>
+        <small *ngIf="submited && atividadeForm.get('projeto')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Por favor, selecione um projeto.
+        </small>
 
         <label>
           Nome:
-          <input type="text" formControlName="nome" name="nome" required />
+          <input type="text" formControlName="nome" name="nome" required placeholder="Ex.:Instalar luminárias"/>
         </label>
+        <small *ngIf="submited && atividadeForm.get('nome')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Nome é obrigatório.
+        </small>
 
         <label>
           Descrição:
           <textarea formControlName="descricao"></textarea>
         </label>
-
+        <small *ngIf="submited && atividadeForm.get('descricao')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Descrição é obrigatória.
+        </small>
         <div class="dual-grid">
           <label>
             Data de início:
             <input type="date" formControlName="dataDeInicio" />
+            <small *ngIf="submited && atividadeForm.get('dataDeInicio')?.hasError('required')" class="text-red-500 text-left"
+            >
+              Data de Início é obrigatória.
+            </small>
           </label>
+
 
           <label>
             Data de entrega:
             <input type="date" formControlName="dataDeEntrega" />
+            <small *ngIf="submited && atividadeForm.get('dataDeEntrega')?.hasError('required')" class="text-red-500 text-left"
+            >
+              Data de Entrega é obrigatória.
+            </small>
           </label>
+
 
         </div>
         <label>Prioridade:</label>
         <select formControlName="prioridade">
-          <option [value]="''" disabled selected hidden>Selecione a prioridade.</option>
+          <option [value]="null" disabled selected hidden>Selecione a prioridade.</option>
           <option
             *ngFor="let p of (Prioridade | keyvalue)"
             [ngValue]="p.value">
             {{ PrioridadeDescricao[p.value] }}
           </option>
         </select>
+        <small *ngIf="submited && atividadeForm.get('prioridade')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Prioridade é obrigatória.
+        </small>
 
-        <label>Status da atividade:</label>
+
+        <label>Status:</label>
         <select formControlName="status">
-          <option [value]="''" disabled selected hidden>Selecione o status.</option>
+          <option [value]="null" disabled selected hidden>Selecione o status.</option>
           <option
             *ngFor="let s of (Status | keyvalue)"
             [ngValue]="s.value">
             {{ StatusDescricao[s.value] }}
           </option>
         </select>
-
+        <small *ngIf="submited && atividadeForm.get('status')?.hasError('required')" class="text-red-500 text-left"
+        >
+          Status é obrigatório.
+        </small>
         <div class="modal-actions">
           <button type="button" (click)="closeModal()" class="cancel-button">Cancelar</button>
           <button type="submit" class="cadastrar-button">Salvar</button>

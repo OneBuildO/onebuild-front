@@ -7,8 +7,8 @@ export class Atividade {
   id?: string;
   nome!: string;
   descricao!: string;
-  //cliente?: ClienteProjetoDTO;
-  projeto?: number;
+  clienteId?: number;
+  projetoId?: number;
   dataDeInicio?: string;
   dataDeEntrega!: string;
   prioridade!: Prioridade;

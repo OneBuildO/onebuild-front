@@ -73,6 +73,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   Status = Status;
   showModalCadastro:boolean = false;
   
+  submited: boolean = false;
+
   readonly PrioridadeDescricao = PrioridadeDescricao
   readonly StatusDescricao = StatusDescricao
 
@@ -96,34 +98,11 @@ export class AtividadesComponent implements OnInit, OnDestroy {
         clientes: this.projetoService.obterClientes(),
         projetos: this.projetoService.obterProjetos(),
       }).subscribe(({ clientes, projetos }) => {
-        this.clients = clientes.response;
-        this.allProjects = projetos.response;
+        this.clients = clientes.response ?? [];
+        this.allProjects = projetos.response ?? [];
         // para o form de cadastro
         this.formClients       = [...this.clients];
         this.formAllProjects   = [...this.allProjects];
-
-
-        // if (this.clients.length) {
-        //   this.selectedClient = this.clients[0];
-        //   this.filterProjects();
-        // }
-
-        // if (this.formClients.length) {
-        //   this.formSelectedCliente = this.formClients[0]
-        // }
-
-        // if (this.projects.length) {
-        //   this.selectedProject = this.projects[0];
-        // }
-
-        // if (this.formProjects.length) {
-        //   this.formSelectedProject = this.formProjects[0];
-        // }
-
-        // this.loadAtividades();
-
-        // projetos iniciais do form (do primeiro cliente)
-        // this.onFormClienteChange(this.formSelectedCliente.nome);
       })
     );
 
@@ -182,7 +161,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   private loadAtividades(): void {
     if (!this.selectedProject) return;
     this.atividadeService
-      .getAtividadesByProjeto(this.selectedProject.idProjeto)
+      .getAtividadesByProjetoECliente(this.selectedProject.idProjeto, this.selectedClient!.id)
       .subscribe(
         ativs => {
           console.log("Deu certo!",ativs);
@@ -282,8 +261,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     projeto: new FormControl<ProjetosDisponiveisDTO|null>(null, Validators.required),
     dataDeInicio : new FormControl('', {validators: Validators.required}),
     dataDeEntrega : new FormControl('', {validators: Validators.required}),
-    prioridade : new FormControl('', {validators: Validators.required}),
-    status : new FormControl('', {validators: Validators.required}),
+    prioridade : new FormControl(null, {validators: Validators.required}),
+    status : new FormControl(null, {validators: Validators.required}),
   });
 
   openModal(): void {
@@ -294,8 +273,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       projeto:null,
       dataDeInicio : '',
       dataDeEntrega : '',
-      prioridade: '',
-      status: '',
+      prioridade: null,
+      status: null,
     });
     this.showModalCadastro = true;
   }
@@ -307,21 +286,34 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
 
   onSubmitAtividade(){
-    // if (this.atividadeForm.invalid) {
-    //   this.atividadeForm.markAllAsTouched();
-    //   return;
-    // }
+    this.submited = true;
 
-    // const atividade : Atividade = {
+    if (this.atividadeForm.invalid) {
+      this.atividadeForm.markAllAsTouched();
+      return;
+    }
 
-    //   nome: this.atividadeForm.value.nome!, 
-    //   descricao: this.atividadeForm.value.descricao!,
-    //   //cliente: this.atividadeForm.value.cliente!,
-    //   projeto: this.atividadeForm.value.projeto?.idProjeto!,
-    //   dataDeInicio: this.atividadeForm.value.dataDeInicio!,
-    //   dataDeEntrega: this.atividadeForm.value.dataDeEntrega!,
-    //   status: this.atividadeForm.value.status!,
+    const atividade : Atividade = {
+      nome: this.atividadeForm.value.nome!, 
+      descricao: this.atividadeForm.value.descricao!,
+      clienteId: Number(this.atividadeForm.value.cliente!.id!),
+      projetoId: this.atividadeForm.value.projeto?.idProjeto!,
+      dataDeInicio: this.atividadeForm.value.dataDeInicio!,
+      dataDeEntrega: this.atividadeForm.value.dataDeEntrega!,
+      status: this.atividadeForm.value.status!,
+      prioridade: this.atividadeForm.value.prioridade!,
+    }
 
-    // }
+    this.atividadeService.cadastrarAtividade(atividade).subscribe({
+      next: () => {
+        this.submited = false;
+        this.atividadeForm.reset();
+        this.closeModal();
+        this.loadAtividades();
+      },
+      error: (err) => {
+        console.error('Erro ao cadastrar atividade:', err);
+      }
+    });
   }
 }
