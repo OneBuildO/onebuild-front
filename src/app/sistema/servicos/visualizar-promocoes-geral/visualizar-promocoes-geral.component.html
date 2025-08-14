@@ -13,7 +13,44 @@
       <button class="btn-cadastrar" (click)="abrirModal()">Cadastrar promoção</button>
     </div>
   </div>
+
   
+  <!-- SECTIONS DE ANÚNCIOS -->
+  <section class="anuncios-section">
+    <h3>Todos os anúncios</h3>
+    <div class="anuncios-grid">
+      <article class="anuncio-card" *ngFor="let a of anuncios">
+        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
+        <h4>{{ a.titulo }}</h4>
+        <p class="desc">{{ a.descricao }}</p>
+        <div class="meta-row">
+          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
+          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </article>
+    </div>
+  </section>
+  
+  <section class="anuncios-section">
+    <h3>Meus anúncios</h3>
+    <div class="anuncios-grid">
+      <article class="anuncio-card" *ngFor="let a of meusAnuncios">
+        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
+        <h4>{{ a.titulo }}</h4>
+        <p class="desc">{{ a.descricao }}</p>
+        <div class="meta-row">
+          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
+          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-acao edit" (click)="editarAnuncio(a)">Editar</button>
+          <button class="btn-acao delete" (click)="removerAnuncio(a)">Excluir</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+
   <!-- MODAL CADASTRAR PROMOÇÃO -->
   <div class="modal-backdrop" *ngIf="isModalOpen" (click)="fecharModal()"></div>
   <div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
@@ -56,40 +93,4 @@
       </div>
     </form>
   </div>
-  
-  <!-- SECTIONS DE ANÚNCIOS -->
-  <section class="anuncios-section">
-    <h3>Todos os anúncios</h3>
-    <div class="anuncios-grid">
-      <article class="anuncio-card" *ngFor="let a of anuncios">
-        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
-        <h4>{{ a.titulo }}</h4>
-        <p class="desc">{{ a.descricao }}</p>
-        <div class="meta-row">
-          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
-          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
-        </div>
-      </article>
-    </div>
-  </section>
-  
-  <section class="anuncios-section">
-    <h3>Meus anúncios</h3>
-    <div class="anuncios-grid">
-      <article class="anuncio-card" *ngFor="let a of meusAnuncios">
-        <img [src]="a.imagemUrl || '/assets/imgs/placeholder.png'" alt="Imagem do anúncio">
-        <h4>{{ a.titulo }}</h4>
-        <p class="desc">{{ a.descricao }}</p>
-        <div class="meta-row">
-          <span class="preco">{{ a.valor | currency:'BRL' }}</span>
-          <span class="validade">Válido até {{ a.validade | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <div class="card-actions">
-          <button class="btn-acao edit" (click)="editarAnuncio(a)">Editar</button>
-          <button class="btn-acao delete" (click)="removerAnuncio(a)">Excluir</button>
-        </div>
-      </article>
-    </div>
-  </section>
-</div>
   

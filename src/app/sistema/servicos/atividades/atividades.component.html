@@ -68,7 +68,7 @@
             cdkDrag
             class="kanban-card"
           >
-            <div class="card">
+            <div class="card" (click)="openModal(atividade); $event.stopPropagation()">
               <h4>{{ atividade.nome }}</h4>
               <p>{{atividade.descricao}}</p>
               <div class="date">
@@ -92,17 +92,17 @@
     <div class="modal-window">
       
       <div class="modal-container-title">
-        <h2>Cadastrar Atividade</h2>
+          <h2>{{ isEditMode ? 'Editar atividade' : 'Cadastrar Atividade' }}</h2>
         <button class="modal-close-btn" (click)="closeModal()" aria-label="Fechar">
           &times;
         </button>
       </div>
 
       <form [formGroup]="atividadeForm"  (ngSubmit)="onSubmitAtividade()">
-        <label>
+        <label *ngIf="!isEditMode">
           Cliente:
         </label>
-        <select formControlName="cliente">
+        <select formControlName="cliente" *ngIf="!isEditMode">
           <option [value]="null" disabled hidden>Selecione</option>
           <option *ngFor="let c of formClients" [ngValue]="c">
             {{ c.nome }}
@@ -112,9 +112,9 @@
         >
           Por favor, selecione um cliente.
         </small>
-        <label>
+        <label *ngIf="!isEditMode">
           Projeto:
-          <select formControlName="projeto">
+          <select formControlName="projeto" >
             <option [value]="null" disabled hidden>Selecione</option>
             <option  *ngFor="let p of formProjects" [ngValue]="p">
               {{ p.nomeProjeto }}
@@ -184,7 +184,7 @@
         <select formControlName="status">
           <option [value]="null" disabled selected hidden>Selecione o status</option>
           <option
-            *ngFor="let s of (Status | keyvalue)"
+            *ngFor="let s of (Status | keyvalue: statusCompareFn)"
             [ngValue]="s.value">
             {{ StatusDescricao[s.value] }}
           </option>
@@ -195,7 +195,15 @@
         </small>
         <div class="modal-actions">
           <button type="button" (click)="closeModal()" class="cancel-button">Cancelar</button>
-          <button type="submit" class="cadastrar-button">Salvar</button>
+          
+          <button *ngIf="isEditMode"
+                  type="button"
+                  class="cancel-button"
+                  (click)="openModalDeletar(editingAtividade!)">
+            Deletar
+          </button>
+
+          <button type="submit" class="cadastrar-button">{{isEditMode ? "Atualizar" : "Salvar"}}</button>
         </div>
       </form>
     </div>

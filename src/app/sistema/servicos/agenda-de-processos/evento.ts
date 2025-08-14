@@ -1,3 +1,5 @@
+import { TipoCompromisso } from "./tipo-compromisso";
+
 export interface Evento {
   id?:         number;
   date:       string;    // "yyyy-MM-dd"
@@ -6,4 +8,5 @@ export interface Evento {
   description?: string;
   color:      string;
   link?:      string;
+  tipoCompromisso?: TipoCompromisso;
 }

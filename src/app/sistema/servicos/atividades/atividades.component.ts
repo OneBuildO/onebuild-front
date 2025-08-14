@@ -21,6 +21,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Prioridade } from './prioridade';
 import { PrioridadeDescricao } from './PrioridadeDescricao';
 import { StatusDescricao } from './StatusDescricao';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
 
 interface Tasks {
   [coluna: string]: Atividade[];
@@ -48,6 +49,9 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   formSelectedProject: ProjetosDisponiveisDTO | null = null;
 
   // Kanban
+  isEditMode: boolean = false;
+  editingAtividade: Atividade | null = null;
+
   statuses = ['backlog', 'emProgresso', 'revisao', 'concluido'];
   statusLabels: Record<string, string> = {
     backlog: 'A fazer',
@@ -72,7 +76,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   Prioridade = Prioridade;
   Status = Status;
   showModalCadastro:boolean = false;
-  
+  showModalDelete:boolean = false;
   submited: boolean = false;
 
   readonly PrioridadeDescricao = PrioridadeDescricao
@@ -86,7 +90,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     private atividadeService: AtividadeService,
     private projetoService: ProjetoService,
     private clienteService: ClienteService,
-    private form:FormBuilder
+    private form:FormBuilder,
+    private modalDeleteService: ModalDeleteService
   ) {}
 
   ngOnInit(): void {
@@ -261,21 +266,33 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     projeto: new FormControl<ProjetosDisponiveisDTO|null>(null, Validators.required),
     dataDeInicio : new FormControl('', {validators: Validators.required}),
     dataDeEntrega : new FormControl('', {validators: Validators.required}),
-    prioridade : new FormControl(null, {validators: Validators.required}),
-    status : new FormControl(null, {validators: Validators.required}),
+    prioridade : new FormControl<Prioridade | null>(null, {validators: Validators.required}),
+    status : new FormControl<Status | null>(null, {validators: Validators.required}),
   });
 
-  openModal(): void {
-    this.atividadeForm.reset({
-      nome: '',
-      descricao: '',
-      cliente: null,
-      projeto:null,
-      dataDeInicio : '',
-      dataDeEntrega : '',
-      prioridade: null,
-      status: null,
-    });
+  openModal(a?:Atividade): void {
+    this.submited = false;
+
+    if (a) {
+      this.isEditMode = true;
+      this.editingAtividade = a;
+      this.setFormFromAtividade(a);
+      
+    }else{
+      this.isEditMode = false;
+      this.editingAtividade = null;
+      this.atividadeForm.reset({
+        nome: '',
+        descricao: '',
+        cliente: null,
+        projeto:null,
+        dataDeInicio : '',
+        dataDeEntrega : '',
+        prioridade: null,
+        status: null,
+      });
+    }
+
     this.showModalCadastro = true;
   }
 
@@ -283,6 +300,27 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     this.showModalCadastro = false;
     //this.novaAtividade = {};
   }
+
+
+  private setFormFromAtividade(a: Atividade) {
+    // monta listas dependentes do cliente para setar projeto corretamente
+    const clienteObj = this.formClients.find(c => Number(c.id) === Number(a.clienteId)) ?? null;
+    this.formProjects = this.formAllProjects.filter(p => p.cliente === clienteObj?.nome);
+
+    const projetoObj = this.formProjects.find(p => p.idProjeto === a.projetoId) ?? null;
+
+    this.atividadeForm.setValue({
+      nome: a.nome ?? '',
+      descricao: a.descricao ?? '',
+      cliente: clienteObj,
+      projeto: projetoObj,
+      dataDeInicio: a.dataDeInicio ?? '',
+      dataDeEntrega: a.dataDeEntrega ?? '',
+      prioridade: a.prioridade ?? null,
+      status: a.status ?? null,
+    });
+  }
+
 
 
   onSubmitAtividade(){
@@ -304,16 +342,61 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       prioridade: this.atividadeForm.value.prioridade!,
     }
 
-    this.atividadeService.cadastrarAtividade(atividade).subscribe({
+    if (this.isEditMode && this.editingAtividade?.id) {
+      this.atividadeService.atualizarAtividade(this.editingAtividade.id, atividade).subscribe({
+        next: () => {
+          this.submited = false;
+          this.atividadeForm.reset();
+          this.closeModal();
+          this.loadAtividades();
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar atividade:', err);
+        }});
+    }else{
+      this.atividadeService.cadastrarAtividade(atividade).subscribe({
+        next: () => {
+          this.submited = false;
+          this.atividadeForm.reset();
+          this.closeModal();
+          this.loadAtividades();
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar atividade:', err);
+        }
+      });
+    }
+  }
+
+  openModalDeletar(atividade: Atividade): void {
+    this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de Atividade',
+        description: `Tem certeza que deseja excluir a atividade <strong>${atividade.nome}</strong>?`, 
+        item: atividade,
+        deletarTextoBotao: 'Remover',
+        size: 'md',
+      },
+      () => this.onDeleteAtividade()
+    );
+  }
+
+
+  onDeleteAtividade() {
+    this.atividadeService.deletarAtividade(this.editingAtividade!.id!).subscribe({
       next: () => {
-        this.submited = false;
-        this.atividadeForm.reset();
         this.closeModal();
         this.loadAtividades();
       },
-      error: (err) => {
-        console.error('Erro ao cadastrar atividade:', err);
-      }
+      error: (err) => console.error('Erro ao deletar atividade:', err)
     });
   }
+
+  statusOrder = [Status.A_FAZER, Status.EM_PROGRESSO, Status.REVISAO, Status.CONCLUIDO];
+
+  statusCompareFn = (a: any, b: any): number => {
+    return this.statusOrder.indexOf(a.value) - this.statusOrder.indexOf(b.value);
+  };
+
+
 }

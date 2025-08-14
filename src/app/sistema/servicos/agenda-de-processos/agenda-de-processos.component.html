@@ -97,11 +97,17 @@
             <div class="event-item"
                  *ngFor="let ev of getEventosByDate(selectedDate)"
                  [ngStyle]="{'background-color': ev.color,
-                             'border-left-color': darken(ev.color,20)}">
-              <div class="event-time">{{ ev.time || '—:—' }}</div>
+                             'border-left-color': darken(ev.color,20)}"
+                 (click)="openCompromissoModal(ev)" >
+              <div class="dual-grid">
+                <div class="event-time">{{ ev.time || '—:—' }}</div>
+                <div class="event-type"> {{TipoCompromissoDescricao[ev.tipoCompromisso!]}}</div>
+              </div>
               <div class="event-title">{{ ev.title }}</div>
               <div class="event-desc" *ngIf="ev.description">{{ ev.description }}</div>
+              <div class="event-desc">{{ev.link}}</div>
             </div>
+        
           </ng-container>
           <ng-template #none>
             <p class="no-events">Nenhum compromisso para este dia.</p>
@@ -138,7 +144,7 @@
     </button>
 
     <div class="modal-title-container">
-      <h2 class="modal-title">Cadastro de atividade</h2>
+      <h2 class="modal-title">{{isEditMode ? "Editar Atividade" : "Cadastro de Atividade"}}</h2>
     </div>
 
     <div class="modal-header">
@@ -158,6 +164,16 @@
         </div>
       </div>
 
+      <div class="field-group">
+        <label for="comp-tipo">Tipo de Compromisso</label>
+        <select id="comp-tipo" [(ngModel)]="compTipoCompromisso" (ngModelChange)="onTipoChange($event)">
+          <option [ngValue]="null" disabled hidden>Selecione</option>
+          <option *ngFor="let tipo of tipoCompromissoKeys" [ngValue]="tipo">
+            {{ TipoCompromissoDescricao[tipo] }}
+          </option>
+        </select>
+      </div>
+
       <label for="comp-titulo">Título</label>
       <input id="comp-titulo" type="text" [(ngModel)]="compTitulo" />
 
@@ -169,7 +185,10 @@
     </div>
 
     <div class="modal-footer">
-      <button class="btn-acao enviar" (click)="confirmCompromisso()">Salvar</button>
+      <button *ngIf="isEditMode" type="button" class="btn-acao deletar" (click)="openModalDeletar(editingEvento!)">
+        Deletar
+      </button>
+      <button class="btn-acao enviar" (click)="confirmCompromisso()">{{isEditMode ? "Atualizar" : "Salvar"}}</button>
     </div>
   </div>
 </div>

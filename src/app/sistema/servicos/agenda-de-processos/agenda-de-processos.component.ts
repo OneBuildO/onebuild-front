@@ -4,17 +4,21 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { Evento } from './evento';
 import { EventoService } from 'src/app/services/services/evento.service';
 import { ApiResponse } from 'src/app/services/services/api-response-dto';
+import { TipoCompromisso } from './tipo-compromisso';
+import { TipoCompromissoDescricao } from './tipo-compromisso-descricao';
+import { ModalDeleteService } from 'src/app/services/services/modal-delete.service';
 
 type ViewMode = 'week' | 'month' | 'year';
 
-// interface Evento {
-//   date: string;   // ISO yyyy-MM-dd
-//   time?: string;
-//   title: string;
-//   description?: string;
-//   color: string;
-//   link?: string;
-// } 
+const TIPO_CORES: Record<TipoCompromisso, string> = {
+  [TipoCompromisso.PESSOAL]:  '#BFDBFE', // azul claro
+  [TipoCompromisso.TRABALHO]: '#FDE68A', // amarelo claro
+  [TipoCompromisso.VIAGEM]:   '#C7F9CC', // verde claro
+  [TipoCompromisso.SAUDE]:    '#FECACA', // vermelho claro
+  [TipoCompromisso.ESTUDO]:   '#DDD6FE', // roxo claro
+  [TipoCompromisso.FERIAS]:   '#FDE2E4', // pêssego claro
+};
+
 
 interface CalendarDay {
   date: Date;
@@ -49,6 +53,12 @@ export class AgendaDeProcessosComponent implements OnInit {
 
   weekDays: Date[] = [];
 
+  TipoCompromisso = TipoCompromisso; // para usar no template
+  TipoCompromissoDescricao = TipoCompromissoDescricao;
+  tipoCompromissoKeys = Object.keys(TipoCompromisso) as TipoCompromisso[];
+  editingEvento: Evento | null = null;
+  isEditMode:boolean = false; // se estamos editando um compromisso
+
   // modal de compromisso
   showCompModal = false;
   modalDate!: Date;
@@ -57,6 +67,7 @@ export class AgendaDeProcessosComponent implements OnInit {
   compColor      = '#ffeeba';
   compTime       = '';
   compLink       = '';
+  compTipoCompromisso: TipoCompromisso | null = null;
 
   // mini-calendar
   selectedDate = new Date();
@@ -64,7 +75,8 @@ export class AgendaDeProcessosComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private eventoService: EventoService
+    private eventoService: EventoService,
+    private modalDeleteService: ModalDeleteService
   ) {
     // preenche meses
     this.monthObjects = this.meses.map((m,i) => ({ name: m, index: i }));
@@ -151,14 +163,40 @@ export class AgendaDeProcessosComponent implements OnInit {
     }
   }
 
+  getTipoColor(tipo: TipoCompromisso | null): string {
+    return tipo ? TIPO_CORES[tipo] : '#ffeeba';
+  }
+
+  onTipoChange(tipo: TipoCompromisso) {
+    this.compTipoCompromisso = tipo;
+    // ao trocar o tipo, setamos a cor do card para a cor do tipo
+    this.compColor = this.getTipoColor(tipo);
+  }
+
   // Modal
-  openCompromissoModal(date: Date): void {
-    this.modalDate     = date;
-    this.compTitulo    = '';
-    this.compDescricao = '';
-    this.compColor     = '#ffeeba';
-    this.compTime      = '';
-    this.compLink      = '';
+  openCompromissoModal(date: Date | Evento): void {
+    this.isEditMode = false;
+    
+    if (date instanceof Date) {
+      this.modalDate     = date;
+      this.compTitulo    = '';
+      this.compDescricao = '';
+      this.compColor     = '#ffeeba';
+      this.compTime      = '';
+      this.compLink      = '';
+      this.compTipoCompromisso = null; 
+    }else{
+      this.isEditMode = true;
+      const ev = date;
+      this.modalDate     = new Date(ev.date);
+      this.compTitulo    = ev.title;
+      this.compDescricao = ev.description || '';
+      this.compColor     = ev.color || '#ffeeba';
+      this.compTime      = ev.time || '';
+      this.compLink      = ev.link || '';
+      this.compTipoCompromisso = ev.tipoCompromisso || null;
+      this.editingEvento = ev;
+    }
     this.showCompModal = true;
   }
 
@@ -170,22 +208,58 @@ export class AgendaDeProcessosComponent implements OnInit {
       time: this.compTime,
       title: this.compTitulo,
       description: this.compDescricao,
-      color: this.compColor,
-      link: this.compLink
+      color: this.compColor || this.getTipoColor(this.compTipoCompromisso),
+      link: this.compLink,
+      tipoCompromisso: this.compTipoCompromisso || undefined
     };
 
-    this.eventoService.salvar(evento)
-      .subscribe({
-        next: (res: ApiResponse<Evento>) => {
-          // aqui res.data é o Evento criado (com id)
-          this.eventos.push(res.response);
-          this.applyFilters();
-          this.closeCompModal();
-        },
-        error: err => console.error('Falha ao salvar evento:', err)
-      });
+    if (this.isEditMode && this.editingEvento?.id) {
+      this.eventoService.atualizar(this.editingEvento.id, evento)
+        .subscribe({
+          next: (res: ApiResponse<Evento>) => {
+            this.loadEventos(); // recarrega a lista de eventos
+            this.closeCompModal();
+          },
+          error: err => console.error('Falha ao atualizar evento:', err)
+        });
+    }else{
+      this.eventoService.salvar(evento)
+        .subscribe({
+          next: (res: ApiResponse<Evento>) => {
+            // aqui res.data é o Evento criado (com id)
+            this.eventos.push(res.response);
+            this.applyFilters();
+            this.closeCompModal();
+          },
+          error: err => console.error('Falha ao salvar evento:', err)
+        });
+    }
   }
 
+  openModalDeletar(evento:Evento): void {
+    this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de Evento',
+        description: `Tem certeza que deseja excluir o evento <strong>${evento.title}</strong>?`, 
+        item: evento,
+        deletarTextoBotao: 'Remover',
+        size: 'md',
+      },
+      () => this.onDeleteEvento()
+    );
+  }
+
+
+  onDeleteEvento(): void {
+    if (!this.editingEvento?.id) return;
+    this.eventoService.deletar(this.editingEvento.id).subscribe({
+      next: () => {
+        this.closeCompModal();
+        this.loadEventos();
+      },
+      error: err => console.error('Erro ao deletar evento:', err)
+    });
+  }
 
   private loadEventos(): void {
     this.eventoService.listarTodos()

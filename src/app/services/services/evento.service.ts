@@ -24,4 +24,14 @@ export class EventoService {
       .post<ApiResponse<Evento>>(`${this.apiUrl}/novo-evento`, evento);
   }
 
+  atualizar(id : number | string, evento: Evento): Observable<ApiResponse<Evento>> {
+    return this.http
+      .put<ApiResponse<Evento>>(`${this.apiUrl}/${id}`, evento);
+  }
+
+  deletar(id: number | string): Observable<ApiResponse<void>> {
+    return this.http
+      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  }
+
 }
