@@ -70,6 +70,23 @@ export class AtividadeService {
         catchError(this.handleError('atualizar o status da atividade')));
   }
 
+  atualizarAtividade(id:number | string, atividade: Atividade): Observable<Atividade> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.put<ApiResponse<Atividade>>(url, atividade).pipe(
+      map(res => res.response),
+      catchError(this.handleError('atualizar a atividade'))
+    );
+  }
+
+
+  deletarAtividade(id: number | string): Observable<void> {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.delete<ApiResponse<void>>(url).pipe(
+      map(res => res.response),
+      catchError(this.handleError('deletar a atividade'))
+    );
+  }
+
   /** Tratamento genérico de erros */
   private handleError(operation: string) {
     return (error: HttpErrorResponse) => {

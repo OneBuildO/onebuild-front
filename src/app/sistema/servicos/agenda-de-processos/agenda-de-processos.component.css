@@ -419,7 +419,10 @@ tr:hover {
 .modal-footer { display:flex; justify-content:flex-end; gap:8px; }
 .btn-acao { padding:8px 16px; border:none; border-radius:4px; cursor:pointer; }
 .btn-acao.enviar { background:#007bff; color:#fff; }
-
+.btn-acao.deletar{
+  background: #dc3545;
+  color: #fff;
+}
 
 /* Botão de fechar com fundo transparente e borda arredondada */
 .modal-close {
@@ -639,6 +642,10 @@ tr:hover {
   box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
 }
 
+.event-item:hover{
+  cursor: pointer;
+}
+
 .event-time {
   font-size: 0.75rem;
   font-weight: 600;
@@ -653,6 +660,19 @@ tr:hover {
 .event-desc {
   font-size: 0.8rem;
   color: #444;
+}
+
+.event-type{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1px 4px;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-shadow: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .no-events {
@@ -673,3 +693,8 @@ tr:hover {
   color: #333;
 }
 
+.dual-grid{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
