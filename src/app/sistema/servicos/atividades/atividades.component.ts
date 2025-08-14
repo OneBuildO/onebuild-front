@@ -392,4 +392,11 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     });
   }
 
+  statusOrder = [Status.A_FAZER, Status.EM_PROGRESSO, Status.REVISAO, Status.CONCLUIDO];
+
+  statusCompareFn = (a: any, b: any): number => {
+    return this.statusOrder.indexOf(a.value) - this.statusOrder.indexOf(b.value);
+  };
+
+
 }

@@ -184,7 +184,7 @@
         <select formControlName="status">
           <option [value]="null" disabled selected hidden>Selecione o status</option>
           <option
-            *ngFor="let s of (Status | keyvalue)"
+            *ngFor="let s of (Status | keyvalue: statusCompareFn)"
             [ngValue]="s.value">
             {{ StatusDescricao[s.value] }}
           </option>
