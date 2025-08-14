@@ -16,7 +16,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule }   from '@angular/material/core';
-import { DetalhesProgressoProjetoComponent } from './sistema/detalhes-progresso-projeto/detalhes-progresso-projeto.component';
+import { DetalhesProgressoProjetoComponent } from './sistema/servicos/cliente/detalhes-progresso-projeto/detalhes-progresso-projeto.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

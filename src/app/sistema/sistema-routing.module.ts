@@ -25,7 +25,7 @@ import { CadastroPromocoesComponent } from './servicos/cadastro-promocoes/cadast
 import { VisualizarPromocoesGeralComponent } from './servicos/visualizar-promocoes-geral/visualizar-promocoes-geral.component';
 import { DetalhesClienteComponent } from './servicos/detalhes/detalhes-cliente/detalhes-cliente.component';
 import { DetalhesProjetoComponent } from './servicos/detalhes/detalhes-projeto/detalhes-projeto.component';
-import { DetalhesProgressoProjetoComponent } from './detalhes-progresso-projeto/detalhes-progresso-projeto.component';
+import { DetalhesProgressoProjetoComponent } from './servicos/cliente/detalhes-progresso-projeto/detalhes-progresso-projeto.component';
 
 const routes: Routes = [
   {

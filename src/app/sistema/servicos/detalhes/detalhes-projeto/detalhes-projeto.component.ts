@@ -438,7 +438,7 @@ export class DetalhesProjetoComponent implements OnInit {
     this.modalDeleteService.openModal(
       {
         title: 'Exclusão de Arquivo',
-        description: `Tem certeza que deseja excluir o arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        description: `Tem certeza que deseja excluir o arquivo <strong>${arquivo.key}</strong>?`,
         item: arquivo,
         deletarTextoBotao: 'Excluir',
         size: 'md',
@@ -466,7 +466,7 @@ export class DetalhesProjetoComponent implements OnInit {
     this.modalConfirmationService.open(
       {
         title: 'Visualizar Arquivo',
-        description: `Deseja visualizar <strong>${arquivo.nomeArquivo}</strong>?`,
+        description: `Deseja visualizar <strong>${arquivo.key}</strong>?`,
         iconSrc: 'assets/icones/See.png',
         confirmButtonText: 'Visualizar',
         confirmButtonClass: 'btn-acao confirmar',
@@ -480,7 +480,7 @@ export class DetalhesProjetoComponent implements OnInit {
     this.modalConfirmationService.open(
       {
         title: 'Download do Arquivo',
-        description: `Deseja realizar o download do arquivo <strong>${arquivo.nomeArquivo}</strong>?`,
+        description: `Deseja realizar o download do arquivo <strong>${arquivo.key}</strong>?`,
         iconSrc: 'assets/icones/download-icon.svg',
         confirmButtonText: 'Download',
         confirmButtonClass: 'btn-acao confirmar',
@@ -508,17 +508,17 @@ export class DetalhesProjetoComponent implements OnInit {
   // helper para saber extensão/MIME
   isImage(arquivo: ArquivosProjetoDTO) {
     // console.log('Verificando imagem:', arquivo.nomeArquivo);
-    return arquivo.nomeArquivo.match(/\.(jpe?g|png)$/i);
+    return arquivo.key.match(/\.(jpe?g|png)$/i);
   }
 
   isPdf(arquivo: ArquivosProjetoDTO) {
     // console.log('Verificando PDF:', arquivo.nomeArquivo);
-    return arquivo.nomeArquivo.match(/\.pdf$/i);
+    return arquivo.key.match(/\.pdf$/i);
   }
 
   isDoc(arquivo: ArquivosProjetoDTO) {
     // console.log('Verificando DOC/DOCX:', arquivo.nomeArquivo);
-    return arquivo.nomeArquivo.match(/\.(docx?|DOCX?)$/i);
+    return arquivo.key.match(/\.(docx?|DOCX?)$/i);
   }
 
   // obtém (e cacheia) a URL de preview

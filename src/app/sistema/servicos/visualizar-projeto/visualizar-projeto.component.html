@@ -6,7 +6,7 @@
 
   <div class="breadcrumb-container">
     <div class="breadcrumb">
-       <!--
+      <!--
       <a (click)="onVoltarClick()">Dashboard &gt; </a>
       <span class="breadcrumb-highlight"> Projetos</span>
        -->
@@ -23,10 +23,7 @@
   <div *ngIf="successMessage" class="alert alert-success">
     <span>{{ successMessage }}</span>
     <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
-    <div
-      class="progress-bar-sucess"
-      [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"
-    ></div>
+    <div class="progress-bar-sucess" [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"></div>
   </div>
 
   <div class="progress-bar-container" *ngIf="isLoading">
@@ -49,7 +46,10 @@
         <tr *ngFor="let projeto of projetosPaginados">
           <td>
             <div class="perfil">
-              <span>{{ projeto.cliente || '-' }}</span>
+              <span *ngIf="!projeto.nomeProjeto">-</span>
+              <a *ngIf="projeto.nomeProjeto" (click)="visualizarProjeto(projeto.idProjeto)" class="cliente-link">
+                {{ projeto.nomeProjeto }}
+              </a>
             </div>
           </td>
           <td>{{ projeto.nomeProjeto || '-' }}</td>
@@ -59,25 +59,13 @@
           <td>
             <div class="acoes">
               <button class="btn-acao visualizar">
-                <img
-                  src="assets/icones/See.png"
-                  (click)="visualizarProjeto(projeto.idProjeto)"
-                  alt="Visualizar"
-                />
+                <img src="assets/icones/See.png" (click)="visualizarProjeto(projeto.idProjeto)" alt="Visualizar" />
               </button>
               <button class="btn-acao edit">
-                <img
-                  src="assets/icones/Edit.png"
-                  (click)="editarProjeto(projeto.idProjeto)"
-                  alt="Editar"
-                />
+                <img src="assets/icones/Edit.png" (click)="editarProjeto(projeto.idProjeto)" alt="Editar" />
               </button>
               <button class="btn-acao delete">
-                <img
-                  src="assets/icones/Delete.png"
-                  (click)="openModalDeletar(projeto)"
-                  alt="Excluir"
-                />
+                <img src="assets/icones/Delete.png" (click)="openModalDeletar(projeto)" alt="Excluir" />
               </button>
             </div>
           </td>
@@ -103,11 +91,8 @@
   </div>
 
   <div class="pagination">
-    <app-pagination
-      [paginaAtual]="paginaAtual"
-      [totalItens]="totalItens"
-      [itensPorPagina]="itensPorPagina"
+    <app-pagination [paginaAtual]="paginaAtual" [totalItens]="totalItens" [itensPorPagina]="itensPorPagina"
       (paginaMudou)="onPaginaMudou($event)">
     </app-pagination>
-  </div> 
+  </div>
 </div>

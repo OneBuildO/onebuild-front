@@ -12,7 +12,7 @@ import { ArquivosProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/ar
 export class DadosService {
   private apiUrl = environment.apiURLBase + '/api/dados';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listarArquivosNormais(id: number): Observable<ApiResponse<ArquivosProjetoDTO[]>> {
     return this.http.get<ApiResponse<ArquivosProjetoDTO[]>>(`${this.apiUrl}/obter-arquivos/${id}`);
@@ -23,7 +23,7 @@ export class DadosService {
   }
 
   downloadArquivo(id: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/arquivo/${id}`, {
+    return this.http.get(`${this.apiUrl}/arquivo/${id}/download`, {
       responseType: 'blob'
     });
   }

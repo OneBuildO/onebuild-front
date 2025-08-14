@@ -50,7 +50,7 @@
   color: #666;
   font-size: 16px;
   text-decoration: none;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .breadcrumb a:hover {
@@ -60,7 +60,7 @@
 
 .breadcrumb-highlight {
   margin-left: 5px;
-  color: #CB8642;
+  color: #cb8642;
   font-size: 16px;
   font-weight: 550;
 }
@@ -117,7 +117,7 @@ td {
 }
 
 th {
-  background:#CB8642;
+  background: #cb8642;
   font-weight: 500;
   font-size: 16px;
   color: #ffffff;
@@ -183,19 +183,19 @@ tr:hover {
 }
 
 .btn-acao {
-  width: 40px;             
+  width: 40px;
   height: 40px;
-  border-radius: 50%;       
-  padding: 0;              
+  border-radius: 50%;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e4e4e4b5;    
+  background: #e4e4e4b5;
   transition: background 0.2s;
 }
 
 .btn-acao img {
-  width: 60%;               /* escala a imagem dentro do círculo */
+  width: 60%; /* escala a imagem dentro do círculo */
   height: 60%;
   object-fit: contain;
   border-radius: 50%;
@@ -325,6 +325,12 @@ tr:hover {
   background: #40812d;
   opacity: 0.5;
   pointer-events: none;
+}
+
+.arquivo-link {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @keyframes progressBarAnim {

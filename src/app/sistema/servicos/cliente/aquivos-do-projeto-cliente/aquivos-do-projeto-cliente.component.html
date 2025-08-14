@@ -23,10 +23,7 @@
   <div *ngIf="successMessage" class="alert alert-success">
     <span>{{ successMessage }}</span>
     <button class="close-btn" (click)="clearMessage()" aria-label="Fechar">&times;</button>
-    <div
-      class="progress-bar-sucess"
-      [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"
-    ></div>
+    <div class="progress-bar-sucess" [style.animation]="successMessage ? 'progressBarAnim 3s linear' : 'none'"></div>
   </div>
 
   <div class="progress-bar-container" *ngIf="isLoading">
@@ -37,8 +34,8 @@
     <table>
       <thead>
         <tr>
-          <th>Projeto</th>
           <th>Nome do Arquivo</th>
+          <th>Projeto</th>
           <th>Data/Hora</th>
           <th>Ações</th>
         </tr>
@@ -47,19 +44,19 @@
         <tr *ngFor="let arquivo of arquivosPaginados">
           <td>
             <div class="perfil">
-              <span>{{ arquivo.nomeProjeto || '-' }}</span>
+              <span *ngIf="!arquivo.key">-</span>
+              <a *ngIf="arquivo.key" (click)="visualizarArquivo(arquivo)" class="arquivo-link">
+                {{ arquivo.key }}
+              </a>
             </div>
           </td>
-          <td>{{ arquivo.nomeArquivo || '-' }}</td>
+
+          <td>{{ arquivo.nomeProjeto || '-' }}</td>
           <td>{{ arquivo.dataUpload | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
             <div class="acoes">
               <button class="btn-acao visualizar">
-                <img
-                  src="assets/icones/See.png"
-                  (click)="visualizarArquivo(arquivo)"
-                  alt="Visualizar"
-                />
+                <img src="assets/icones/See.png" (click)="visualizarArquivo(arquivo)" alt="Visualizar" />
               </button>
             </div>
           </td>
@@ -85,10 +82,7 @@
   </div>
 
   <div class="pagination" *ngIf="arquivosPaginados.length > 0">
-    <app-pagination
-      [paginaAtual]="paginaAtual"
-      [totalItens]="totalItens"
-      [itensPorPagina]="itensPorPagina"
+    <app-pagination [paginaAtual]="paginaAtual" [totalItens]="totalItens" [itensPorPagina]="itensPorPagina"
       (paginaMudou)="onPaginaMudou($event)">
     </app-pagination>
   </div>

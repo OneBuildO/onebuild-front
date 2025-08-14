@@ -34,8 +34,8 @@
     <table>
       <thead>
         <tr>
-          <th>Nome do arquiteto</th>
           <th>Projeto</th>
+          <th>Nome do arquiteto</th>
           <th>Status</th>
           <th>Data/Hora</th>
           <th>Ações</th>
@@ -43,8 +43,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of projetos">
+          <td>
+            <div class="perfil">
+              <span *ngIf="!p.nomeProjeto">-</span>
+              <a *ngIf="p.nomeProjeto" (click)="visualizarProjeto(p.idProjeto)" class="cliente-link">
+                {{ p.nomeProjeto }}
+              </a>
+            </div>
+          </td>
           <td>{{ p.nomeArquiteto || '-' }}</td>
-          <td>{{ p.nomeProjeto || '-' }}</td>
           <td>{{ traduzirProjeto(p.status) || '-' }}</td>
           <td>{{ p.dataAtualizacaoo | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
