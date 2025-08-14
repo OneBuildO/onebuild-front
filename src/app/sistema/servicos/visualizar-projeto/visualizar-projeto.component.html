@@ -34,8 +34,8 @@
     <table>
       <thead>
         <tr>
-          <th>Cliente</th>
           <th>Projeto</th>
+          <th>Cliente</th>
           <th>Status</th>
           <th>Cidade</th>
           <th>Estado</th>
@@ -52,7 +52,7 @@
               </a>
             </div>
           </td>
-          <td>{{ projeto.nomeProjeto || '-' }}</td>
+          <td>{{ projeto.cliente || '-' }}</td>
           <td>{{ traduzirStatusDoProjeto(projeto.status) || '-' }}</td>
           <td>{{ projeto.cidade || '-' }}</td>
           <td>{{ projeto.estado || '-' }}</td>
