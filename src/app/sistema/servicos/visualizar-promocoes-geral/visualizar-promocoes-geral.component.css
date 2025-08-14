@@ -339,10 +339,14 @@
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.4); backdrop-filter: blur(1px);
     z-index: 98;
+    display: flex; justify-content: center; align-items: center;
   }
   .modal{
-    position: fixed; inset: 0;
-    margin: auto; max-width: 640px; width: calc(100% - 32px);
+    position: fixed; 
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 640px; width: calc(100% - 32px);
+    max-height: 85vh;   overflow: auto;
     background: #fff; border-radius: 16px; padding: 24px 24px 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     z-index: 99; display: flex; flex-direction: column; gap: 16px;
