@@ -24,7 +24,7 @@ export class VisualizarClientesComponent implements OnInit {
   clientesPaginados: ClienteCadastroDTO[] = [];
   itensPorPagina = 6;
   paginaAtual = 1;
-  totalPaginas = 0; 
+  totalPaginas = 0;
   totalItens = 0;
 
   erro: string | null = null;
@@ -35,7 +35,7 @@ export class VisualizarClientesComponent implements OnInit {
     private usuarioService: UsuarioService,
     private modalDeleteService: ModalDeleteService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.exibirMensagemDeSucesso();
@@ -52,7 +52,7 @@ export class VisualizarClientesComponent implements OnInit {
     this.usuarioService.getClientesDoUsuario().subscribe(
       (cliente: ApiResponse<ClienteCadastroDTO[]>) => {
         this.clientes = cliente.response;
-        this.totalItens = this.clientes.length; 
+        this.totalItens = this.clientes.length;
         this.totalPaginas = Math.ceil(
           this.clientes.length / this.itensPorPagina
         );
@@ -93,7 +93,7 @@ export class VisualizarClientesComponent implements OnInit {
         this.isLoading = false;
         if (error.message && error.message.includes('404')) {
           this.clientes = [];
-          this.totalItens = 0; 
+          this.totalItens = 0;
           this.atualizarPaginacao();
           this.mensagemBusca = 'Busca não encontrada';
         }
@@ -113,7 +113,7 @@ export class VisualizarClientesComponent implements OnInit {
     this.modalDeleteService.openModal(
       {
         title: 'Remoção de Cliente',
-        description: `Tem certeza que deseja excluir o cliente <strong>${cliente.nome}</strong>?`, 
+        description: `Tem certeza que deseja excluir o cliente <strong>${cliente.nome}</strong>?`,
         item: cliente,
         deletarTextoBotao: 'Remover',
         size: 'md',

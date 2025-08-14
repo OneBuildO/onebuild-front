@@ -1,4 +1,3 @@
-
 <div *ngIf="successMessage" class="toast">
   {{ successMessage }}
 </div>
@@ -18,7 +17,7 @@
     </div>
     <div class="actions">
       <div class="search-container">
-          <app-search (searchChange)="onSearch($event)"></app-search>
+        <app-search (searchChange)="onSearch($event)"></app-search>
       </div>
       <button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
     </div>
@@ -50,7 +49,10 @@
         <tr *ngFor="let cliente of clientesPaginados">
           <td>
             <div class="perfil">
-              <span>{{ cliente.nome || '-' }}</span>
+              <span *ngIf="!cliente.nome">-</span>
+              <a *ngIf="cliente.nome" (click)="visualizarCliente(cliente.id!)" class="cliente-link">
+                {{ cliente.nome }}
+              </a>
             </div>
           </td>
           <!-- <td>{{ '-' }}</td> -->
@@ -62,7 +64,7 @@
               <button class="btn-acao visualizar">
                 <img src="assets/icones/See.png" (click)="visualizarCliente(cliente.id!)" alt="Visualizar" />
               </button>
-              <button class="btn-acao edit" >
+              <button class="btn-acao edit">
                 <img src="assets/icones/Edit.png" (click)="editarCliente(cliente.id!)" alt="Editar" />
               </button>
               <button class="btn-acao delete">
@@ -92,11 +94,8 @@
   </div>
 
   <div class="pagination">
-    <app-pagination
-    [paginaAtual]="paginaAtual"
-    [totalItens]="totalItens"
-    [itensPorPagina]="itensPorPagina"
-    (paginaMudou)="onPaginaMudou($event)">
+    <app-pagination [paginaAtual]="paginaAtual" [totalItens]="totalItens" [itensPorPagina]="itensPorPagina"
+      (paginaMudou)="onPaginaMudou($event)">
     </app-pagination>
-  </div> 
+  </div>
 </div>

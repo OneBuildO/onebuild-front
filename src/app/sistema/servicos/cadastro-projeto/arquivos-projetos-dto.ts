@@ -1,5 +1,6 @@
 export interface ArquivosProjetoDTO {
     id: number;
+    key: string;
     nomeArquivo: string;
     arquivos?: string; 
     plantaBaixaArquivos?: string; 

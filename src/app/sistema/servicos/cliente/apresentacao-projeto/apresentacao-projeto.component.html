@@ -35,8 +35,8 @@
     <table *ngIf="projetosPaginados.length > 0">
       <thead>
         <tr>
-          <th>Cliente</th>
           <th>Projeto</th>
+          <th>Cliente</th>
           <th>Status</th>
           <th>Data/Hora</th>
           <th>Cidade</th>
@@ -46,18 +46,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of projetosPaginados">
+          <td>
+            <div class="perfil">
+              <span *ngIf="!p.nomeProjeto">-</span>
+              <a *ngIf="p.nomeProjeto" (click)="visualizarProjeto(p.idProjeto)" class="cliente-link">
+                {{ p.nomeProjeto }}
+              </a>
+            </div>
+          </td>
           <td>{{ p.cliente || '-' }}</td>
-          <td>{{ p.nomeProjeto || '-' }}</td>
           <td>{{ traduzirStatusDoProjeto(p.status) || '-' }}</td>
           <td>{{ p.dataCadastro | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ p.cidade || '-' }}</td>
           <td>{{ p.estado || '-' }}</td>
           <td>
-            <button
-              class="btn-acao visualizar"
-              (click)="visualizarProjeto(p.idProjeto)"
-              title="Visualizar"
-            >
+            <button class="btn-acao visualizar" (click)="visualizarProjeto(p.idProjeto)" title="Visualizar">
               <img src="assets/icones/See.png" alt="Ver" />
             </button>
           </td>
@@ -80,13 +83,10 @@
         <p>Não há projetos cadastrados.</p>
       </div>
     </ng-template>
-  </div>  
+  </div>
 
   <div class="pagination" *ngIf="projetosPaginados.length > 0">
-    <app-pagination
-      [paginaAtual]="paginaAtual"
-      [totalItens]="totalItens"
-      [itensPorPagina]="itensPorPagina"
+    <app-pagination [paginaAtual]="paginaAtual" [totalItens]="totalItens" [itensPorPagina]="itensPorPagina"
       (paginaMudou)="onPaginaMudou($event)">
     </app-pagination>
   </div>
