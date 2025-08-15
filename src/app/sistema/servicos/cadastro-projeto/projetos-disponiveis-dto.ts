@@ -9,4 +9,5 @@ export interface ProjetosDisponiveisDTO {
   dataCadastro: string;      // ISO string
   cidade: string;
   estado: string;
+  dataDeAtualizacao: string;
 }

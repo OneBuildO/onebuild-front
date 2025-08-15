@@ -9,17 +9,18 @@
         </div>
     </div>
 
-    <div *ngIf="detalheProjeto" class="header-with-button">
-        <div class="project-info">
-            <h1>{{ nomeUsuario }}</h1>
+    <div *ngIf="detalheProjeto" class="header-info">
+        <div class="info-box">
+            <label>Usuário</label>
+            <p>{{ nomeUsuario || '—' }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Nome do Projeto</label>
+            <p>{{ detalheProjeto.nomeProjeto || '—' }}</p>
         </div>
     </div>
 
-    <div *ngIf="detalheProjeto" class="header-with-button">
-        <div class="project-info">
-            <h1>Nome do projeto: {{ detalheProjeto.nomeProjeto || '—' }}</h1>
-        </div>
-    </div>
 </div>
 
 <div class="subMain-container-novidades">

@@ -12,8 +12,7 @@
 
     <div class="actions">
       <div class="search-container">
-        <!-- Componente de busca removido -->
-        <input type="text" placeholder="Buscar projeto..." />
+        <app-search (searchChange)="onSearch($event)"></app-search>
       </div>
     </div>
   </div>
@@ -53,7 +52,7 @@
           </td>
           <td>{{ p.nomeArquiteto || '-' }}</td>
           <td>{{ traduzirProjeto(p.status) || '-' }}</td>
-          <td>{{ p.dataAtualizacaoo | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ p.dataDeAtualizacao | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
             <button class="btn-acao visualizar" title="Visualizar" (click)="visualizarProjeto(p.idProjeto)">
               <img src="assets/icones/See.png" alt="Ver" />
@@ -69,4 +68,5 @@
     <img src="assets/imgs/no-data.svg" alt="Sem dados" />
     <p>Não há projetos cadastrados.</p>
   </div>
+
 </div>

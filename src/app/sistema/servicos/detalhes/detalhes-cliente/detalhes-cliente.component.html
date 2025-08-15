@@ -1,23 +1,26 @@
 <div class="main-container" *ngIf="cliente">
   <div class="progress-bar-container" *ngIf="carregando">
-      <div class="progress-bar"></div>
+    <div class="progress-bar"></div>
   </div>
-  
+
   <div class="breadcrumb-container">
     <div class="back-title">
-      <img
-        src="assets/icones/voltar-icon.svg"
-        alt="Back"
-        class="back-icon"
-        [routerLink]="['/usuario/visualizar-clientes']"
-      />
+      <img src="assets/icones/voltar-icon.svg" alt="Back" class="back-icon"
+        [routerLink]="['/usuario/visualizar-clientes']" />
       <span>Detalhes do Cliente</span>
     </div>
   </div>
 
-  <div class="actions">
-    <h1>{{ cliente.nome }}</h1>
-    <p>Quantidade de projetos: {{ cliente.projetos.length || 0 }}</p>
+  <div class="header-info">
+    <div class="info-box">
+      <label>Cliente</label>
+      <p>{{ cliente.nome }}</p>
+    </div>
+
+    <div class="info-box">
+      <label>Quantidade de Projetos</label>
+      <p class="count">{{ cliente.projetos.length || 0 }}</p>
+    </div>
   </div>
 </div>
 
@@ -62,33 +65,39 @@
     </div>
   </div>
 
-<div class="divisao">
-  <p>Projetos</p>
-  <hr class="line" />
-</div>
+  <div class="divisao">
+    <p>Projetos</p>
+    <hr class="line" />
+  </div>
 
-<div class="data-grid-trio item-data-title">
-  <div><p>Nome</p></div>
-  <div><p>Estado/Cidade</p></div>
-  <div><p>Status do Projeto</p></div>
-</div>
-
-<ng-container *ngIf="cliente as c">
-  <ng-container *ngIf="c.projetos && c.projetos.length > 0; else semProjetos">
-    <div class="data-grid-trio" *ngFor="let projeto of c.projetos">
-      <div class="item-data">
-        <p>{{ projeto.nome || 'Sem nome' }}</p>
-      </div>
-      <div class="item-data">
-        <p>{{ projeto.estado }}/{{ projeto.cidade }}</p>
-      </div>
-      <div class="item-data">
-        <p>{{ traduzirStatusDoProjeto(projeto.status) }}</p>
-      </div>
+  <div class="data-grid-trio item-data-title">
+    <div>
+      <p>Nome</p>
     </div>
-  </ng-container>
-</ng-container>
+    <div>
+      <p>Estado/Cidade</p>
+    </div>
+    <div>
+      <p>Status do Projeto</p>
+    </div>
+  </div>
 
-<ng-template #semProjetos>
-  <p style="margin-left: 10px;">Nenhum projeto encontrado.</p>
-</ng-template>
+  <ng-container *ngIf="cliente as c">
+    <ng-container *ngIf="c.projetos && c.projetos.length > 0; else semProjetos">
+      <div class="data-grid-trio" *ngFor="let projeto of c.projetos">
+        <div class="item-data">
+          <p>{{ projeto.nome || 'Sem nome' }}</p>
+        </div>
+        <div class="item-data">
+          <p>{{ projeto.estado }}/{{ projeto.cidade }}</p>
+        </div>
+        <div class="item-data">
+          <p>{{ traduzirStatusDoProjeto(projeto.status) }}</p>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #semProjetos>
+    <p style="margin-left: 10px;">Nenhum projeto encontrado.</p>
+  </ng-template>

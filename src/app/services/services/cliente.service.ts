@@ -5,6 +5,7 @@ import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/c
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiResponse } from './api-response-dto';
 import { ClienteProjetoDTO } from 'src/app/sistema/servicos/visualizar-clientes/cliente-projeto-dto';
+import { ProjetoHistorico } from 'src/app/pages/projetos/models/ProjetoHistorico';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,28 @@ export class ClienteService {
       })
     );
   }
+
+
+    buscarProjetosPorNomeLogado(
+      nome: string
+    ): Observable<ApiResponse<ProjetoHistorico[]>> {
+      const url = `${this.apiUrl}/search/me/${encodeURIComponent(nome)}`;
+      return this.httpCliente
+        .get<ApiResponse<ProjetoHistorico[]>>(url)
+        .pipe(
+          map((response) => response),
+          catchError((error: HttpErrorResponse) => {
+            let errorMessage = 'Erro ao buscar usuários por nome.';
+            if (error.error instanceof ErrorEvent) {
+              errorMessage = `Erro: ${error.error.message}`;
+            } else if (error.status) {
+              errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+            }
+            console.error(errorMessage);
+            return throwError(() => new Error(errorMessage));
+          })
+        );
+    }
 
   deleteClientById(id: string):Observable<void>{
       const url = `${this.apiUrl}/deletar/${id}`;
