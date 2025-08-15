@@ -92,7 +92,15 @@ export class CadastroClientesComponent implements OnInit {
       return;
     }
 
+  
     const dados = this.clienteForm.value;
+    if (dados.senha!.length < 8) {
+      this.errorMessage = 'A senha deve ter pelo menos 8 caracteres.';
+      this.isLoading = false;
+      return;
+      
+    }
+
     if (dados.senha !== dados.confirmarSenha) {
       this.errorMessage = 'As senhas não coincidem.';
       this.isLoading = false;

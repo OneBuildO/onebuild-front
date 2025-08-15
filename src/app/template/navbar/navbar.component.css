@@ -20,6 +20,25 @@
     background-color: var(--lm-sidebar-header)
   }
   
+  .location-user{
+    background-color: rgba(255, 255, 255, 0.22);
+    border-radius: 20px;
+    color: white;
+    display: flex;
+    padding: 7px;
+  }
+
+  .location-user h2{
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .location-user img{
+    height: 25px;
+    width: 25px;
+    align-self: center;
+  }
+
   .header-toggle {
     cursor: pointer;
     background: none;
@@ -432,6 +451,23 @@
     }
   }
   
+  @media screen and (min-width:300px) and (max-width: 399px) {
+  .sidebar-open .location-user {
+    display: none;
+  }
+
+  .location-user{
+    margin-right: 20px;
+  }
+
+  .location-user img{
+    height: 20px;
+    width: 20px;
+  }
+}
+
+
+
   @media screen and (min-width: 900px) {
     .header {
       margin: 0;

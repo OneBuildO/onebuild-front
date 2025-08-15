@@ -94,6 +94,15 @@ export class ClienteService {
     );
   }
 
+  obterClientesPorMes(ano:number): Observable<number[]> {
+    const url = `${this.apiUrl}/dados/clientes-por-mes?ano=${ano}`;
+    return this.httpCliente.get<ApiResponse<{ meses: number[] }>>(url).pipe(
+      map(res => res.response.meses),
+      catchError(this.handleError('Erro ao obter clientes por mês'))
+    );
+  }
+
+
   private handleError(message: string) {
     return (error: any) => {
       let errorMsg = message;

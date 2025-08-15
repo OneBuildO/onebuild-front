@@ -28,9 +28,9 @@ export class MeuPerfilComponent implements OnInit {
   initialFormValues: any;
 
   cadastroForm = this.formBuilder.group({
-    nome: new FormControl({ value: '', disabled: true }, Validators.required),
-    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
-    contato: new FormControl({ value: '', disabled: true }, Validators.required),
+    nome: new FormControl({ value: '', disabled: true }),
+    email: new FormControl({ value: '', disabled: true }),
+    contato: new FormControl({ value: '', disabled: true }),
     cnpj: new FormControl({ value: '', disabled: true }),
     senha: new FormControl({ value: '', disabled: true }, Validators.required),
     confirmPassword: new FormControl({ value: '', disabled: true }, Validators.required)

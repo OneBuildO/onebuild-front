@@ -304,9 +304,14 @@
   cursor: pointer;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0;
+  inset: 0;
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.5);
   display: flex;
@@ -314,25 +319,38 @@
   justify-content: center;
   z-index: 1000;
   overflow-y: auto;       /* se o modal for mais alto, toda a área de fundo rola */
-  padding: 20px;          /* dá um “respiro” no topo/embaixo */
+  padding: 20px 20px 48px;          /* dá um “respiro” no topo/embaixo */
   align-items: start;     /* faz o modal começar lá no topo do viewport */
 }
 
 .modal-window {
+  margin: 0;
+  overflow: hidden;            /* o scroll fica dentro do form */
   max-height: 90vh;       /* nunca maior que 90% da altura da tela */
-  overflow-y: auto;       /* adiciona scroll vertical, se necessário */
   background: #fff;
   padding: 24px;
   border-radius: 8px;
-  margin-top: 80px;
+  margin: 80px 0;
   max-width: 500px;
   width: 90%;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-window h2 {
   margin-top: 0;
 }
+
+/* O FORM rola dentro do modal */
+.modal-window form {
+  flex: 1 1 auto;
+  overflow: auto;              /* <— aqui nasce o scroll interno */
+  overscroll-behavior: contain;
+  padding-right: 4px;          /* evita sobrepor a barra de rolagem */
+  padding-bottom: 24px;         /* evita sobrepor a barra de rolagem */
+}
+
 
 .modal-window form label {
   display: block;
@@ -360,6 +378,12 @@
 .modal-container-title{
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+  z-index: 1;
+  padding-bottom: 8px;
+
 }
 
 .modal-close-btn {
