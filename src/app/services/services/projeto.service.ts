@@ -82,6 +82,18 @@ export class ProjetoService {
     );
   }
 
+  obterProjetosPorStatus(): Observable<Record<string, number>> {
+    const url = `${this.apiUrl}/dados/projetos-por-status`;
+    return this.httpCliente.get<ApiResponse<Record<string, number>>>(url).pipe(
+      map(res => res.response ?? {}),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar projetos pelos status:', error);
+        return throwError(() => new Error('Erro ao buscar projetos pelos status.'));
+      })
+    );
+  }
+
+
   buscarProjetosPorNome(
     nome: string
   ): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {

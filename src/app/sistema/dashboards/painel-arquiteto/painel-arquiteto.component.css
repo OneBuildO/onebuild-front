@@ -191,6 +191,11 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.101);
 }
 
+.grafico apx-chart {
+  width: 100%;
+  height: 100%;
+}
+
 /* Breakpoints */
 @media (min-width: 1200px) {
   .main-container {

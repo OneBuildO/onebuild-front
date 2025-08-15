@@ -29,6 +29,9 @@ export class NavbarComponent implements OnInit {
 
   nomeUsuario: string = '';
   permissaoUsuario: string = '';
+  estadoUsuario: string = '';
+  cidadeUsuario: string = '';
+  enderecoUsuario: string = '';
   cargoUsuario!: Permissao;
   fotoUsuario: string | null = null;
   dashboardLink: string = '';
@@ -48,6 +51,9 @@ ngOnInit(): void {
       this.cargoUsuario = tipoUsuarioRole as Permissao;
       this.permissaoUsuario = PermissaoDescricoes[this.cargoUsuario] || 'Permissão desconhecida';
       this.fotoUsuario = usuario.fotoUsuario?.documentoUrl || null;
+      this.estadoUsuario = usuario.estado;
+      this.cidadeUsuario = usuario.cidade;
+      this.enderecoUsuario = usuario.endereco;
 
       console.log('Tipo de usuário recebido:', tipoUsuarioRole);
 

@@ -34,6 +34,8 @@ import { Permissao } from 'src/app/login/permissao';
 import { ClimaService } from 'src/app/services/services/clima.service';
 import { MotivationalMessagesService } from 'src/app/services/services/MotivationalMessagesService';
 import { AuthService } from 'src/app/services/services/auth.service';
+import { ClienteService } from 'src/app/services/services/cliente.service';
+import { ProjetoService } from 'src/app/services/services/projeto.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -75,6 +77,8 @@ export class PainelArquitetoComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private usuarioService: AuthService,
     private authService: AuthService,
+    private clienteService: ClienteService,
+    private projetoService: ProjetoService
   ) {}
 
 
@@ -93,9 +97,38 @@ export class PainelArquitetoComponent implements OnInit {
         console.error('Erro ao carregar o perfil do usuário:', err);
       }
     );
+    this.carregarClientesPorMes();
+    this.carregarProjetosPorStatus();
   }
 
+  carregarClientesPorMes(): void {
+    this.clienteService.obterClientesPorMes(new Date().getFullYear()).subscribe({
+      next: (meses) => {
+        console.log('Clientes por mês:', meses);
+        this.clientesPorMesChart.series = [{
+          name: "Clientes",
+          data: meses
+        }];
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar clientes por mês:', err)
+    });
+  }
 
+  carregarProjetosPorStatus(): void {
+    this.projetoService.obterProjetosPorStatus().subscribe({
+      next: (data) => {
+        this.projetosPorStatusChart.series = [
+          data['NOVO_PROJETO'] ?? 0,
+          data['EM_COTACAO'] ?? 0,
+          data['EM_ANDAMENTO'] ?? 0,
+          data['FINALIZADO'] ?? 0
+        ];
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar projetos por status:', err)
+    });
+  }
   getWeatherForRussas(): void {
     this.apiService.fetchWeatherForRussas().subscribe((data) => {
       this.weatherData = data;
@@ -169,12 +202,12 @@ clientesPorMesChart: BarChartOptions = {
 };
 
 projetosPorStatusChart: DonutChartOptions = {
-  series: [5, 2, 10, 3, 7],
+  series: [5, 2, 10, 7],
   chart: {
     type: 'donut' as ChartType,
     height: 350
   },
-  labels: ["Novo Projeto","Em Cotação", "Em Andamento", "Pausado", "Finalizado"],
+  labels: ["Novo Projeto","Em Cotação", "Em Andamento", "Finalizado"],
   dataLabels: {
     enabled: true
   },
