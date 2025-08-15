@@ -3,5 +3,5 @@ export interface ProjetoHistorico {
   nomeProjeto: string;
   nomeArquiteto: string;
   status: string;
-  dataAtualizacaoo: string;
+  dataDeAtualizacao: string;
 }

@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ClienteProjetoDTO } from '../../visualizar-clientes/cliente-projeto-dto';
 import { StatusDoProjeto } from '../../cadastro-projeto/statusDoProjeto';
 import { StatusDoProjetoDescricoes } from '../../cadastro-projeto/statusDoProjetoDescricoes';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-detalhes-cliente',

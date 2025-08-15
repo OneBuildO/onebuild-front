@@ -23,7 +23,7 @@ export class ApresentacaoProjetoComponent implements OnInit {
   totalPaginas = 0;
   totalItens: number = 0;
 
-  
+
   constructor(
     private router: Router,
     private projetoService: ProjetoService,
@@ -34,61 +34,61 @@ export class ApresentacaoProjetoComponent implements OnInit {
     this.fetchMeusProjetos();
   }
 
-    fetchMeusProjetos(): void {
-      this.isLoading = true;
-  
-      this.projetoService.getMeusProjetos().subscribe(
-        (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
-          this.projetos = res.response;
-          this.totalItens = this.projetos.length; 
-          this.totalPaginas = Math.ceil(
-            this.projetos.length / this.itensPorPagina
-          );
-          this.atualizarPaginacao();
-          this.isLoading = false;
-        },
-        (error) => {
-          console.error('Erro ao carregar projetos:', error);
-          this.isLoading = false;
-        }
-      );
-    }
+  fetchMeusProjetos(): void {
+    this.isLoading = true;
 
-    onSearch(searchTerm: string) {
-       if (!searchTerm || searchTerm.trim() === '') {
-         this.mensagemBusca = '';
-         this.fetchMeusProjetos();
-         return;
-       }
-       this.isLoading = true;
-       this.projetoService.buscarProjetosPorNomeLogado(searchTerm).subscribe(
-         (projetos: ApiResponse<ProjetosDisponiveisDTO[]>) => {
-           this.projetos = projetos.response;
-           this.paginaAtual = 1;
-           this.totalItens = this.projetos.length;
-           this.totalPaginas = Math.ceil(
-             this.projetos.length / this.itensPorPagina
-           );
-           this.atualizarPaginacao();
-           this.isLoading = false;
-           if (!projetos || projetos.response.length === 0) {
-             this.mensagemBusca = 'Busca não encontrada';
-           }
-           this.cdr.detectChanges();
-         },
-         (error) => {
-           console.error('Erro ao buscar colaboradores:', error);
-           this.isLoading = false;
-           if (error.message && error.message.includes('404')) {
-             this.projetos = [];
-             this.totalItens = 0;
-             this.atualizarPaginacao();
-             this.mensagemBusca = 'Busca não encontrada';
-           }
-           this.cdr.detectChanges();
-         }
-       );
-     }
+    this.projetoService.getMeusProjetos().subscribe(
+      (res: ApiResponse<ProjetosDisponiveisDTO[]>) => {
+        this.projetos = res.response;
+        this.totalItens = this.projetos.length;
+        this.totalPaginas = Math.ceil(
+          this.projetos.length / this.itensPorPagina
+        );
+        this.atualizarPaginacao();
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Erro ao carregar projetos:', error);
+        this.isLoading = false;
+      }
+    );
+  }
+
+  onSearch(searchTerm: string) {
+    if (!searchTerm || searchTerm.trim() === '') {
+      this.mensagemBusca = '';
+      this.fetchMeusProjetos();
+      return;
+    }
+    this.isLoading = true;
+    this.projetoService.buscarProjetosPorNomeLogado(searchTerm).subscribe(
+      (projetos: ApiResponse<ProjetosDisponiveisDTO[]>) => {
+        this.projetos = projetos.response;
+        this.paginaAtual = 1;
+        this.totalItens = this.projetos.length;
+        this.totalPaginas = Math.ceil(
+          this.projetos.length / this.itensPorPagina
+        );
+        this.atualizarPaginacao();
+        this.isLoading = false;
+        if (!projetos || projetos.response.length === 0) {
+          this.mensagemBusca = 'Busca não encontrada';
+        }
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erro ao buscar colaboradores:', error);
+        this.isLoading = false;
+        if (error.message && error.message.includes('404')) {
+          this.projetos = [];
+          this.totalItens = 0;
+          this.atualizarPaginacao();
+          this.mensagemBusca = 'Busca não encontrada';
+        }
+        this.cdr.detectChanges();
+      }
+    );
+  }
 
   atualizarPaginacao(): void {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;

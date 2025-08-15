@@ -15,7 +15,7 @@
       <p>Cliente: {{ detalheProjeto.nomeCliente || '—' }}</p>
     </div>
     <button *ngIf="allowedToAddNovidades" class="btn-novidades-square" (click)="openNovidadesModal()">
-      Adicionar Atualizações
+      Adicionar Atualização do Projeto
     </button>
   </div>
 
@@ -78,7 +78,7 @@
 <!-- Arquivos anexados -->
 <div class="subMain-container">
   <div class="divisao">
-    <p>Anexos do projeto</p>
+    <p>Arquivos</p>
     <hr class="line" />
   </div>
 
@@ -134,6 +134,11 @@
 
 
 <div class="subMain-container-novidades">
+  <div class="divisao">
+    <p>Atualizações do Projeto</p>
+    <hr class="line" />
+  </div>
+
   <div class="timeline" *ngIf="novidadesList.length > 0; else semNovidades">
     <div class="timeline-item" *ngFor="let nov of novidadesList; let i = index"
       [ngClass]="{ left: i % 2 === 0, right: i % 2 !== 0 }">
