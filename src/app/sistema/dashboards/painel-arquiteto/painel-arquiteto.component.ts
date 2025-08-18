@@ -99,6 +99,7 @@ export class PainelArquitetoComponent implements OnInit {
     );
     this.carregarClientesPorMes();
     this.carregarProjetosPorStatus();
+    this.carregarProjetosPorMes();
   }
 
   carregarClientesPorMes(): void {
@@ -129,6 +130,20 @@ export class PainelArquitetoComponent implements OnInit {
       error: (err) => console.error('Erro ao carregar projetos por status:', err)
     });
   }
+
+  carregarProjetosPorMes(): void {
+    this.projetoService.obterProjetosPorMes(new Date().getFullYear()).subscribe({
+      next: (meses) => {
+        this.projetosPorMesChart.series = [{
+          name: "Projetos",
+          data: meses
+        }];
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar projetos por mês:', err)
+    });
+  }
+
   getWeatherForRussas(): void {
     this.apiService.fetchWeatherForRussas().subscribe((data) => {
       this.weatherData = data;

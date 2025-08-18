@@ -93,6 +93,16 @@ export class ProjetoService {
     );
   }
 
+  obterProjetosPorMes(ano: number): Observable<number[]> {
+    const url = `${this.apiUrl}/dados/projetos-por-mes?ano=${ano}`;
+    return this.httpCliente.get<ApiResponse<{ meses: number[] }>>(url).pipe(
+      map(res => res.response.meses),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar projetos por mes:', error);
+        return throwError(() => new Error('Erro ao buscar projetos por mes.'));
+      })
+    );
+  }
 
   buscarProjetosPorNome(
     nome: string
@@ -192,4 +202,7 @@ export class ProjetoService {
       `${this.apiUrl}/${id}`
     );
   }
+
+
+
 }
