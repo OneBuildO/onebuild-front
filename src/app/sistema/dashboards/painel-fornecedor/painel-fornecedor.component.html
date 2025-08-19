@@ -34,9 +34,9 @@
           <p><span>Endereço:</span> {{ p.endereco }}</p>
         </div>
   
-        <div class="projeto-actions">
-          <a class="botao-link" [routerLink]="p.link || '/projetos'">Saiba mais</a>
-        </div>
+        <button class="botao-link" type="button" (click)="openPropostaModal(p)">
+        Acessar
+      </button>
       </div>
     </div>
   </div>
@@ -56,4 +56,50 @@
     </div>
   </div>
 </div>
+</div>
+
+
+<!-- Modal de Proposta -->
+<div class="modal-overlay" *ngIf="isPropostaOpen" (click)="closePropostaModal($event)">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Enviar proposta — {{ selectedProjeto?.nomeProjeto }}</h3>
+      <button class="close" (click)="isPropostaOpen=false" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="modal-body">
+      <ul class="projeto-attrs">
+        <li><strong>Cliente:</strong> {{ selectedProjeto?.nomeCliente }}</li>
+        <li><strong>Endereço:</strong> {{ selectedProjeto?.endereco }}</li>
+      </ul>
+
+      <div class="form-field">
+        <label for="valor">Valor da proposta</label>
+        <input id="valor"
+               type="number"
+               min="0"
+               step="0.01"
+               placeholder="Ex: 15000.00"
+               [(ngModel)]="propostaValor" />
+      </div>
+
+      <div class="form-field">
+        <label for="arquivo">Anexar proposta (PDF/DOC)</label>
+        <input id="arquivo"
+               type="file"
+               accept=".pdf,.doc,.docx"
+               (change)="onFileChange($event)" />
+        <small *ngIf="propostaFileName">Selecionado: {{ propostaFileName }}</small>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="isPropostaOpen=false">Cancelar</button>
+      <button class="btn btn-primary"
+              [disabled]="!propostaValor || !propostaFile"
+              (click)="enviarProposta()">
+        Enviar
+      </button>
+    </div>
+  </div>
 </div>

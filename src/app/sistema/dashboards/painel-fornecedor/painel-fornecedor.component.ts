@@ -73,6 +73,14 @@ export class PainelFornecedorComponent implements OnInit {
           quote: '',
           author: '',
         };
+
+        isPropostaOpen: boolean = false;
+        selectedProjeto: any | null = null;
+
+        propostaValor: number | null = null;
+        propostaFile: File | null = null;
+        propostaFileName: string = '';
+
       
         fornecedoresPorTipo: FornecedorPorTipo[] = [];
       
@@ -202,6 +210,54 @@ export class PainelFornecedorComponent implements OnInit {
           this.windSpeed = this.weatherData.wind.speed;
           this.cdr.detectChanges();
         }
+      }
+
+
+      openPropostaModal(projeto: any): void {
+        this.selectedProjeto = projeto;
+        this.propostaValor = null;
+        this.propostaFile = null;
+        this.propostaFileName = '';
+        this.isPropostaOpen = true;
+      }
+
+      closePropostaModal(event?: MouseEvent): void {
+        // fecha ao clicar fora do conteúdo
+        if (!event || (event && (event.target as HTMLElement).classList.contains('modal-overlay'))) {
+          this.isPropostaOpen = false;
+        }
+      }
+
+      onFileChange(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length) {
+          this.propostaFile = input.files[0];
+          this.propostaFileName = this.propostaFile.name;
+        } else {
+          this.propostaFile = null;
+          this.propostaFileName = '';
+        }
+      }
+
+      enviarProposta(): void {
+        if (!this.selectedProjeto || !this.propostaValor || !this.propostaFile) return;
+
+        const formData = new FormData();
+        formData.append('nomeProjeto', this.selectedProjeto.nomeProjeto);
+        formData.append('valor', String(this.propostaValor));
+        formData.append('arquivo', this.propostaFile);
+
+        // TODO: Chamar seu service de backend aqui.
+        // this.propostasService.enviar(formData).subscribe(...);
+
+        console.log('Proposta enviada:', {
+          projeto: this.selectedProjeto,
+          valor: this.propostaValor,
+          arquivo: this.propostaFileName
+        });
+
+        // Fechar modal após envio (ou após sucesso no subscribe)
+        this.isPropostaOpen = false;
       }
 
 }
