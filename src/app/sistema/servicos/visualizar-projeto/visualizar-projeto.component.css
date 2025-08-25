@@ -278,7 +278,7 @@ tr:hover {
 .progress-bar {
   width: 0;
   height: 100%;
-  background-color: var(--accent-color);
+  background-color: #007bff;
   animation: progress-animation 2s infinite linear;
 }
 
@@ -308,8 +308,12 @@ tr:hover {
 
 .cliente-link {
   color: #007bff;
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
+}
+
+.cliente-link:hover{
+    color: #0055af;
 }
 
 @keyframes progressBarAnim {
