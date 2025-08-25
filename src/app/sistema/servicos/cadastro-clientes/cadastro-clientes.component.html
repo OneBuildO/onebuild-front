@@ -159,11 +159,18 @@
       <!-- loading bar aparece aqui -->
       <div *ngIf="isLoading" class="loading-bar"></div>
 
-      <button id="btn-cadastrar-cupom"
-              type="submit"
-              [disabled]="isLoading">
-        {{ isEditMode ? 'Atualizar cliente' : 'Cadastrar cliente' }}
-      </button>
+
+      <div class="botoes">
+        <button [routerLink]="['/usuario/visualizar-clientes']" id="btn-cancelar" type="submit">
+          Cancelar
+        </button>
+        <button id="btn-cadastrar-cliente"
+                type="submit"
+                [disabled]="isLoading">
+          {{ isEditMode ? 'Atualizar cliente' : 'Cadastrar cliente' }}
+        </button>
+      </div>
+
 
 
       <small *ngIf="submited && clienteForm.hasError('passwordsMismatch')" class="text-red-500">
