@@ -235,6 +235,10 @@ export class DetalhesProjetoComponent implements OnInit {
     return this.authService.getRoleUsuarioFromToken() === Permissao.ARQUITETO;
   }
 
+  isAdmin():boolean{
+    return this.authService.getRoleUsuarioFromToken() === Permissao.ADMIN;
+  }
+
   onAdicionarNovidades(): void {
     if (
       !this.novidadesTitulo ||
