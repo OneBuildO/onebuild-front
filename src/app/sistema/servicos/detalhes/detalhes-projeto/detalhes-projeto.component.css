@@ -411,14 +411,13 @@
   width: 160px;             
   height: 20px;
   padding: 20px 30px;             
-  font-size: 18px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0;
-  font-size: 17px;
+  font-size: 14px;
   transition: background-color 0.2s ease;
 }
 
