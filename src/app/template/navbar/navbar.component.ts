@@ -36,6 +36,40 @@ export class NavbarComponent implements OnInit {
   fotoUsuario: string | null = null;
   dashboardLink: string = '';
 
+  // Variáveis para controle das notificações
+  isNotificationOpen = false;
+  notifications: any[] = [];
+  unreadNotifications = 0;
+
+  // Dados de exemplo (substitua pelos dados reais da sua aplicação)
+  mockNotifications = [
+    {
+      id: 1,
+      message: 'Seu projeto CASA DA PRAIA do cliente GUILHERME SALES foi atualizado',
+      time: 'Há 10 minutos',
+      read: false,
+      type: 'project',
+      icon: 'assets/icones/icone-caderno.svg'
+    },
+    {
+      id: 2,
+      message: 'Seu projeto CASA DA PRAIA teve suas informações atualizadas.',
+      time: 'Há 1 hora',
+      read: false,
+      type: 'activity',
+      icon: 'assets/icones/ati.svg'
+    },
+    {
+      id: 3,
+      message: 'Reunião agendada para o dia 14/09/2025',
+      time: 'Há 2 horas',
+      read: true,
+      type: 'meeting',
+      icon: 'assets/icones/cale.svg'
+    }
+  ];
+
+
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -43,52 +77,91 @@ export class NavbarComponent implements OnInit {
   ) {}
 
 
-ngOnInit(): void {
-  this.authService.obterPerfilUsuario().subscribe(
-    (usuario) => {
-      this.nomeUsuario = usuario.nome;
-      const tipoUsuarioRole = 'ROLE_' + usuario.tipoUsuario; // ✅ ajustado
-      this.cargoUsuario = tipoUsuarioRole as Permissao;
-      this.permissaoUsuario = PermissaoDescricoes[this.cargoUsuario] || 'Permissão desconhecida';
-      this.fotoUsuario = usuario.fotoUsuario?.documentoUrl || null;
-      this.estadoUsuario = usuario.estado;
-      this.cidadeUsuario = usuario.cidade;
-      this.enderecoUsuario = usuario.endereco;
+  ngOnInit(): void {
+    this.authService.obterPerfilUsuario().subscribe(
+      (usuario) => {
+        this.nomeUsuario = usuario.nome;
+        const tipoUsuarioRole = 'ROLE_' + usuario.tipoUsuario; // ✅ ajustado
+        this.cargoUsuario = tipoUsuarioRole as Permissao;
+        this.permissaoUsuario = PermissaoDescricoes[this.cargoUsuario] || 'Permissão desconhecida';
+        this.fotoUsuario = usuario.fotoUsuario?.documentoUrl || null;
+        this.estadoUsuario = usuario.estado;
+        this.cidadeUsuario = usuario.cidade;
+        this.enderecoUsuario = usuario.endereco;
 
-      console.log('Tipo de usuário recebido:', tipoUsuarioRole);
+        console.log('Tipo de usuário recebido:', tipoUsuarioRole);
 
-      switch (tipoUsuarioRole) {
-        case 'ROLE_ADMIN':
-          this.dashboardLink = '/usuario/dashboard-admin';
-          break;
-        case 'ROLE_CLIENTE':
-          this.dashboardLink = '/usuario/dashboard-cliente';
-          break;
-        case 'ROLE_FORNECEDOR':
-          this.dashboardLink = '/usuario/dashboard-fornecedor';
-          break;
-        case 'ROLE_ARQUITETO':
-          this.dashboardLink = '/usuario/dashboard-arquiteto';
-          break;
-        case 'ROLE_CONSTRUTORA':
-          this.dashboardLink = '/usuario/dashboard-contrutora';
-          break;
-        case 'ROLE_DESIGN_INTERIORES':
-          this.dashboardLink = '/usuario/dashboard-design-de-interior';
-          break;
-        default:
-          this.dashboardLink = '/forbidden';
-          break;
+        switch (tipoUsuarioRole) {
+          case 'ROLE_ADMIN':
+            this.dashboardLink = '/usuario/dashboard-admin';
+            break;
+          case 'ROLE_CLIENTE':
+            this.dashboardLink = '/usuario/dashboard-cliente';
+            break;
+          case 'ROLE_FORNECEDOR':
+            this.dashboardLink = '/usuario/dashboard-fornecedor';
+            break;
+          case 'ROLE_ARQUITETO':
+            this.dashboardLink = '/usuario/dashboard-arquiteto';
+            break;
+          case 'ROLE_CONSTRUTORA':
+            this.dashboardLink = '/usuario/dashboard-contrutora';
+            break;
+          case 'ROLE_DESIGN_INTERIORES':
+            this.dashboardLink = '/usuario/dashboard-design-de-interior';
+            break;
+          default:
+            this.dashboardLink = '/forbidden';
+            break;
+        }
+      },
+      (err) => {
+        console.error('Erro ao buscar perfil do usuário', err);
       }
-    },
-    (err) => {
-      console.error('Erro ao buscar perfil do usuário', err);
+    );
+    // Carrega notificações (aqui usando dados mockados)
+    this.notifications = this.mockNotifications;
+    this.updateUnreadCount();
+  }
+
+  // Método para alternar o dropdown de notificações
+  toggleNotification(): void {
+    this.isNotificationOpen = !this.isNotificationOpen;
+    
+    // Fecha o dropdown do usuário se estiver aberto
+    if (this.isNotificationOpen && this.isDropdownOpen) {
+      this.isDropdownOpen = false;
     }
-  );
-  
-}
+    
+    // Marca notificações como lidas quando o dropdown é aberto
+    if (this.isNotificationOpen) {
+      this.markNotificationsAsRead();
+    }
+  }
 
+  // Método para marcar notificações como lidas
+  markNotificationsAsRead(): void {
+    this.notifications.forEach(notification => notification.read = true);
+    this.updateUnreadCount();
+  }
 
+  markAllAsRead(): void {
+    // Marca todas as notificações como lidas
+    this.notifications.forEach(notification => {
+      notification.read = true;
+    });
+    
+    // Atualiza o contador de notificações não lidas
+    this.updateUnreadCount();
+    
+    // Aqui você também pode adicionar uma chamada API se necessário
+    // this.notificationService.markAllAsRead().subscribe(...);
+  }
+
+  // Método para atualizar contador de não lidas
+  updateUnreadCount(): void {
+    this.unreadNotifications = this.notifications.filter(n => !n.read).length;
+  }
 
 
   ngAfterViewInit(): void {
