@@ -681,6 +681,10 @@ tr:hover {
   background: #007bff3b;
 }
 
+.download:hover {
+  background: #007bff3b;
+}
+
 .delete:hover {
   background: #dc35453b;
 }
