@@ -8,16 +8,32 @@
       </div>
     </div>
 
-    <div class="climate">
-      <div class="title-clima">
-        <h3>Clima de {{ weatherData.name }} </h3>
+    <div class="dual-card">
+      <div class="invite">
+        <div class="title-invite">
+          <img class="phone-icon" src="/assets/icones/phone-icon.svg" alt="phone icon">
+          <h3>Convidar via Whatsapp</h3>
+        </div>
+        <div class="invite-descricao">
+          <h6>Envie um convite com o link direto para clientes e fornecedores.</h6>
+        </div>
+        <div class="invite-button">
+
+          <button>Convidar</button>
+        </div>
       </div>
-      <div class="temperatura">
-        <img [src]="iconUrl" alt="Ícone do clima">
-        <span>{{ temperature | number:'1.0-0' }} °C</span>
-      </div>
-      <div class="descricao">
-        <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+  
+      <div class="climate">
+        <div class="title-clima">
+          <h3>Clima de {{ weatherData.name }} </h3>
+        </div>
+        <div class="temperatura">
+          <img [src]="iconUrl" alt="Ícone do clima">
+          <span>{{ temperature | number:'1.0-0' }} °C</span>
+        </div>
+        <div class="descricao">
+          <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+        </div>
       </div>
     </div>
   </div>
@@ -41,21 +57,79 @@
     </div>
   </div>
   
+  <div class="tabela-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Projeto</th>
+          <!--<th>Projeto</th>-->
+          <th>Razão Social</th>
+          <th>Status da Proposta</th>
+          <th>Valor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="propostasPaginadas!.length > 0; else semPropostas">
+        <tr *ngFor="let proposta of propostasPaginadas">
+          <td>
+            <div class="perfil">
+              <span *ngIf="!proposta.projeto">-</span>
+              <a *ngIf="proposta.projeto" class="cliente-link">
+                {{ proposta.nome }}
+              </a>
+            </div>
+          </td>
+          <!-- <td>{{ '-' }}</td> -->
+          <td>{{ proposta.razaoSocial || '-' }}</td>
+          <td>{{ proposta.status || '-' }}</td>
+          <td>{{ proposta.valor || '-' }}</td>
+          <td>
+            <div class="acoes">
+              <button class="btn-acao visualizar">
+                <img src="assets/icones/See.png"  alt="Visualizar" />
+              </button>
+            <button class="btn-acao download">
+              <img src="assets/icones/download-icon.svg" alt="Baixar" />
+            </button>
+              <!-- <button class="btn-acao delete">
+                <img src="assets/icones/Delete.png" alt="Excluir" />
+              </button> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+      <!-- quando NÃO tem propostas -->
+      <ng-template #semPropostas>
+        <tbody>
+          <tr>
+            <td colspan="5" class="sem-registros" aria-live="polite">
+              <div class="empty-state">
+                <img class="empty-img" src="/assets/imgs/no-data.svg" alt="Sem dados" />
+                <span class="empty-msg">Sem propostas no momento.</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </ng-template>
+
+    </table>
+  </div>
 
 
-    <div class="noticias-feed">
-  <h3> Notícias sobre Arquitetura e Construção Civil</h3>
-  <div class="noticias-cards">
-    <div class="noticia-card" *ngFor="let noticia of noticias.slice(0, 4)">
-      <img [src]="noticia.imagem" alt="Imagem da notícia" />
-      <div class="noticia-info">
-        <h4>{{ noticia.titulo }}</h4>
-        <p class="data">{{ noticia.data | date: 'dd/MM/yyyy' }}</p>
-        <a [href]="noticia.link" target="_blank" class="botao-link">Notícia Completa</a>
+  <div class="noticias-feed">
+    <h3> Notícias sobre Arquitetura e Construção Civil</h3>
+    <div class="noticias-cards">
+      <div class="noticia-card" *ngFor="let noticia of noticias.slice(0, 4)">
+        <img [src]="noticia.imagem" alt="Imagem da notícia" />
+        <div class="noticia-info">
+          <h4>{{ noticia.titulo }}</h4>
+          <p class="data">{{ noticia.data | date: 'dd/MM/yyyy' }}</p>
+          <a [href]="noticia.link" target="_blank" class="botao-link">Notícia Completa</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 

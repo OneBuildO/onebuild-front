@@ -60,6 +60,81 @@
   width: 60%;
 }
 
+.dual-card{
+  display: flex;
+  gap: 16px;
+}
+
+/* convite */
+.invite{
+  /* width: 204px;
+  min-height: 172px; */
+  background: rgba(0, 0, 0, 0.796);
+  border-radius: 12px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+  gap: 2px;
+  margin: 0;
+}
+
+.invite-descricao{
+  display: flex;
+  justify-content: center;
+}
+
+.phone-icon{
+  height: 25px;
+}
+
+.title-invite{
+  display: flex;
+  gap: 2px;
+}
+
+.title-invite h3 {
+  color: var(--accent-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.invite-descricao h6 {
+  color: var(--lm-accent-02);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  max-width: 208px;
+  align-self: center;
+  margin: 0;
+}
+
+.invite-button{
+  display: flex;
+  margin-top: 5px;
+}
+
+.invite-button button{
+  background:var(--gradient-primary);
+  transform: translateZ(0);                /* aceleração/GPU */
+  transform-origin: center;                /* escala pelo centro */
+  transition: transform .25s ease,         /* suaviza o scale */
+              background .3s ease, 
+              box-shadow .25s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+.invite-button button:hover{
+  transform: scale(1.06);
+  background:var(--gradient-secondary);
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+.invite-button button:active{
+  transform: scale(0.98);
+}
+
 /* clima */
 .climate {
   background: rgba(234, 234, 234, 0.796);
@@ -267,7 +342,6 @@
   background: #f4f4f4;
   padding: 24px;
   border-radius: 16px;
-  margin-top: 32px;
 }
 
 .noticias-feed h3 {
@@ -524,5 +598,121 @@ font-weight: 500;
   border: none;
 }
 
+
+/* tabela */
+.tabela-container {
+  width: 100%;
+  overflow-x: auto;
+  border: #b5b5b5 solid 1px;
+  border-radius: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px 16px;
+}
+
+th {
+  background: #cb8642;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+td {
+  font-size: 16px;
+  color: #666;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background: #fafafa;
+}
+
+tr:hover {
+  background-color: #eaf1e5;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-acao {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* transforma em círculo */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e4e4b5;
+  transition: background 0.2s;
+}
+
+.btn-acao img {
+  width: 60%; /* escala a imagem dentro do círculo */
+  height: 60%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.visualizar:hover {
+  background: #3d4b123b;
+}
+
+.edit:hover {
+  background: #007bff3b;
+}
+
+.download:hover {
+  background: #007bff3b;
+}
+
+.delete:hover {
+  background: #dc35453b;
+}
+
+.sem-registros {
+  text-align: center;
+  padding: 24px;
+}
+
+/* aplica o flex no wrapper interno */
+.sem-registros .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  /* opcional */
+  gap: 8px;
+  width: 100%;
+}
+
+.sem-registros .empty-img {
+  width: 120px;
+  height: auto;
+  opacity: 0.9;
+}
+
+.sem-registros .empty-msg {
+  color: #777;
+  font-size: 15px;
+}
 
 
