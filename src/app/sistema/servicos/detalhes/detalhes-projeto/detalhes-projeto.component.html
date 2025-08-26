@@ -131,6 +131,24 @@
   </div>
 </div>
 
+<!-- Propostas Recebidas -->
+<div class="subMain-container" *ngIf="isArquiteto()">
+  <div class="divisao">
+    <p>Propostas Recebidas</p>
+    <hr class="line" />
+  </div>
+  
+  <ng-container *ngIf="propostasDoProjeto.length > 0; else semPropostas">
+    <div *ngFor="let proposta of propostasDoProjeto">
+    </div>
+  </ng-container>
+
+  <ng-template #semPropostas>
+    <p style="margin-left: 1rem;">Nenhuma proposta encontrada.</p>
+  </ng-template>
+
+</div>
+
 
 <div class="subMain-container-novidades">
   <div class="divisao">
