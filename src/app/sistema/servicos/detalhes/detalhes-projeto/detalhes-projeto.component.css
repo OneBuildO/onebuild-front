@@ -3,7 +3,7 @@
   max-width: 100%;
   background: #ffffff;
   border-radius: 24px;
-  padding: 40px;
+  padding: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
@@ -64,7 +64,7 @@
 }
 
 .back-title span {
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 600;
   color: #000000;
   margin-left: 12px;
@@ -90,7 +90,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 0;
   align-items: center;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .data-itens {
-  margin: 16px 0;
+  margin: 8px 0;
 }
 
 .data-grid {
@@ -331,36 +331,41 @@
 @media (min-width: 1200px) {
   .main-container {
     margin: 90px 20px 20px;
-    padding: 40px;
+    padding: 16px;
   }
 
   .subMain-container {
     margin: 20px 20px 20px;
-    padding: 40px;
+    padding: 16px;
+  }
+
+  .subMain-container-novidades {
+    margin: 20px 20px 20px;
+    padding: 16px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
   .main-container {
     margin: 90px 20px 20px;
-    padding: 40px;
+    padding: 16px;
   }
 
   .subMain-container {
     margin: 20px 20px 20px;
-    padding: 20px;
+    padding: 16px;
   }
 }
 
 @media (max-width: 767px) {
   .main-container {
     margin: 90px 20px 20px;
-    padding: 20px;
+    padding: 10px;
   }
 
   .subMain-container {
     margin: 20px 20px 20px;
-    padding: 20px;
+    padding: 10px;
   }
 
   .data-grid-trio {
@@ -385,12 +390,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px; /* espaçamento abaixo */
 }
 
 /* 2) Agrupa título e subtítulo */
 .project-info h1 {
-  font-size: 30px;
+  font-size: 20px;
   margin: 0;
 }
 .project-info p {
@@ -405,11 +409,16 @@
   border: none;
   border-radius: 4px;      
   width: 160px;             
-  height: 48px;
+  height: 20px;
   padding: 20px 30px;             
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 17px;
   transition: background-color 0.2s ease;
 }
 

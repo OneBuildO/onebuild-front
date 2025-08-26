@@ -93,14 +93,28 @@ label.required::after {
   font-size: 10px;
 }
 
+.botoes{
+    display: flex;
+    justify-content: end;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+#btn-cancelar{
+    background: var(--danger);
+    color: var(--font-color-light);
+    margin: 0;
+}
+
+#btn-cancelar:hover{
+    background: var(--danger-hover);
+}
+
 #btn-cadastrar-projeto {
     background: var(--gradient-primary);
     color: var(--color-text-dark);
-    display: block; /* faz o botão se comportar como bloco */
-    margin-left: auto; /* empurra para a direita, sem quebrar */
-    margin-top: 20px;
     border-radius: 10px;
-    box-sizing: border-box; /* garante que padding não cause overflow */
+    margin: 0;
     max-width: 100%;        /* nunca excede 100% da largura disponível */
     cursor: pointer;
 }
@@ -193,7 +207,7 @@ label.required::after {
     }
 
     /* Torna o botão um bloco com largura ajustável, sem float */
-    #btn-cadastrar-cupom {
+    #btn-cadastrar-projeto {
         float: none;
         width: 100%;
         text-align: center;
@@ -228,9 +242,23 @@ label.required::after {
         margin-top: 20px;
     }
 
-    #btn-cadastrar-cupom {
-        margin-left: auto; /* continua alinhado à direita no container */
-        width: 100%; /* ocupa 100% da largura disponível em telas pequenas */
-        text-align: center; /* texto centralizado dentro do botão */
+    .botoes {
+        display: flex;
+        flex-wrap: nowrap; /* Impede que os botões quebrem para linha seguinte */
+        gap: 10px; /* Reduz um pouco o espaçamento entre botões */
+        justify-content: center; /* Centraliza os botões horizontalmente */
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #btn-cadastrar-projeto,
+    #btn-cancelar {
+        width: auto; /* Remove a largura de 100% */
+        flex: 1; /* Faz os botões se expandirem igualmente */
+        min-width: 0; /* Permite que os botões encolham se necessário */
+        text-wrap: nowrap;
+        padding: 10px 12px; /* Ajusta o padding para caber melhor */
+        font-size: 0.9rem; /* Reduz levemente o tamanho da fonte */
+        margin: 0;
     }
 }

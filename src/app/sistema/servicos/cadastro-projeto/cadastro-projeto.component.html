@@ -314,10 +314,15 @@
         <div class="progress-bar"></div>
       </div>
 
-      <!-- BOTÃO DE SUBMIT -->
-      <button id="btn-cadastrar-projeto" type="submit">
-        {{ isEditMode ? 'Atualizar Projeto' : 'Cadastrar Projeto' }}
-      </button>
+      <div class="botoes">
+        <button [routerLink]="['/usuario/visualizar-projeto']" id="btn-cancelar" type="submit">
+          Cancelar
+        </button>
+        <!-- BOTÃO DE SUBMIT -->
+        <button id="btn-cadastrar-projeto" type="submit"[disabled]="isLoading">
+          {{ isEditMode ? 'Atualizar Projeto' : 'Cadastrar Projeto' }}
+        </button>
+      </div>
     </form>
   </section>
 </section>
