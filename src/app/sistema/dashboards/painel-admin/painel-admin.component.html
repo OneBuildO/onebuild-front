@@ -8,17 +8,34 @@
       </div>
     </div>
 
-    <div class="climate">
-      <div class="title-clima">
-        <h3>Clima de {{ weatherData.name }} </h3>
-      </div>
-      <div class="temperatura">
-        <img [src]="iconUrl" alt="Ícone do clima">
-        <span>{{ temperature | number:'1.0-0' }} °C</span>
-      </div>
-      <div class="descricao">
-        <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
-      </div>
+    <div class="dual-card">
+          <div class="invite">
+            <div class="title-invite">
+              <img class="phone-icon" src="/assets/icones/phone-icon.svg" alt="phone icon">
+              <h3>Convidar via Whatsapp</h3>
+            </div>
+            <div class="invite-descricao">
+              <h6>Envie um convite com o link direto para clientes e fornecedores.</h6>
+            </div>
+            <div class="invite-button">
+
+              <button>Convidar</button>
+            </div>
+          </div>
+      
+      
+          <div class="climate">
+            <div class="title-clima">
+              <h3>Clima de {{ weatherData.name }} </h3>
+            </div>
+            <div class="temperatura">
+              <img [src]="iconUrl" alt="Ícone do clima">
+              <span>{{ temperature | number:'1.0-0' }} °C</span>
+            </div>
+            <div class="descricao">
+              <h6>Vento: {{ windSpeed }} m/s, {{ weatherDescription }}</h6>
+            </div>
+          </div>
     </div>
   </div>
 

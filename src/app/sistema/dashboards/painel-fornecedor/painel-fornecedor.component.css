@@ -60,6 +60,81 @@
   width: 60%;
 }
 
+.dual-card{
+  display: flex;
+  gap: 16px;
+}
+
+/* convite */
+.invite{
+  /* width: 204px;
+  min-height: 172px; */
+  background: rgba(0, 0, 0, 0.796);
+  border-radius: 12px;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+  gap: 2px;
+  margin: 0;
+}
+
+.invite-descricao{
+  display: flex;
+  justify-content: center;
+}
+
+.phone-icon{
+  height: 25px;
+}
+
+.title-invite{
+  display: flex;
+  gap: 2px;
+}
+
+.title-invite h3 {
+  color: var(--accent-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.invite-descricao h6 {
+  color: var(--lm-accent-02);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  max-width: 208px;
+  align-self: center;
+  margin: 0;
+}
+
+.invite-button{
+  display: flex;
+  margin-top: 5px;
+}
+
+.invite-button button{
+  background:var(--gradient-primary);
+  transform: translateZ(0);                /* aceleração/GPU */
+  transform-origin: center;                /* escala pelo centro */
+  transition: transform .25s ease,         /* suaviza o scale */
+              background .3s ease, 
+              box-shadow .25s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+.invite-button button:hover{
+  transform: scale(1.06);
+  background:var(--gradient-secondary);
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+.invite-button button:active{
+  transform: scale(0.98);
+}
+
 /* clima */
 .climate {
   background: rgba(234, 234, 234, 0.796);
