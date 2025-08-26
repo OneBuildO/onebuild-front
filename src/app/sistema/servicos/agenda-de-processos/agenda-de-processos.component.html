@@ -162,16 +162,15 @@
           <label for="comp-color">Cor</label>
           <input id="comp-color" type="color" [(ngModel)]="compColor" />
         </div>
-      </div>
-
-      <div class="field-group">
-        <label for="comp-tipo">Tipo de Compromisso</label>
-        <select id="comp-tipo" [(ngModel)]="compTipoCompromisso" (ngModelChange)="onTipoChange($event)">
-          <option [ngValue]="null" disabled hidden>Selecione</option>
-          <option *ngFor="let tipo of tipoCompromissoKeys" [ngValue]="tipo">
-            {{ TipoCompromissoDescricao[tipo] }}
-          </option>
-        </select>
+        <div class="field-group">
+          <label for="comp-tipo">Tipo de Compromisso</label>
+          <select id="comp-tipo" [(ngModel)]="compTipoCompromisso" (ngModelChange)="onTipoChange($event)">
+            <option [ngValue]="null" disabled hidden>Selecione</option>
+            <option *ngFor="let tipo of tipoCompromissoKeys" [ngValue]="tipo">
+              {{ TipoCompromissoDescricao[tipo] }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <label for="comp-titulo">Título</label>
