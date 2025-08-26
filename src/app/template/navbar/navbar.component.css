@@ -556,4 +556,160 @@
   align-items: center;
 }
 
+/* Container de notificações */
+.notification-container {
+  position: relative;
+  margin-right: 15px;
+}
+
+/* Botão de notificações */
+.notification-toggle {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* Badge de contagem de notificações não lidas */
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff4757;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dropdown de notificações */
+.notification-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  width: 350px;
+  max-height: 400px;
+  overflow: hidden;
+  z-index: 20;
+  margin-top: 10px;
+}
+
+.notification-dropdown.show {
+  display: block;
+}
+
+/* Cabeçalho do dropdown */
+.notification-header {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.mark-all-read {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Lista de notificações */
+.notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 12px 15px;
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid #f1f1f1;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+  background-color: #f0f7ff;
+}
+
+.notification-icon {
+  margin-right: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-icon img {
+  width: 18px;
+  height: 18px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-message {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.empty-notifications {
+  padding: 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* Rodapé do dropdown */
+.notification-footer {
+  padding: 12px 15px;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.notification-footer a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Ajustes para mobile */
+@media screen and (max-width: 720px) {
+  .notification-dropdown {
+    width: 300px;
+    right: -50px;
+  }
+  
+  .notification-container {
+    margin-right: 5px;
+  }
+}
+
   

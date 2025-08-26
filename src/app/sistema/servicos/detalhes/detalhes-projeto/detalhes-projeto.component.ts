@@ -35,6 +35,8 @@ export class DetalhesProjetoComponent implements OnInit {
   arquivosNormais: ArquivosProjetoDTO[] = [];
   // plantasBaixas: ArquivosProjetoDTO[] = [];
 
+  propostasDoProjeto: any[] = [];
+
   nomeUsuario!: string;
   projetoId!: number;
   clienteid!: string | undefined;
@@ -227,6 +229,10 @@ export class DetalhesProjetoComponent implements OnInit {
 
   isClient(): boolean {
     return this.authService.getRoleUsuarioFromToken() === Permissao.CLIENTE;
+  }
+
+  isArquiteto():boolean{
+    return this.authService.getRoleUsuarioFromToken() === Permissao.ARQUITETO;
   }
 
   onAdicionarNovidades(): void {
