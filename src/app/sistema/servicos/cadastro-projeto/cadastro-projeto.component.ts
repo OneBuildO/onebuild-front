@@ -28,7 +28,7 @@ export class CadastroProjetoComponent implements OnInit {
     nomeProjeto: new FormControl('', [Validators.required]),
     arquivos: new FormControl<File[]>([]),
     plantaBaixa: new FormControl<File[]>([]),
-    categoria: new FormControl('', [Validators.required]), 
+    categoria: new FormControl('', [Validators.required]),
     dataLimiteOrcamento: new FormControl('', [Validators.required]),
     observacoes: new FormControl(''),
     estado: new FormControl('', [Validators.required]),
@@ -41,7 +41,7 @@ export class CadastroProjetoComponent implements OnInit {
   submited = false;
   isEditMode = false;
   projetoId: number | null = null;
-  isLoading:boolean = false;
+  isLoading: boolean = false;
 
   arquivosProjeto: ArquivosProjetoDTO[] = [];
   // plantaBaixa: ArquivosProjetoDTO[] = [];
@@ -53,8 +53,8 @@ export class CadastroProjetoComponent implements OnInit {
   listaCidades: any[] = [];
 
   tipoFornecedorArr: TipoFornecedor[] = Object
-  .values(TipoFornecedor)
-  .sort((a, b) => a.localeCompare(b));
+    .values(TipoFornecedor)
+    .sort((a, b) => a.localeCompare(b));
 
   protected readonly listaEstados = listaEstados;
   statusProjetoArr = Object.values(StatusDoProjeto) as StatusDoProjeto[];
@@ -81,7 +81,7 @@ export class CadastroProjetoComponent implements OnInit {
     private projetoService: ProjetoService,
     private cidadeService: CidadesService,
     private dadosService: DadosService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarClientes();
@@ -113,7 +113,7 @@ export class CadastroProjetoComponent implements OnInit {
             status: projeto.status,
           });
 
-          this.obterCidadePorNomeEstado(projeto.estado);
+          this.obterCidadePorEstado(projeto.estado);
 
           this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
             next: (res: ApiResponse<ArquivosProjetoDTO[]>) => {
@@ -147,20 +147,20 @@ export class CadastroProjetoComponent implements OnInit {
     });
   }
 
-  onEstadoChange(event: Event): void {
-    const estado = (event.target as HTMLSelectElement).value;
-    this.obterCidadePorNomeEstado(estado);
+  onEstadoChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const estadoSigla = selectElement.value;
+    this.obterCidadePorEstado(estadoSigla);
   }
 
-  private obterCidadePorNomeEstado(estadoNome: string): void {
-    if (!estadoNome) {
+  obterCidadePorEstado(estadoSigla: string) {
+    if (estadoSigla) {
+      this.cidadeService.getCidadesByEstado(estadoSigla).subscribe(data => {
+        this.listaCidades = data;
+      });
+    } else {
       this.listaCidades = [];
-      return;
     }
-    this.cidadeService.getCidadesByNomeEstado(estadoNome).subscribe({
-      next: data => this.listaCidades = data,
-      error: () => this.listaCidades = []
-    });
   }
 
   onArquivosSelecionados(arquivos: File[]): void {
@@ -214,7 +214,7 @@ export class CadastroProjetoComponent implements OnInit {
       publico: fv.visibilidade === VisibilidadeProjeto.PUBLICO,
       status: fv.status!
     };
-    
+
     const novosArquivos = fv.arquivos || [];
     const novasPlantas = fv.plantaBaixa || [];
 
@@ -235,7 +235,7 @@ export class CadastroProjetoComponent implements OnInit {
           // this.plantasRemoverIds = [];
           this.projetoForm.get('arquivos')?.reset([]);
           this.projetoForm.get('plantaBaixa')?.reset([]);
-          
+
 
           this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
             next: res => this.arquivosProjeto = res.response,
@@ -262,7 +262,7 @@ export class CadastroProjetoComponent implements OnInit {
         next: () => {
           this.isLoading = false;
           this.successMessage = 'Projeto cadastrado com sucesso!';
-          
+
           this.projetoForm.reset({
             visibilidade: VisibilidadeProjeto.PUBLICO,
             status: StatusDoProjeto.NOVO_PROJETO

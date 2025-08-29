@@ -191,8 +191,6 @@ export class TelaCadastroComponent implements OnInit {
     }
   }
 
-
-
   public readonly PermissaoKeys = Object.values(Permissao);
   public permissoesDisponiveis: Permissao[] = null!;
   public readonly PermissaoDescricoes = PermissaoDescricoes;
