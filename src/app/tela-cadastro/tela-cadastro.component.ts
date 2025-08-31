@@ -72,9 +72,6 @@ export class TelaCadastroComponent implements OnInit {
     this.submited = true;
     this.serverMessage = '';
 
-    this.cadastroForm.get('tipoFornecedor')?.setValue('DEFAULT');
-    console.log(this.cadastroForm);
-
     if (this.cadastroForm.invalid) {
       this.serverMessage = 'Por favor, preencha todos os campos corretamente.';
       this.scrollTop();
@@ -193,8 +190,6 @@ export class TelaCadastroComponent implements OnInit {
       this.listaCidades = [];
     }
   }
-
-
 
   public readonly PermissaoKeys = Object.values(Permissao);
   public permissoesDisponiveis: Permissao[] = null!;

@@ -9,26 +9,15 @@
   </div>
 
   <section class="inputs-cadastro">
-    <form
-      [formGroup]="projetoForm"
-      (ngSubmit)="onSubmit()"
-      class="container-form"
-      autocomplete="off"
-    >
+    <form [formGroup]="projetoForm" (ngSubmit)="onSubmit()" class="container-form" autocomplete="off">
       <!-- CLIENTE -->
       <div id="campo-titulo">
         <label class="form-label required" for="cliente">Cliente</label>
-        <select
-          formControlName="cliente"
-          id="cliente"
-          class="form-select"
-        >
+        <select formControlName="cliente" id="cliente" class="form-select">
           <option value="" disabled hidden>
             Selecione o cliente
           </option>
-          <option
-            *ngFor="let cliente of clientes"
-            [value]="cliente.id">
+          <option *ngFor="let cliente of clientes" [value]="cliente.id">
             {{ cliente.nome }}
           </option>
         </select>
@@ -39,19 +28,11 @@
         <label class="form-label required" for="nomeProjeto">
           Nome do projeto
         </label>
-        <input
-          type="text"
-          id="nome-projeto"
-          formControlName="nomeProjeto"
-          placeholder="Digite o nome do projeto"
-        />
-        <small
-          *ngIf="
+        <input type="text" id="nome-projeto" formControlName="nomeProjeto" placeholder="Digite o nome do projeto" />
+        <small *ngIf="
             submited &&
             projetoForm.get('nomeProjeto')?.invalid
-          "
-          class="text-red-500 text-left"
-        >
+          " class="text-red-500 text-left">
           Nome do projeto é obrigatório.
         </small>
       </div>
@@ -59,34 +40,22 @@
       <!-- UPLOAD DE ARQUIVOS -->
       <div class="input-arquivo" id="campo-titulo">
         <label class="form-label" for="arquivos">Arquivos</label>
-        <app-input-arquivos
-          [isEditMode]="isEditMode"
-          (arquivosSelecionados)="onArquivosSelecionados($event)"
+        <app-input-arquivos [isEditMode]="isEditMode" (arquivosSelecionados)="onArquivosSelecionados($event)"
           formControlName="arquivos"
           accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          [iconSrc]="'assets/icones/upload-file-icon.svg'"
-        ></app-input-arquivos>
+          [iconSrc]="'assets/icones/upload-file-icon.svg'"></app-input-arquivos>
       </div>
-    
+
 
       <!-- EXISTENTES: ARQUIVOS -->
-      <div
-        *ngIf="isEditMode && arquivosProjeto.length > 0"
-        class="campo-existente"
-      >
+      <div *ngIf="isEditMode && arquivosProjeto.length > 0" class="campo-existente">
         <label class="form-label">Arquivos existentes</label>
         <ul class="lista-arquivos">
           <li *ngFor="let arquivo of arquivosProjeto">
-            <a
-              [href]="arquivo.urlDownload"
-              target="_blank"
-            >
+            <a [href]="arquivo.urlDownload" target="_blank">
               {{ arquivo.key }}
             </a>
-            <button
-              type="button"
-              (click)="removerArquivoExistente(arquivo.id, 'arquivo')"
-            >
+            <button type="button" (click)="removerArquivoExistente(arquivo.id, 'arquivo')">
               Remover
             </button>
           </li>
@@ -102,44 +71,28 @@
               Selecione uma categoria
             </option>
             <!-- usa as descrições do enum, em ordem alfabética -->
-            <option
-              *ngFor="let tipo of tipoFornecedorArr"
-              [value]="tipo"
-            >
+            <option *ngFor="let tipo of tipoFornecedorArr" [value]="tipo">
               {{ TipoFornecedorDescricoes[tipo] }}
             </option>
           </select>
-          <small
-            *ngIf="
+          <small *ngIf="
               submited &&
               projetoForm.get('categoria')?.hasError('required')
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Categoria é obrigatória.
           </small>
         </div>
 
         <!-- DATA LIMITE -->
         <div id="campo-valor">
-          <label
-            class="form-label required"
-            for="dataLimiteOrcamento"
-          >
+          <label class="form-label required" for="dataLimiteOrcamento">
             Receber orçamento até
           </label>
-          <input
-            type="date"
-            id="dataLimiteOrcamento"
-            formControlName="dataLimiteOrcamento"
-          />
-          <small
-            *ngIf="
+          <input type="date" id="dataLimiteOrcamento" formControlName="dataLimiteOrcamento" />
+          <small *ngIf="
               submited &&
               projetoForm.get('dataLimiteOrcamento')?.invalid
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Data limite é obrigatória.
           </small>
         </div>
@@ -151,12 +104,8 @@
         <label class="form-label" for="observacoes">
           Observações <span>(Opcional)</span>
         </label>
-        <textarea
-          id="observacoes"
-          formControlName="observacoes"
-          placeholder="Ex: O material deve ser..."
-          rows="4"
-        ></textarea>
+        <textarea id="observacoes" formControlName="observacoes" placeholder="Ex: O material deve ser..."
+          rows="4"></textarea>
       </div>
 
       <section class="campos-tipo-valor">
@@ -165,28 +114,18 @@
           <label class="form-label required" for="estado">
             Estado
           </label>
-          <select
-            formControlName="estado"
-            id="estado"
-            (change)="onEstadoChange($event)"
-          >
+          <select formControlName="estado" id="estado" (change)="onEstadoChange($event)">
             <option value="" disabled hidden>
               Selecione seu estado
             </option>
-            <option
-              *ngFor="let estado of listaEstados"
-              [value]="estado.nome"
-            >
+            <option *ngFor="let estado of listaEstados" [value]="estado.sigla">
               {{ estado.nome }}
             </option>
           </select>
-          <small
-            *ngIf="
+          <small *ngIf="
               submited &&
               projetoForm.get('estado')?.invalid
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Estado é obrigatório.
           </small>
         </div>
@@ -200,20 +139,14 @@
             <option value="" disabled hidden>
               Selecione sua cidade
             </option>
-            <option
-              *ngFor="let cidade of listaCidades"
-              [value]="cidade.nome"
-            >
+            <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">
               {{ cidade.nome }}
             </option>
           </select>
-          <small
-            *ngIf="
+          <small *ngIf="
               submited &&
               projetoForm.get('cidade')?.invalid
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Cidade é obrigatória.
           </small>
         </div>
@@ -224,19 +157,11 @@
         <label class="form-label required" for="endereco">
           Endereço
         </label>
-        <input
-          type="text"
-          id="endereco"
-          formControlName="endereco"
-          placeholder="Digite o endereço"
-        />
-        <small
-          *ngIf="
+        <input type="text" id="endereco" formControlName="endereco" placeholder="Digite o endereço" />
+        <small *ngIf="
             submited &&
             projetoForm.get('endereco')?.invalid
-          "
-          class="text-red-500 text-left"
-        >
+          " class="text-red-500 text-left">
           Endereço é obrigatório.
         </small>
       </div>
@@ -251,20 +176,14 @@
             <option value="" disabled hidden>
               Selecione
             </option>
-            <option
-              *ngFor="let status of statusProjetoArr"
-              [value]="status"
-            >
+            <option *ngFor="let status of statusProjetoArr" [value]="status">
               {{ StatusDoProjetoDescricoes[status] }}
             </option>
           </select>
-          <small
-            *ngIf="
+          <small *ngIf="
               submited &&
               projetoForm.get('status')?.invalid
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Status é obrigatório.
           </small>
         </div>
@@ -275,20 +194,14 @@
             Visibilidade
           </label>
           <select formControlName="visibilidade" id="visibilidade">
-            <option
-              *ngFor="let vis of visibilidadeProjetoArr"
-              [value]="vis"
-            >
+            <option *ngFor="let vis of visibilidadeProjetoArr" [value]="vis">
               {{ vis }}
             </option>
           </select>
-          <small
-            *ngIf="
+          <small *ngIf="
               submited &&
               projetoForm.get('visibilidade')?.invalid
-            "
-            class="text-red-500 text-left"
-          >
+            " class="text-red-500 text-left">
             Visibilidade é obrigatória.
           </small>
         </div>
@@ -296,20 +209,14 @@
 
       <!-- MENSAGENS -->
       <div class="alerts">
-        <div
-          class="alerts-container alert-success"
-          *ngIf="successMessage"
-        >
+        <div class="alerts-container alert-success" *ngIf="successMessage">
           {{ successMessage }}
         </div>
-        <div
-          class="alerts-container alert-danger"
-          *ngIf="errorMessage"
-        >
+        <div class="alerts-container alert-danger" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>
       </div>
-      
+
       <div class="progress-bar-container" *ngIf="isLoading">
         <div class="progress-bar"></div>
       </div>
@@ -319,7 +226,7 @@
           Cancelar
         </button>
         <!-- BOTÃO DE SUBMIT -->
-        <button id="btn-cadastrar-projeto" type="submit"[disabled]="isLoading">
+        <button id="btn-cadastrar-projeto" type="submit" [disabled]="isLoading">
           {{ isEditMode ? 'Atualizar Projeto' : 'Cadastrar Projeto' }}
         </button>
       </div>
