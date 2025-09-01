@@ -39,6 +39,7 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { NoticiasService } from 'src/app/services/services/noticias.service';
 import { UsuarioService } from 'src/app/services/services/usuario.service';
 import { Noticia } from '../painel-admin/noticia';
+import { DadosUsuario } from 'src/app/login/dadosUsuario';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -60,85 +61,87 @@ interface FornecedorPorTipo {
 })
 export class PainelClientesComponent implements OnInit {
 
-  quantidadeProjetosEmAndamento: number = 0; 
+  quantidadeProjetosEmAndamento: number = 0;
 
-  
-    noticias: Noticia[] = [];
-    usuario: Usuario | null = null;
-    nomeUsuario: string = '';
-    weatherDescription: string = 'Carregando...';
-    temperature: number = 0;
-    iconUrl: string = '';
-    windSpeed: number = 0;
-    weatherData: any = {};
-    motivationalMessage: { quote: string; author: string } = {
-      quote: '',
-      author: '',
-    };
-  
-    fornecedoresPorTipo: FornecedorPorTipo[] = [];
-  
-    totalDeArquitetos: number = 0;
-    totalDeConstrutoras: number = 0;
-    totalDeDesignsDeInteriores: number = 0;
-    totalDeFornecedores: number = 0;
-  
-    public Permissao = Permissao;
-    cargoUsuario!: Permissao;
-  
-    constructor(
-      private apiService: ClimaService,
-      private noticiaService: NoticiasService,
-      private motivationalMessagesService: MotivationalMessagesService,
-      private cdr: ChangeDetectorRef,
-      private authService: AuthService,
-      private usuarioService: UsuarioService
-    ) { }
-  
-  
-    ngOnInit(): void {  
-      this.noticiaService.getNoticias().subscribe({
-        next: (data) => {
-          const imagensDisponiveis = [
-            'arquitetura01.jpg',
-            'arquitetura02.jpg',
-            'fornecedores01.jpg',
-            'construtora01.jpg',
-            'backgroundhome.jpg',
-            'backgroundhome_clean00.png',
-            'backgroundhome_clean.png',
-            'backgroundhome.png',
-            'predios01.png',
-            'predios02.png',
-            'predios03.png',
-            'predios04.png'
-          ];
-  
-          this.noticias = data.map((noticia, index) => ({
-            ...noticia,
-            imagem: 'assets/imagens/' + imagensDisponiveis[index % imagensDisponiveis.length]
-          }));
-        },
-        error: () => this.noticias = []
-      });
-      this.getWeatherForCurrentLocation();
-      this.motivationalMessage =
-        this.motivationalMessagesService.getRandomMessage();
-      // this.carregarDistribuicaoMock();
-      this.authService.obterPerfilUsuario().subscribe(
-        (usuario) => {
-          this.usuario = usuario;
-          this.nomeUsuario = usuario.nome;
-          this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
-          console.log('Usuário logado:', this.nomeUsuario);
-        },
-        (err) => {
-          console.error('Erro ao carregar o perfil do usuário:', err);
-        }
-      );
-    }
 
-     getWeatherForRussas(): void {
+  noticias: Noticia[] = [];
+  usuario: Usuario | null = null;
+  dadosUsuario: DadosUsuario | null = null;
+  nomeUsuario: string = '';
+  weatherDescription: string = 'Carregando...';
+  temperature: number = 0;
+  iconUrl: string = '';
+  windSpeed: number = 0;
+  weatherData: any = {};
+  motivationalMessage: { quote: string; author: string } = {
+    quote: '',
+    author: '',
+  };
+
+  fornecedoresPorTipo: FornecedorPorTipo[] = [];
+
+  totalDeArquitetos: number = 0;
+  totalDeConstrutoras: number = 0;
+  totalDeDesignsDeInteriores: number = 0;
+  totalDeFornecedores: number = 0;
+
+  public Permissao = Permissao;
+  cargoUsuario!: Permissao;
+
+  constructor(
+    private apiService: ClimaService,
+    private noticiaService: NoticiasService,
+    private motivationalMessagesService: MotivationalMessagesService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
+    private usuarioService: UsuarioService
+  ) { }
+
+
+  ngOnInit(): void {
+    this.noticiaService.getNoticias().subscribe({
+      next: (data) => {
+        const imagensDisponiveis = [
+          'arquitetura01.jpg',
+          'arquitetura02.jpg',
+          'fornecedores01.jpg',
+          'construtora01.jpg',
+          'backgroundhome.jpg',
+          'backgroundhome_clean00.png',
+          'backgroundhome_clean.png',
+          'backgroundhome.png',
+          'predios01.png',
+          'predios02.png',
+          'predios03.png',
+          'predios04.png'
+        ];
+
+        this.noticias = data.map((noticia, index) => ({
+          ...noticia,
+          imagem: 'assets/imagens/' + imagensDisponiveis[index % imagensDisponiveis.length]
+        }));
+      },
+      error: () => this.noticias = []
+    });
+    this.getWeatherForCurrentLocation();
+    this.motivationalMessage =
+      this.motivationalMessagesService.getRandomMessage();
+    // this.carregarDistribuicaoMock();
+    this.authService.obterPerfilUsuario().subscribe(
+      (usuario) => {
+        this.dadosUsuario = usuario;
+        this.nomeUsuario = usuario.nome;
+        this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
+        localStorage.setItem('dadosUsuario', JSON.stringify(usuario));
+        console.log('Usuário logado:', this.nomeUsuario);
+      },
+      (err) => {
+        console.error('Erro ao carregar o perfil do usuário:', err);
+      }
+    );
+  }
+
+  getWeatherForRussas(): void {
     this.apiService.fetchWeatherForRussas().subscribe((data) => {
       this.weatherData = data;
       console.log(this.weatherData);

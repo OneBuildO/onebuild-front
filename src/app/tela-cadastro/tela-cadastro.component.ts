@@ -98,7 +98,7 @@ export class TelaCadastroComponent implements OnInit {
       confirmarSenha: this.cadastroForm.get('confirmPassword')?.value ?? '',
       estado: this.cadastroForm.get('estado')?.value ?? '',
       cidade: this.cadastroForm.get('cidade')?.value ?? '',
-      endereco: this.enderecoCompleto ?? ''
+      endereco: this.cadastroForm.get('endereco')?.value ?? ''
     };
     
     

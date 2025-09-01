@@ -84,12 +84,12 @@ export class NavbarComponent implements OnInit {
         const tipoUsuarioRole = 'ROLE_' + usuario.tipoUsuario; // ✅ ajustado
         this.cargoUsuario = tipoUsuarioRole as Permissao;
         this.permissaoUsuario = PermissaoDescricoes[this.cargoUsuario] || 'Permissão desconhecida';
-        this.fotoUsuario = usuario.fotoUsuario?.documentoUrl || null;
+        this.fotoUsuario = usuario.fotoUsuario || null;
         this.estadoUsuario = usuario.estado;
         this.cidadeUsuario = usuario.cidade;
         this.enderecoUsuario = usuario.endereco;
 
-        console.log('Tipo de usuário recebido:', tipoUsuarioRole);
+        //console.log('Tipo de usuário recebido:', tipoUsuarioRole);
 
         switch (tipoUsuarioRole) {
           case 'ROLE_ADMIN':

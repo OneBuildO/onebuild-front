@@ -131,15 +131,44 @@
   </div>
 </div>
 
-<!-- Propostas Recebidas -->
 <div class="subMain-container" *ngIf="isArquiteto() || isAdmin()">
   <div class="divisao">
     <p>Propostas Recebidas</p>
     <hr class="line" />
   </div>
-  
+
   <ng-container *ngIf="propostasDoProjeto.length > 0; else semPropostas">
-    <div *ngFor="let proposta of propostasDoProjeto">
+    <div class="propostas-container">
+      <div class="card-proposta" *ngFor="let proposta of propostasDoProjeto">
+        <div class="header-proposta">
+          <div class="avatar">
+            <img [src]="proposta.urlFoto" alt="Foto do Proponente">
+          </div>
+          <div class="info-proponente">
+            <h4>{{ proposta.razaoSocial }}</h4>
+            <div class="rating">
+              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                <span class="star" [class.filled]="proposta.classificacao > 0 && proposta.classificacao >= star">
+                  ⭐
+                </span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="body-proposta">
+          <p>{{ proposta.descricaoFornecedor }}</p>
+          <div class="valor">
+            <span>Valor:</span>
+            <span class="valor-total">R$ {{ proposta.valorProposta | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="acoes-proposta">
+          <button class="btn-aceitar" (click)="abrirModalObservacao(proposta, 'aceitar')">Aceitar</button>
+          <button class="btn-recusar" (click)="abrirModalObservacao(proposta, 'recusar')">Recusar</button>
+        </div>
+      </div>
     </div>
   </ng-container>
 
@@ -227,6 +256,31 @@
       <button class="btn-acao voltar" (click)="fecharComentarioModal()">Voltar</button>
       <button class="btn-acao enviar" (click)="enviarComentario()">Enviar</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showPropostasModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Adicionar Observação</h4>
+      <button class="close-btn" (click)="fecharModalObservacao()">
+        &times;
+      </button>
+    </div>
+    <form #observacaoForm="ngForm" (ngSubmit)="confirmarAcao(observacaoForm.value)">
+      <div class="modal-body">
+        <p>Gostaria de adicionar uma observação antes de prosseguir?</p>
+        <textarea name="observacao" [(ngModel)]="observacaoText" rows="4"
+          placeholder="Opcional: Digite sua observação aqui..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancelar" (click)="fecharModalObservacao()">Cancelar</button>
+        <button type="submit" class="btn-confirmar"
+          [ngClass]="{'btn-aceitar': acaoModal === 'aceitar', 'btn-recusar': acaoModal === 'recusar'}">
+          Confirmar
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 

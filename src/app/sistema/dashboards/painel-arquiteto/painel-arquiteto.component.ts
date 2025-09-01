@@ -1,4 +1,4 @@
-import { Component, OnInit,  ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Usuario } from 'src/app/login/usuario';
 import {
   ApexAxisChartSeries,
@@ -9,8 +9,8 @@ import {
   ApexNonAxisChartSeries,
   ApexResponsive,
   ApexTitleSubtitle,
-  ApexPlotOptions, 
-  ChartType 
+  ApexPlotOptions,
+  ChartType
 } from 'ng-apexcharts';
 
 export type BarChartOptions = {
@@ -18,7 +18,7 @@ export type BarChartOptions = {
   chart: ApexChart;
   dataLabels: ApexDataLabels;
   xaxis: ApexXAxis;
-  title: ApexTitleSubtitle; 
+  title: ApexTitleSubtitle;
 };
 
 export type DonutChartOptions = {
@@ -27,7 +27,7 @@ export type DonutChartOptions = {
   labels: string[];
   dataLabels: ApexDataLabels;
   legend: ApexLegend;
-  title: ApexTitleSubtitle; 
+  title: ApexTitleSubtitle;
 };
 
 import { Permissao } from 'src/app/login/permissao';
@@ -36,6 +36,7 @@ import { MotivationalMessagesService } from 'src/app/services/services/Motivatio
 import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
+import { DadosUsuario } from 'src/app/login/dadosUsuario';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -55,6 +56,7 @@ export class PainelArquitetoComponent implements OnInit {
   nomeUsuario: string = '';
   weatherDescription: string = 'Carregando...';
   temperature: number = 0;
+  dadosUsuario: DadosUsuario | null = null;
   iconUrl: string = '';
   windSpeed: number = 0;
   weatherData: any = {};
@@ -79,18 +81,19 @@ export class PainelArquitetoComponent implements OnInit {
     private authService: AuthService,
     private clienteService: ClienteService,
     private projetoService: ProjetoService
-  ) {}
+  ) { }
 
 
   ngOnInit(): void {
     this.getWeatherForCurrentLocation();
     this.motivationalMessage =
-    this.motivationalMessagesService.getRandomMessage();
+      this.motivationalMessagesService.getRandomMessage();
     this.authService.obterPerfilUsuario().subscribe(
       (usuario) => {
-        this.usuario = usuario;
+        this.dadosUsuario = usuario;
         this.nomeUsuario = usuario.nome;
         this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
+        localStorage.setItem('dadosUsuario', JSON.stringify(usuario));
         console.log('Usuário logado:', this.nomeUsuario);
       },
       (err) => {
@@ -185,92 +188,92 @@ export class PainelArquitetoComponent implements OnInit {
   }
 
 
-clientesPorMesChart: BarChartOptions = {
-  series: [
-    {
-      name: "Clientes",
-      data: [12, 19, 8, 15, 20, 10, 25, 30, 22, 18, 26, 29]
+  clientesPorMesChart: BarChartOptions = {
+    series: [
+      {
+        name: "Clientes",
+        data: [12, 19, 8, 15, 20, 10, 25, 30, 22, 18, 26, 29]
+      }
+    ],
+    chart: {
+      type: 'bar' as ChartType,
+      height: 350
+    },
+    dataLabels: {
+      enabled: false
+    },
+    xaxis: {
+      categories: [
+        "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+      ]
+    },
+    title: {
+      text: 'Clientes por Mês',
+      align: 'center',
+      style: {
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#4b504b'
+      }
     }
-  ],
-  chart: {
-    type: 'bar' as ChartType,
-    height: 350
-  },
-  dataLabels: {
-    enabled: false
-  },
-  xaxis: {
-    categories: [
-      "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-      "Jul", "Ago", "Set", "Out", "Nov", "Dez"
-    ]
-  },
-  title: {
-    text: 'Clientes por Mês',
-    align: 'center',
-    style: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      color: '#4b504b'
-    }
-  }
-};
+  };
 
-projetosPorStatusChart: DonutChartOptions = {
-  series: [5, 2, 10, 7],
-  chart: {
-    type: 'donut' as ChartType,
-    height: 350
-  },
-  labels: ["Novo Projeto","Em Cotação", "Em Andamento", "Finalizado"],
-  dataLabels: {
-    enabled: true
-  },
-  legend: {
-    position: 'bottom' as const
-  },
-  title: {
-    text: 'Projetos por Status',
-    align: 'center',
-    style: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      color: '#4b504b'
+  projetosPorStatusChart: DonutChartOptions = {
+    series: [5, 2, 10, 7],
+    chart: {
+      type: 'donut' as ChartType,
+      height: 350
+    },
+    labels: ["Novo Projeto", "Em Cotação", "Em Andamento", "Finalizado"],
+    dataLabels: {
+      enabled: true
+    },
+    legend: {
+      position: 'bottom' as const
+    },
+    title: {
+      text: 'Projetos por Status',
+      align: 'center',
+      style: {
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#4b504b'
+      }
     }
-  }
-};
+  };
 
 
-projetosPorMesChart: BarChartOptions = {
-  series: [
-    {
-      name: "Projetos",
-      data: [5, 8, 6, 12, 14, 10, 9, 15, 11, 13, 7, 16] // dados mockados
+  projetosPorMesChart: BarChartOptions = {
+    series: [
+      {
+        name: "Projetos",
+        data: [5, 8, 6, 12, 14, 10, 9, 15, 11, 13, 7, 16] // dados mockados
+      }
+    ],
+    chart: {
+      type: 'bar' as ChartType,
+      height: 350
+    },
+    dataLabels: {
+      enabled: false
+    },
+    xaxis: {
+      categories: [
+        "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+      ]
+    },
+    title: {
+      text: 'Projetos por Mês',
+      align: 'center',
+      style: {
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#4b504b'
+      }
     }
-  ],
-  chart: {
-    type: 'bar' as ChartType,
-    height: 350
-  },
-  dataLabels: {
-    enabled: false
-  },
-  xaxis: {
-    categories: [
-      "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-      "Jul", "Ago", "Set", "Out", "Nov", "Dez"
-    ]
-  },
-  title: {
-    text: 'Projetos por Mês',
-    align: 'center',
-    style: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      color: '#4b504b'
-    }
-  }
-};
+  };
 
 
 

@@ -20,6 +20,8 @@ import { NovidadesService } from 'src/app/services/services/novidades.service';
 import { RespostasNovidadeService } from 'src/app/services/services/respostas-novidade.service';
 import { ProjetoNovidadeRequestDTO } from 'src/app/pages/novidades/models/ProjetoNovidadeRequestDTO';
 import { RespostaNovidadeRequestDTO } from 'src/app/pages/novidades/models/RespostaNovidadeRequestDTO';
+import { PropostaFornecedorService } from 'src/app/services/services/proposta-forcecedor.service';
+import { PropostaFornecedorCard } from 'src/app/pages/proposta-fornecedor/models/propostaProjetoCardDTO';
 
 @Component({
   selector: 'app-detalhes-projeto',
@@ -35,13 +37,15 @@ export class DetalhesProjetoComponent implements OnInit {
   arquivosNormais: ArquivosProjetoDTO[] = [];
   // plantasBaixas: ArquivosProjetoDTO[] = [];
 
-  propostasDoProjeto: any[] = [];
+  propostasDoProjeto: PropostaFornecedorCard[] = []
+
 
   nomeUsuario!: string;
   projetoId!: number;
   clienteid!: string | undefined;
   carregando: boolean = true;
   erro?: string;
+
 
   //mensagem de sucesso
   successMessage = '';
@@ -55,6 +59,12 @@ export class DetalhesProjetoComponent implements OnInit {
   novidadesDescricao = '';
   novidadesStatus = '';
   novidadesImagemFile?: File;
+
+  // Controle do modal de propostas
+  showPropostasModal = false;
+  propostaSelecionada: PropostaFornecedorCard | null = null;
+  acaoModal: 'aceitar' | 'recusar' | '' = '';
+  observacaoText: string = '';
 
   listaStatusObra = [
     { value: 'PLANEJAMENTO', label: 'Planejamento' },
@@ -102,8 +112,9 @@ export class DetalhesProjetoComponent implements OnInit {
     private modalDeleteService: ModalDeleteService,
     private modalConfirmationService: ModalConfirmationService,
     private novidadesService: NovidadesService,
-    private respostasService: RespostasNovidadeService
-  ) {}
+    private respostasService: RespostasNovidadeService,
+    private propostasService: PropostaFornecedorService
+  ) { }
 
   ngOnInit(): void {
     const url = this.router.url;
@@ -130,6 +141,54 @@ export class DetalhesProjetoComponent implements OnInit {
     );
   }
 
+  abrirModalObservacao(proposta: PropostaFornecedorCard, acao: 'aceitar' | 'recusar') {
+    this.acaoModal = acao;
+    this.showPropostasModal = true;
+    this.propostaSelecionada = proposta;
+
+  }
+
+  fecharModalObservacao() {
+    this.showPropostasModal = false;
+
+  }
+
+  confirmarAcao(formData: { observacao: string }) {
+    const observacao = formData.observacao;
+
+    if (this.propostaSelecionada && this.propostaSelecionada.id) {
+      const acaoRequest = {
+        id: this.propostaSelecionada.id,
+        descricao: observacao
+      };
+
+      if (this.acaoModal === 'aceitar') {
+        this.propostasService.aceitarProposta(acaoRequest).subscribe({
+          next: (response) => {
+            console.log(response.message);
+            // Exibir mensagem de sucesso para o usuário
+            this.fecharModalObservacao();
+          },
+          error: (error) => {
+            console.error(error);
+            // Exibir mensagem de erro para o usuário
+          }
+        });
+      } else {
+        this.propostasService.negarProposta(acaoRequest).subscribe({
+          next: (response) => {
+            console.log(response.message);
+            // Exibir mensagem de sucesso
+            this.fecharModalObservacao();
+          },
+          error: (error) => {
+            console.error(error);
+            // Exibir mensagem de erro
+          }
+        });
+      }
+    }
+  }
   carregarDetalhes(): void {
     this.carregando = true;
     this.projetoService.obterDetalheProjeto(this.projetoId).subscribe({
@@ -137,6 +196,7 @@ export class DetalhesProjetoComponent implements OnInit {
         this.detalheProjeto = res.response;
         this.carregarProjetoResumo();
         this.carregarArquivosProjeto();
+        this.fetchPropostaProjeto(this.projetoId);
         this.carregando = false;
       },
       error: () => {
@@ -169,6 +229,18 @@ export class DetalhesProjetoComponent implements OnInit {
       error: () => {
         this.erro = 'Erro ao carregar arquivos.';
       },
+    });
+  }
+
+  fetchPropostaProjeto(idProjeto: number) {
+    this.propostasService.obterPropostasProjeto(idProjeto).subscribe({
+      next: (data: PropostaFornecedorCard[]) => {
+        this.propostasDoProjeto = data;
+        console.log('Propostas carregadas com sucesso:', this.propostasDoProjeto);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar propostas:', error);
+      }
     });
   }
 
@@ -231,11 +303,11 @@ export class DetalhesProjetoComponent implements OnInit {
     return this.authService.getRoleUsuarioFromToken() === Permissao.CLIENTE;
   }
 
-  isArquiteto():boolean{
+  isArquiteto(): boolean {
     return this.authService.getRoleUsuarioFromToken() === Permissao.ARQUITETO;
   }
 
-  isAdmin():boolean{
+  isAdmin(): boolean {
     return this.authService.getRoleUsuarioFromToken() === Permissao.ADMIN;
   }
 
@@ -327,15 +399,15 @@ export class DetalhesProjetoComponent implements OnInit {
     this.novidadesService.cadastrarNovidade(dto).subscribe({
       next: (res) => {
         this.novidadesList.push({
-        id: res.id,
-        titulo: res.titulo,
-        descricao: res.descricao,
-        status: res.statusDaObra,
-        nomeArquitetoObra: res.nomeArquitetoObra,
-        imagemUrl: res.imagemId ? `${this.apiURL}/novidade/dados/${res.imagemId}` : undefined,
-        data: new Date(),
-        comments: []
-      });
+          id: res.id,
+          titulo: res.titulo,
+          descricao: res.descricao,
+          status: res.statusDaObra,
+          nomeArquitetoObra: res.nomeArquitetoObra,
+          imagemUrl: res.imagemId ? `${this.apiURL}/novidade/dados/${res.imagemId}` : undefined,
+          data: new Date(),
+          comments: []
+        });
 
         this.fecharNovidadesModal();
         this.showMessage('success', 'Novidade adicionada com sucesso!');
@@ -411,9 +483,9 @@ export class DetalhesProjetoComponent implements OnInit {
               .subscribe({
                 next: (respostas) => {
                   this.novidadesList[idx].comments = respostas.map((r) => ({
-                  autor: r.nomeCliente, 
+                    autor: r.nomeCliente,
                     descricao: r.descricao,
-                    titulo: r.titulo, 
+                    titulo: r.titulo,
                     data: new Date(r.dataCadastro),
                   }));
                 },

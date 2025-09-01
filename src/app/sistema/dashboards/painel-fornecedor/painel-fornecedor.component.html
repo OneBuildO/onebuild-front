@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="banner">
     <div class="welcome">
-      <h1>  Bem-vindo, {{ nomeUsuario }}</h1>
+      <h1> Bem-vindo, {{ nomeUsuario }}</h1>
       <div class="motivational-message">
         <p>"{{ motivationalMessage.quote }}"</p>
         <span class="author">{{ motivationalMessage.author }}</span>
@@ -22,7 +22,7 @@
           <button>Convidar</button>
         </div>
       </div>
-  
+
       <div class="climate">
         <div class="title-clima">
           <h3>Clima de {{ weatherData.name }} </h3>
@@ -40,23 +40,23 @@
 
   <div class="projetos-section">
     <h3>Projetos Disponíveis em sua Região</h3>
-  
+
     <div class="projetos-cards">
       <div class="projeto-card" *ngFor="let p of projetos | slice:0:4">
         <h4>{{ p.nomeProjeto }}</h4>
-  
+
         <div class="projeto-meta">
-          <p><span>Cliente:</span> {{ p.nomeCliente }}</p>
+          <p><span>Cliente:</span> {{ p.cliente }}</p>
           <p><span>Endereço:</span> {{ p.endereco }}</p>
         </div>
-  
+
         <button class="botao-link" type="button" (click)="openPropostaModal(p)">
-        Acessar
-      </button>
+          Acessar
+        </button>
       </div>
     </div>
   </div>
-  
+
   <div class="tabela-container">
     <table>
       <thead>
@@ -73,24 +73,27 @@
         <tr *ngFor="let proposta of propostasPaginadas">
           <td>
             <div class="perfil">
-              <span *ngIf="!proposta.projeto">-</span>
-              <a *ngIf="proposta.projeto" class="cliente-link">
-                {{ proposta.nome }}
+              <span *ngIf="!proposta.nomeProjeto">-</span>
+              <a *ngIf="proposta.nomeProjeto" class="cliente-link">
+                {{ proposta.nomeProjeto }}
               </a>
             </div>
           </td>
           <!-- <td>{{ '-' }}</td> -->
           <td>{{ proposta.razaoSocial || '-' }}</td>
-          <td>{{ proposta.status || '-' }}</td>
-          <td>{{ proposta.valor || '-' }}</td>
+          <td>{{ traduzirStatusProposta(proposta.statusProposta) || '-' }}</td>
+          <td>{{ proposta.valorDaProposta || '-' }}</td>
           <td>
             <div class="acoes">
-              <button class="btn-acao visualizar">
-                <img src="assets/icones/See.png"  alt="Visualizar" />
+              <a href="{{ proposta.propostaUrl }}" target="_blank">
+                <button class="btn-acao visualizar">
+                  <img src="assets/icones/See.png" alt="Visualizar" />
+                </button>
+              </a>
+
+              <button class="btn-acao download" (click)="(baixarProposta(proposta.propostaUrl, proposta.key))">
+                <img src="assets/icones/download-icon.svg" alt="Baixar" />
               </button>
-            <button class="btn-acao download">
-              <img src="assets/icones/download-icon.svg" alt="Baixar" />
-            </button>
               <!-- <button class="btn-acao delete">
                 <img src="assets/icones/Delete.png" alt="Excluir" />
               </button> -->
@@ -143,35 +146,25 @@
 
     <div class="modal-body">
       <ul class="projeto-attrs">
-        <li><strong>Cliente:</strong> {{ selectedProjeto?.nomeCliente }}</li>
+        <li><strong>Cliente:</strong> {{ selectedProjeto?.cliente }}</li>
         <li><strong>Endereço:</strong> {{ selectedProjeto?.endereco }}</li>
       </ul>
 
       <div class="form-field">
         <label for="valor">Valor da proposta</label>
-        <input id="valor"
-               type="number"
-               min="0"
-               step="0.01"
-               placeholder="Ex: 15000.00"
-               [(ngModel)]="propostaValor" />
+        <input id="valor" type="number" min="0" step="0.01" placeholder="Ex: 15000.00" [(ngModel)]="propostaValor" />
       </div>
 
       <div class="form-field">
         <label for="arquivo">Anexar proposta (PDF/DOC)</label>
-        <input id="arquivo"
-               type="file"
-               accept=".pdf,.doc,.docx"
-               (change)="onFileChange($event)" />
+        <input id="arquivo" type="file" accept=".pdf,.doc,.docx" (change)="onFileChange($event)" />
         <small *ngIf="propostaFileName">Selecionado: {{ propostaFileName }}</small>
       </div>
     </div>
 
     <div class="modal-footer">
       <button class="btn btn-secondary" (click)="isPropostaOpen=false">Cancelar</button>
-      <button class="btn btn-primary"
-              [disabled]="!propostaValor || !propostaFile"
-              (click)="enviarProposta()">
+      <button class="btn btn-primary" [disabled]="!propostaValor || !propostaFile" (click)="enviarProposta()">
         Enviar
       </button>
     </div>

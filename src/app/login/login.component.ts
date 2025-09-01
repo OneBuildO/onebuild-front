@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
         fotoUsuario: data.fotoUsuario ?? null
       };
 
-      console.log(usuario);
+      
       localStorage.setItem('usuario', JSON.stringify(usuario));
 
       switch (usuario.tipoUsuario) {

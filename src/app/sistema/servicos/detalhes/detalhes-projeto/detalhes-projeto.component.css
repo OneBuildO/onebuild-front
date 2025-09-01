@@ -836,3 +836,130 @@
   font-weight: bold;
   font-size: 1rem;
 }
+
+
+/* Container para as propostas */
+.propostas-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem; /* Espaçamento entre os cartões */
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+/* Estilo do Cartão de Proposta */
+.card-proposta {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 350px; /* Largura máxima para os cartões */
+}
+
+/* Header do cartão (avatar e informações) */
+.header-proposta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.info-proponente h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.rating .star {
+  color: #dcdcdc; /* Cor da estrela vazia */
+  font-size: 1.2rem;
+}
+
+.rating .star.filled {
+  color: #ffc107; /* Cor da estrela preenchida (amarelo) */
+}
+
+/* Corpo do cartão (descrição e valor) */
+.body-proposta {
+  margin-bottom: 1.5rem;
+}
+
+.body-proposta p {
+  color: #555;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+}
+
+.valor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.valor span {
+  font-size: 1rem;
+  color: #777;
+}
+
+.valor-total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #28a745; /* Cor verde para o valor */
+}
+
+/* Botões de Ação */
+.acoes-proposta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.acoes-proposta button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1;
+}
+
+.btn-detalhes {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.btn-detalhes:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-aceitar {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-aceitar:hover {
+  background-color: #218838;
+}
+
+.btn-recusar {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-recusar:hover {
+  background-color: #c82333;
+}

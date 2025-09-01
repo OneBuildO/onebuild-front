@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Usuario } from 'src/app/login/usuario';
 import { LoginDTO } from 'src/app/sistema/LoginDTO';
+import { DadosUsuario } from 'src/app/login/dadosUsuario';
 
 @Injectable({
   providedIn: 'root',
@@ -39,15 +40,14 @@ export class AuthService {
     return null;
   }
 
-  obterPerfilUsuario(): Observable<Usuario> {
+  obterPerfilUsuario(): Observable<DadosUsuario> {
     const token = this.obterToken();
     const headers = {
       Authorization: `Bearer ${token}`,
     };
 
-    return this.http.get<Usuario>(`${this.apiUrl}/token`, { headers }).pipe(
+    return this.http.get<DadosUsuario>(`${this.apiUrl}/token`, { headers }).pipe(
       map((response) => {
-        console.log('Resposta do endpoint /token:', response);
         return response;
       }),
       catchError((error: HttpErrorResponse) => {
