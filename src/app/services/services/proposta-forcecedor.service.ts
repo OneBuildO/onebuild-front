@@ -41,8 +41,8 @@ export class PropostaFornecedorService {
             );
     }
 
-    obterPropostasFornecedor(idFornecedor: string) {
-        const url = `${this.apiURL}/fornecedor/${encodeURIComponent(idFornecedor)}`;
+    obterPropostasFornecedor() {
+        const url = `${this.apiURL}/fornecedor/`;
         return this.http.get<{ data: PropostasFornecedorDTO[] }>(url).pipe(
             map(response => response.data)
         );

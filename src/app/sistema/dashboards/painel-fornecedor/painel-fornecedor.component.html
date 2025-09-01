@@ -82,7 +82,7 @@
           <!-- <td>{{ '-' }}</td> -->
           <td>{{ proposta.razaoSocial || '-' }}</td>
           <td>{{ traduzirStatusProposta(proposta.statusProposta) || '-' }}</td>
-          <td>{{ proposta.valorDaProposta || '-' }}</td>
+          <td>R$ {{ proposta.valorDaProposta | number:'1.2-2' }}</td>
           <td>
             <div class="acoes">
               <a href="{{ proposta.propostaUrl }}" target="_blank">

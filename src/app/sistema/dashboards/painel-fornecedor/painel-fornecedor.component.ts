@@ -130,7 +130,7 @@ export class PainelFornecedorComponent implements OnInit {
   ngOnInit(): void {
 
     this.fetchProjetosDisponiveis(this.estadoUsuario);
-    this.fetchPropostasDisponiveis(this.usuarioId);
+    this.fetchPropostasDisponiveis();
     this.noticiaService.getNoticias().subscribe({
       next: (data) => {
         const imagensDisponiveis = [
@@ -270,6 +270,8 @@ export class PainelFornecedorComponent implements OnInit {
         this.propostaFile = null;
         this.propostaFileName = '';
         this.isPropostaOpen = false;
+        this.fetchPropostasDisponiveis();
+
       },
       error: (error: any) => {
         alert('Erro ao enviar proposta. Tente novamente.');
@@ -279,15 +281,14 @@ export class PainelFornecedorComponent implements OnInit {
   }
 
 
-  fetchPropostasDisponiveis(idFornecedor: string): void {
-    this.propostaService.obterPropostasFornecedor(idFornecedor).subscribe({
+  fetchPropostasDisponiveis(): void {
+    this.propostaService.obterPropostasFornecedor().subscribe({
       next: (data) => {
         this.propostasPaginadas = data;
 
       },
       error: (error) => {
         console.error('Erro ao carregar propostas:', error);
-        alert('Erro ao carregar as propostas. Tente novamente.');
       }
     });
   }

@@ -167,6 +167,7 @@ export class DetalhesProjetoComponent implements OnInit {
           next: (response) => {
             console.log(response.message);
             // Exibir mensagem de sucesso para o usuário
+            this.fetchPropostaProjeto(this.projetoId);
             this.fecharModalObservacao();
           },
           error: (error) => {
@@ -179,6 +180,7 @@ export class DetalhesProjetoComponent implements OnInit {
           next: (response) => {
             console.log(response.message);
             // Exibir mensagem de sucesso
+            this.fetchPropostaProjeto(this.projetoId);
             this.fecharModalObservacao();
           },
           error: (error) => {
