@@ -10,4 +10,5 @@ export interface ProjetosDisponiveisDTO {
   cidade: string;
   estado: string;
   dataDeAtualizacao: string;
+  endereco: string;
 }

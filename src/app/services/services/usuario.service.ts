@@ -1,25 +1,26 @@
-import {Injectable} from '@angular/core';
-import {environment} from "src/environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {first, Observable} from "rxjs";
+import { Injectable } from '@angular/core';
+import { environment } from "src/environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { first, Observable } from "rxjs";
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
-import {AuthService} from "./auth.service";
+import { AuthService } from "./auth.service";
 import { Usuario } from 'src/app/login/usuario';
 import { AdminEstatisticaDTO } from 'src/app/sistema/dashboards/painel-admin/AdminEstatisticaDTO';
 import { map } from 'rxjs/operators';
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
 import { ApiResponse } from './api-response-dto';
+import { DadosUsuario } from 'src/app/login/dadosUsuario';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
-  apiUrl: string = environment.apiURLBase + "/api/usuarios"; 
+  apiUrl: string = environment.apiURLBase + "/api/usuarios";
 
   private readonly _apiBaseUrl = `${environment.apiURLBase}`;
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly authService : AuthService,
-  ) {}
+    private readonly authService: AuthService,
+  ) { }
 
 
   getClientesDoUsuario(): Observable<ApiResponse<ClienteCadastroDTO[]>> {
@@ -27,18 +28,18 @@ export class UsuarioService {
     return this.httpClient.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 
-  saveUser(newUser : CadastroUsuarioDTO){
-    return this.httpClient.post(`${this._apiBaseUrl}/api/usuarios/novo`, newUser, {responseType: "text"})
+  saveUser(newUser: CadastroUsuarioDTO) {
+    return this.httpClient.post(`${this._apiBaseUrl}/api/usuarios/novo`, newUser, { responseType: "text" })
       .pipe(first())
   }
 
-  resendCodeValidationEmail(email: string){
+  resendCodeValidationEmail(email: string) {
     return this.httpClient.get(`${this._apiBaseUrl}/api/usuarios/envioEmail/reenviarCodigoValidacaoEmail?email=${email}`,
-      {responseType: "text"})
+      { responseType: "text" })
       .pipe(first())
   }
 
-  getUserLogged(): Observable<Usuario>{
+  getUserLogged(): Observable<DadosUsuario> {
     return this.authService.obterPerfilUsuario();
   }
 

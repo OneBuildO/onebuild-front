@@ -16,7 +16,7 @@ import { ProjetoNovidadeResponseDTO } from 'src/app/pages/novidades/models/Proje
 export class NovidadesService {
   private apiURL = `${environment.apiURLBase}/api/novidade`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   cadastrarNovidade(dados: ProjetoNovidadeRequestDTO): Observable<any> {
     const formData = new FormData();

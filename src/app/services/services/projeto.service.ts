@@ -19,7 +19,7 @@ import { ProjetoHistorico } from 'src/app/pages/projetos/models/ProjetoHistorico
 export class ProjetoService {
   apiUrl: string = environment.apiURLBase + '/api/projeto';
 
-  constructor(private httpCliente: HttpClient) {}
+  constructor(private httpCliente: HttpClient) { }
 
   obterClientes(): Observable<ApiResponse<ProjetoUsuarioDTO[]>> {
     return this.httpCliente.get<ApiResponse<ProjetoUsuarioDTO[]>>(
@@ -123,6 +123,16 @@ export class ProjetoService {
           return throwError(() => new Error(errorMessage));
         })
       );
+  }
+
+  obterProjetoPublicoPorEstado(estado: string): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+    const url = `${this.apiUrl}/obter-projetos/${encodeURIComponent(estado)}`;
+    return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar projetos públicos por estado:', error);
+        return throwError(() => new Error('Erro ao buscar projetos públicos por estado.'));
+      })
+    );
   }
 
   buscarProjetosPorNomeLogado(

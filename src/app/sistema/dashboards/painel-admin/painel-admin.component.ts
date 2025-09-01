@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Usuario } from 'src/app/login/usuario';
+import { DadosUsuario } from 'src/app/login/dadosUsuario';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -62,6 +64,7 @@ export class PainelAdminComponent implements OnInit {
 
   noticias: Noticia[] = [];
   usuario: Usuario | null = null;
+  dadosUsuario: DadosUsuario | null = null;
   nomeUsuario: string = '';
   weatherDescription: string = 'Carregando...';
   temperature: number = 0;
@@ -145,10 +148,10 @@ export class PainelAdminComponent implements OnInit {
     // this.carregarDistribuicaoMock();
     this.authService.obterPerfilUsuario().subscribe(
       (usuario) => {
-        this.usuario = usuario;
         this.nomeUsuario = usuario.nome;
         this.cargoUsuario = ('ROLE_' + usuario.tipoUsuario) as Permissao;
-        console.log('Usuário logado:', this.nomeUsuario);
+        this.dadosUsuario = usuario;
+        localStorage.setItem('dadosUsuario', JSON.stringify(usuario));
       },
       (err) => {
         console.error('Erro ao carregar o perfil do usuário:', err);
