@@ -21,16 +21,16 @@
           </div>
         </div>
 
-            <!-- PERMISSAO DO USUARIO -->
-          <div class="form-group">
-            <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
-            <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
-              <option value="" disabled selected hidden>Selecione</option>
-              <option *ngFor="let permissao of permissoesDisponiveis" [value]="permissao">
-                {{ PermissaoDescricoes[permissao] }}
-              </option>
-            </select>
-          </div>
+          <!-- PERMISSAO DO USUARIO -->
+        <div class="form-group">
+          <label class="form-label required" for="permissaoDoUsuario">Tipo da Empresa/Profissão</label>
+          <select id="permissaoDoUsuario" class="form-select" formControlName="permissaoDoUsuario">
+            <option value="" disabled selected hidden>Selecione</option>
+            <option *ngFor="let permissao of permissoesDisponiveis" [value]="permissao">
+              {{ PermissaoDescricoes[permissao] }}
+            </option>
+          </select>
+        </div>
 
         <!-- TIPO FORNECEDOR -->
         <div class="form-group" *ngIf="cadastroForm.get('permissaoDoUsuario')?.value === Permissao.FORNECEDOR">
@@ -84,7 +84,7 @@
           <label class="form-label required" for="contato">Telefone</label>
           <div class="relative">
             <i class="bi bi-telephone-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input id="contato" type="text" class="form-control pl-10" formControlName="contato" placeholder="Informe o seu telefone">
+            <input id="contato" type="text" class="form-control pl-10" formControlName="contato" mask="(00) 00000-0000" placeholder="Informe o seu telefone">
           </div>
         </div>
 
@@ -93,7 +93,7 @@
           <label class="form-label required" for="cnpj">CNPJ</label>
           <div class="relative">
             <i class="bi bi-building-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <input id="cnpj" type="text" class="form-control pl-10" formControlName="cnpj" placeholder="Informe o CNPJ">
+            <input id="cnpj" type="text" class="form-control pl-10" formControlName="cnpj" mask="00.000.000/0000-00" placeholder="Informe o CNPJ">
           </div>
         </div>
 
