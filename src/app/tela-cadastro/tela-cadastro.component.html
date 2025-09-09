@@ -164,9 +164,11 @@
         </button>
 
         <!-- MENSAGEM -->
-        <div *ngIf="serverMessage" [ngClass]="{'text-success': tipoAlerta === 'success', 'text-danger': tipoAlerta === 'danger'}">
-          {{ serverMessage }}
-        </div>
+         <div class="alerts">
+           <div *ngIf="serverMessage" [ngClass]="{'alerts-container alert-success': tipoAlerta === 'success', 'alerts-container alert-danger': tipoAlerta === 'danger'}">
+             {{ serverMessage }}
+           </div>
+         </div>
       </form>
 
       </div>
