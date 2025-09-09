@@ -48,21 +48,23 @@
           </div>
         </div>
         
-        <!-- Foto do usuário, ou fallback com inicial e cor -->
-        <div class="user-photo" *ngIf="fotoUsuario; else fallbackPhoto">
-          <img [src]="fotoUsuario" alt="Foto do Usuário" />
+        <div class="user-toggle-dropdown" (click)="toggleDropdown()">
+          <!-- Foto do usuário, ou fallback com inicial e cor -->
+          <div class="user-photo" *ngIf="fotoUsuario; else fallbackPhoto">
+            <img [src]="fotoUsuario" alt="Foto do Usuário" />
+          </div>
+  
+          <ng-template #fallbackPhoto>
+            <div
+              class="user-initial"
+              [style.background-color]="getRandomColor(nomeUsuario)"
+            >
+              {{ getInitial(nomeUsuario) }}
+            </div>
+          </ng-template>
         </div>
 
-        <ng-template #fallbackPhoto>
-          <div
-            class="user-initial"
-            [style.background-color]="getRandomColor(nomeUsuario)"
-          >
-            {{ getInitial(nomeUsuario) }}
-          </div>
-        </ng-template>
-
-        <div class="user-info">
+        <div class="user-info" (click)="toggleDropdown()">
           <h3 class="user-name">{{ nomeUsuario }}</h3>
           <span class="user-cargo">{{ permissaoUsuario }}</span>
         </div>
