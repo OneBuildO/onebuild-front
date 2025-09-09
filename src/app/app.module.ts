@@ -20,6 +20,7 @@ import { DetalhesProgressoProjetoComponent } from './sistema/servicos/cliente/de
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatStepperModule,
     MatInputModule,
     MatButtonModule,
+    NgxMaskModule.forRoot(),
   ],
   providers: [
     AuthService,
