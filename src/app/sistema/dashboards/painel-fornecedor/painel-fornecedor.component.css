@@ -717,4 +717,14 @@ tr:hover {
   font-size: 15px;
 }
 
+.valor-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.currency-symbol {
+  font-size: 2rem; 
+}
+
 
