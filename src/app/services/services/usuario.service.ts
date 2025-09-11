@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { ClienteCadastroDTO } from 'src/app/sistema/servicos/cadastro-clientes/cliente-cadastro-dto';
 import { ApiResponse } from './api-response-dto';
 import { DadosUsuario } from 'src/app/login/dadosUsuario';
+import { AtualizarUsuarioDTO } from 'src/app/sistema/meu-perfil/AtualizarUsuarioDTO';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
@@ -30,6 +31,11 @@ export class UsuarioService {
 
   saveUser(newUser: CadastroUsuarioDTO) {
     return this.httpClient.post(`${this._apiBaseUrl}/api/usuarios/novo`, newUser, { responseType: "text" })
+      .pipe(first())
+  }
+
+  updateUser(user: AtualizarUsuarioDTO) {
+    return this.httpClient.put(`${this._apiBaseUrl}/api/usuarios/atualizar`, user, { responseType: "text" })
       .pipe(first())
   }
 

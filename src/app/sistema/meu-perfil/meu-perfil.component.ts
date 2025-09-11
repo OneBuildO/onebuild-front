@@ -5,6 +5,8 @@ import { AlertType } from 'src/app/shared/components/alert/alert.type';
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
 import { Permissao } from 'src/app/login/permissao';
 import { pageTransition } from 'src/app/shared/utils/animations';
+import { AtualizarUsuarioDTO } from './AtualizarUsuarioDTO';
+import { CidadesService, listaEstados } from 'src/app/services/services/cidade.service';
 
 @Component({
   selector: 'app-meu-perfil',
@@ -27,18 +29,25 @@ export class MeuPerfilComponent implements OnInit {
 
   initialFormValues: any;
 
+  private idUsuario : number | null = null;
+
+  public listaCidades: any[] = [];
+
   cadastroForm = this.formBuilder.group({
-    nome: new FormControl({ value: '', disabled: true }),
-    email: new FormControl({ value: '', disabled: true }),
+    nome: new FormControl({ value: '', disabled: true }, Validators.required ),
+    email: new FormControl({ value: '', disabled: true }, Validators.required),
     contato: new FormControl({ value: '', disabled: true }),
+    estado: new FormControl({ value: '', disabled: true }, Validators.required),
+    cidade: new FormControl({ value: '', disabled: true }, Validators.required),
     cnpj: new FormControl({ value: '', disabled: true }),
-    senha: new FormControl({ value: '', disabled: true }, Validators.required),
-    confirmPassword: new FormControl({ value: '', disabled: true }, Validators.required)
+    senha: new FormControl({ value: '', disabled: true },),
+    confirmPassword: new FormControl({ value: '', disabled: true },)
   });
 
   constructor(
     private userService: UsuarioService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private serviceLocalidade: CidadesService
   ) {}
 
   ngOnInit(): void {
@@ -49,11 +58,16 @@ export class MeuPerfilComponent implements OnInit {
           nome: data.nome ?? '',
           email: data.email ?? '',
           contato: data.contato ?? '',
-          cnpj: data.cnpj ?? ''
+          cnpj: data.cnpj ?? '',
+          estado: data.estado ?? '',
         });
-        // if (this.tipoCadastro !== data.tipoUsuario) {
-        //   this.tipoCadastro = data.tipoUsuario;
-        // }
+        this.idUsuario = data.idUsuario ?? null;
+
+        this.obterCidadePorEstado(data.estado ?? '');
+        this.cadastroForm.patchValue({
+          cidade: data.cidade ?? '',
+        });
+
         this.initialFormValues = this.cadastroForm.getRawValue(); // Guardar valores iniciais
       },
       error: (err) => {
@@ -82,12 +96,36 @@ export class MeuPerfilComponent implements OnInit {
     this.isSenhaValida();
   }
 
+
+  onEstadoChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const estadoSigla = selectElement.value;
+    this.obterCidadePorEstado(estadoSigla);
+  }
+
+  obterCidadePorEstado(estadoSigla: string) {
+    if (estadoSigla) {
+      this.serviceLocalidade.getCidadesByEstado(estadoSigla).subscribe(data => {
+        this.listaCidades = data;
+      });
+    } else {
+      this.listaCidades = [];
+    }
+  }
+
+
   isSenhaValida(): boolean {
     const senha = this.cadastroForm.controls.senha.value;
     const confirmPassword = this.cadastroForm.controls.confirmPassword.value;
 
-    if (!senha || senha.length < 8) {
+    if (senha && senha.length < 8) {
       this.serverErrors.push('Sua senha deve conter pelo menos 8 caracteres');
+      this.scrollTop();
+      return false;
+    }
+
+    if (senha && !confirmPassword) {
+      this.serverErrors.push('Preencha o campo confirmar senha.');
       this.scrollTop();
       return false;
     }
@@ -102,6 +140,7 @@ export class MeuPerfilComponent implements OnInit {
   }
 
   onFormSubmitHandler(event: SubmitEvent): void {
+    this.tipoAlerta = AlertType.Warning;
     event.preventDefault();
     this.submited = true;
     this.serverErrors = [];
@@ -114,7 +153,8 @@ export class MeuPerfilComponent implements OnInit {
     }
 
 
-    const dadosCadastro: CadastroUsuarioDTO = {
+    const dadosCadastro: AtualizarUsuarioDTO = {
+      id: this.idUsuario,
       nome: this.cadastroForm.controls.nome.value,
       email: this.cadastroForm.controls.email.value,
       contato: this.cadastroForm.controls.contato.value,
@@ -122,14 +162,15 @@ export class MeuPerfilComponent implements OnInit {
       senha: this.cadastroForm.controls.senha.value,
       permissaoDoUsuario: null,
       tipoFornecedor: null,
-      confirmarSenha: '',
-      cidade: '',
-      estado: '',
+      confirmarSenha: this.cadastroForm.controls.confirmPassword.value,
+      cidade: this.cadastroForm.controls.cidade.value ?? '',
+      estado: this.cadastroForm.controls.estado.value ?? '',
       endereco: ''
     };
 
-    this.userService.saveUser(dadosCadastro).subscribe({
+    this.userService.updateUser(dadosCadastro).subscribe({
       next: (data: any) => {
+        console.log("Usuario Atualizado:", dadosCadastro);
         this.tipoAlerta = AlertType.Success;
         this.serverErrors.push(data);
         this.isEditing = false; // Desabilitar edição após salvar
@@ -172,4 +213,5 @@ onImageSelected(event: Event): void {
   }
 
   protected readonly ETipoUsuario = Permissao;
+  protected readonly listaEstados = listaEstados;
 }
