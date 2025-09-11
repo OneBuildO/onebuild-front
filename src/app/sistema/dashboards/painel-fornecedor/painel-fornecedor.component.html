@@ -46,7 +46,8 @@
         <h4>{{ p.nomeProjeto }}</h4>
 
         <div class="projeto-meta">
-          <p><span>Cliente:</span> {{ p.cliente }}</p>
+          <p><span>Arquiteto Responsável:</span> {{ p.nomeArquiteto }}</p>
+          <p><span>Cidade:</span> {{p.cidade}}</p>
           <p><span>Endereço:</span> {{ p.endereco }}</p>
         </div>
 
@@ -146,7 +147,8 @@
 
     <div class="modal-body">
       <ul class="projeto-attrs">
-        <li><strong>Cliente:</strong> {{ selectedProjeto?.cliente }}</li>
+        <li><strong>Arquiteto:</strong> {{ selectedProjeto?.nomeArquiteto }}</li>
+        <li><strong>Cidade:</strong> {{ selectedProjeto?.cidade }}</li>
         <li><strong>Endereço:</strong> {{ selectedProjeto?.endereco }}</li>
       </ul>
 
