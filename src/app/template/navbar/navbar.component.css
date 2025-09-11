@@ -57,6 +57,10 @@
     align-items: center;
     gap: 8px;
   }
+
+  .user-toggle-dropdown{
+    cursor: pointer;
+  }
   
   .user-photo {
     width: 45px;
@@ -69,6 +73,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    cursor: pointer;
   }
   
   .user-info h3 {

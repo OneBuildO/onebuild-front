@@ -494,7 +494,7 @@ font-weight: 500;
 }
 
 .modal {
-  width: min(640px, 92vw);
+  width: min(440px, 82vw);
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -508,7 +508,7 @@ font-weight: 500;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 10px 16px;
   border-bottom: 1px solid #eee;
 }
 
@@ -520,7 +520,9 @@ font-weight: 500;
 }
 
 .modal-header .close {
-  background: transparent;
+  background: #e9e9e9;
+  color: #222;
+  padding: 0px 8px;
   border: none;
   font-size: 22px;
   line-height: 1;

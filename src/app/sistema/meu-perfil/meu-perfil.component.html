@@ -67,7 +67,7 @@
             <label class="form-label" for="contato">Contato</label>
             <div class="relative">
               <input type="text" id="contato" class="form-control w-full ps-10 no-spinners"
-                     formControlName="contato" placeholder="Digite seu contato"
+                     formControlName="contato" placeholder="Digite seu contato" mask="(00) 00000-0000"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-phone"></i></span>
             </div>
@@ -76,13 +76,51 @@
               [valueValidation]="cadastroForm.get('contato')?.value?.toString()"
             ></validation-error> -->
           </div>
+
+          <!-- ESTADO -->
+          <div class="form-group">
+            <label class="form-label" for="estado">Estado</label>
+            <div class="relative">
+              <input type="hidden" /> <!-- evita autofill chato do browser -->
+              <select
+                id="estado"
+                class="form-control w-full ps-10"
+                formControlName="estado"
+                (change)="onEstadoChange($event)"
+                [disabled]="!isEditing"
+              >
+                <option value="">Selecione</option>
+                <option *ngFor="let estado of listaEstados" [value]="estado.sigla">
+                  {{ estado.nome }}
+                </option>
+              </select>
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-geo-alt"></i></span>
+            </div>
+          </div>
+
+          <!-- CIDADE -->
+          <div class="form-group">
+            <label class="form-label" for="cidade">Cidade</label>
+            <div class="relative">
+              <select
+                id="cidade"
+                class="form-control w-full ps-10"
+                formControlName="cidade"
+                [disabled]="!isEditing"
+              >
+                <option value="" disabled selected hidden>Selecione</option>
+                <option *ngFor="let cidade of listaCidades" [value]="cidade.nome">{{ cidade.nome }}</option>
+              </select>
+              <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-geo"></i></span>
+            </div>
+          </div>         
     
           <!-- CNPJ -->
           <div class="form-group">
             <label class="form-label" for="cnpj">CNPJ</label>
             <div class="relative">
               <input type="text" id="cnpj" class="form-control w-full ps-10"
-                     formControlName="cnpj" placeholder="Digite seu CNPJ"
+                     formControlName="cnpj" placeholder="Digite seu CNPJ" mask="00.000.000/0000-00"
                      [disabled]="!isEditing">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-person-vcard"></i></span>
             </div>
@@ -91,7 +129,14 @@
               [valueValidation]="cadastroForm.get('cnpj')?.value?.toString()"
             ></validation-error> -->
           </div>
-    
+          
+          <div class="border border-gray-300 rounded flex items-center justify-center w-full">
+            <p class="text-sm text-gray-600 pt-3 m-0">
+              <i class="bi bi-info-circle-fill me-2"></i>
+              Deixe os campos de senha em branco caso não queira alterá-la.
+            </p>
+          </div>
+
           <!-- SENHA -->
           <div class="form-group">
             <label class="form-label" for="senha">Senha <small>(mínimo de 8 caracteres)</small></label>
@@ -101,10 +146,10 @@
                      [disabled]="!isEditing" (change)="handleChange()">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
             </div>
-            <validation-error
+            <!-- <validation-error
               [submited]="submited"
               [valueValidation]="cadastroForm.get('senha')?.value?.toString()"
-            ></validation-error>
+            ></validation-error> -->
           </div>
     
           <!-- CONFIRMAR SENHA -->
@@ -116,10 +161,10 @@
                      [disabled]="!isEditing" (change)="handleChange()">
               <span class="absolute top-2 left-0 ps-3 text-gray-400"><i class="bi bi-shield-lock"></i></span>
             </div>
-            <validation-error
+            <!-- <validation-error
               [submited]="submited"
               [valueValidation]="cadastroForm.get('confirmPassword')?.value?.toString()"
-            ></validation-error>
+            ></validation-error> -->
           </div>
 
           <div class="progress-bar-container" *ngIf="isLoading">

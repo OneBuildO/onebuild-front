@@ -56,7 +56,7 @@
             </div>
           </td>
           <!-- <td>{{ '-' }}</td> -->
-          <td>{{ cliente.contato || '-' }}</td>
+          <td>{{ (cliente.contato | mask: '(00) 00000-0000') || '-' }}</td>
           <td>{{ cliente.cidade || '-' }}</td>
           <td>{{ cliente.estado || '-' }}</td>
           <td>

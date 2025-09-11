@@ -73,6 +73,7 @@ export class TelaCadastroComponent implements OnInit {
     this.serverMessage = '';
 
     if (this.cadastroForm.invalid) {
+      this.tipoAlerta = 'danger';
       this.serverMessage = 'Por favor, preencha todos os campos corretamente.';
       this.scrollTop();
       return;

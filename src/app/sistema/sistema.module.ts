@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { SistemaRoutingModule } from './sistema-routing.module';
 import { PainelAdminComponent } from './dashboards/painel-admin/painel-admin.component';
