@@ -15,6 +15,8 @@ import { ProjetoResumoDTO } from './projeto-resumo-dto';
 import { ProjetoUsuarioDTO } from './projeto-usuario-dto';
 import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { TipoFornecedorDescricoes } from 'src/app/login/tipoFornecedorDescricoes';
+import { CategoriaProjeto } from './categoriaProjeto.enum';
+import { CategoriaProjetoDescricoes } from './categoriaProjetoDescricoes';
 
 @Component({
   selector: 'app-cadastro-projeto',
@@ -52,8 +54,8 @@ export class CadastroProjetoComponent implements OnInit {
   clientes: ProjetoUsuarioDTO[] = [];
   listaCidades: any[] = [];
 
-  tipoFornecedorArr: TipoFornecedor[] = Object
-    .values(TipoFornecedor)
+  categoriaProjetoArr: CategoriaProjeto[] = Object
+    .values(CategoriaProjeto)
     .sort((a, b) => a.localeCompare(b));
 
   protected readonly listaEstados = listaEstados;
@@ -61,7 +63,7 @@ export class CadastroProjetoComponent implements OnInit {
   visibilidadeProjetoArr = Object.values(VisibilidadeProjeto) as VisibilidadeProjeto[];
   protected readonly StatusDoProjetoDescricoes = StatusDoProjetoDescricoes;
   protected readonly ERROR_MESSAGES = ERROR_MESSAGES;
-  readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes;
+  readonly CategoriaProjetoDescricoes = CategoriaProjetoDescricoes;
 
   successMessage: string | null = null;
   errorMessage: string | null = null;

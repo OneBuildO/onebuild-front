@@ -71,8 +71,8 @@
               Selecione uma categoria
             </option>
             <!-- usa as descrições do enum, em ordem alfabética -->
-            <option *ngFor="let tipo of tipoFornecedorArr" [value]="tipo">
-              {{ TipoFornecedorDescricoes[tipo] }}
+            <option *ngFor="let categoria of categoriaProjetoArr" [value]="categoria">
+              {{ CategoriaProjetoDescricoes[categoria] }}
             </option>
           </select>
           <small *ngIf="
