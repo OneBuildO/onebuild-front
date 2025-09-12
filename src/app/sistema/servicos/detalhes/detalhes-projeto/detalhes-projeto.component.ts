@@ -22,6 +22,8 @@ import { ProjetoNovidadeRequestDTO } from 'src/app/pages/novidades/models/Projet
 import { RespostaNovidadeRequestDTO } from 'src/app/pages/novidades/models/RespostaNovidadeRequestDTO';
 import { PropostaFornecedorService } from 'src/app/services/services/proposta-forcecedor.service';
 import { PropostaFornecedorCard } from 'src/app/pages/proposta-fornecedor/models/propostaProjetoCardDTO';
+import { CategoriaProjetoDescricoes } from '../../cadastro-projeto/categoriaProjetoDescricoes';
+import { CategoriaProjeto } from '../../cadastro-projeto/categoriaProjeto.enum';
 
 @Component({
   selector: 'app-detalhes-projeto',
@@ -294,7 +296,7 @@ export class DetalhesProjetoComponent implements OnInit {
   }
 
   traduzirCategoriaProjeto(categoriaProjeto: string): string {
-    return TipoFornecedorDescricoes[categoriaProjeto as TipoFornecedor];
+    return CategoriaProjetoDescricoes[categoriaProjeto as CategoriaProjeto];
   }
 
   onVoltar(): void {
