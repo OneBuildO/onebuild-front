@@ -125,6 +125,28 @@ export class ProjetoService {
       );
   }
 
+
+  buscarProjetosPorCliente(
+    nome: string
+  ): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
+    const url = `${this.apiUrl}/search/cliente/${encodeURIComponent(nome)}`;
+    return this.httpCliente
+      .get<ApiResponse<ProjetosDisponiveisDTO[]>>(url)
+      .pipe(
+        map((response) => response),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'Erro ao buscar projetos por nome do cliente.';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Erro: ${error.error.message}`;
+          } else if (error.status) {
+            errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+  }
+
   obterProjetoPublicoPorEstado(estado: string): Observable<ApiResponse<ProjetosDisponiveisDTO[]>> {
     const url = `${this.apiUrl}/obter-projetos/${encodeURIComponent(estado)}`;
     return this.httpCliente.get<ApiResponse<ProjetosDisponiveisDTO[]>>(url).pipe(

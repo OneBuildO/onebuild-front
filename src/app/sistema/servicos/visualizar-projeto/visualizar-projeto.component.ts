@@ -57,7 +57,7 @@ export class VisualizarProjetoComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.projetoService.buscarProjetosPorNome(searchTerm).subscribe(
+    this.projetoService.buscarProjetosPorCliente(searchTerm).subscribe(
       (cliente: ApiResponse<ProjetosDisponiveisDTO[]>) => {
         this.projetos = cliente.response;
         this.paginaAtual = 1;
