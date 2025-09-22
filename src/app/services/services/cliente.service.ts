@@ -25,6 +25,14 @@ export class ClienteService {
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url);
   }
 
+  obterTotalClientes(): Observable<number> {
+    const url = `${this.apiUrl}/total-clientes-cadastrados`;
+    return this.httpCliente.get<ApiResponse<number>>(url).pipe(
+      map((res) => res.response),
+      catchError(this.handleError('Erro ao obter total de clientes'))
+    );
+  }
+
   buscarUsuariosPorNome(nome: string): Observable<ApiResponse<ClienteCadastroDTO[]>> {
     const url = `${this.apiUrl}/search-cliente/${encodeURIComponent(nome)}`;
     return this.httpCliente.get<ApiResponse<ClienteCadastroDTO[]>>(url).pipe(

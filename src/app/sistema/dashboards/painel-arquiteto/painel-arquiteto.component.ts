@@ -103,6 +103,7 @@ export class PainelArquitetoComponent implements OnInit {
     this.carregarClientesPorMes();
     this.carregarProjetosPorStatus();
     this.carregarProjetosPorMes();
+    this.obterTotalClientes();
   }
 
   carregarClientesPorMes(): void {
@@ -116,6 +117,16 @@ export class PainelArquitetoComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Erro ao carregar clientes por mês:', err)
+    });
+  }
+
+  obterTotalClientes(): void {
+    this.clienteService.obterTotalClientes().subscribe({
+      next: (total : number) => {
+        this.totalDeClientes = total;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao obter total de clientes:', err)
     });
   }
 
