@@ -56,11 +56,11 @@
     <div class="data-grid">
       <div class="item-data">
         <label>CEP</label>
-        <p>{{ cliente.cep || 'Não informado' }}</p>
+        <p>{{ (cliente.cep! | mask: '00000-000') || 'Não informado' }}</p>
       </div>
       <div class="item-data">
         <label>Contato</label>
-        <p>{{ cliente.contato || 'Não informado'}}</p>
+        <p>{{ (cliente.contato | mask: '(00) 00000-0000') || 'Não informado' }}</p>
       </div>
     </div>
   </div>
