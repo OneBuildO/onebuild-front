@@ -119,8 +119,42 @@ label.required::after {
     cursor: pointer;
 }
 
-.input-arquivo p{
+.input-arquivo{
     font-size: 14px;
+}
+
+.input-arquivo-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.input-arquivo-header button{
+    padding: 8px 16px;
+    margin: 0;
+}
+
+.line{
+    border-bottom: 1px solid #ccc;
+    margin-top: 6px;           /* espaço acima da linha */
+    margin-bottom: 0;          /* zera margem padrão do hr */
+}
+
+.arquivos-container{
+    border: 1px dashed #ccc;
+    padding: 16px;
+    margin-top: 6px;          
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arquivos-container p{
+    margin: 0;
+    color: var(--lm-accent-02);
 }
 
 #imagem-download{
@@ -181,6 +215,36 @@ label.required::after {
     width: 0;
   }
 }
+
+.modal-body form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.modal-info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lm-accent-02);
+    margin: 0;
+}
+
+.grupo-arquivos { width: 100%; }
+.grupo-titulo { margin: 0 0 8px; color: var(--lm-text02); font-size: 1rem; font-weight: 600;}
+.lista-arquivos { list-style: none; padding: 0; margin: 0 0 12px; }
+.lista-arquivos li {
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
+}
+.nome-arquivo { flex: 1; }
+.tamanho-arquivo { color: #666; }
+.btn-remover {
+  padding: 4px 10px; border-radius: 6px; cursor: pointer;
+  background: var(--danger); color: var(--font-color-light); border: none;
+}
+.btn-remover:hover { background: var(--danger-hover); }
+
 
 /* ==============================
    MEDIA QUERIES (RESPONSIVIDADE)

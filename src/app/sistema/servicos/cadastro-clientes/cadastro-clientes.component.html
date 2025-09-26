@@ -155,10 +155,10 @@
           {{ errorMessage }}
         </div>
       </div>
-
-      <!-- loading bar aparece aqui -->
-      <div *ngIf="isLoading" class="loading-bar"></div>
-
+      
+      <div class="progress-bar-container" *ngIf="isLoading">
+        <div class="progress-bar"></div>
+      </div>
 
       <div class="botoes">
         <button [routerLink]="['/usuario/visualizar-clientes']" id="btn-cancelar" type="submit">
