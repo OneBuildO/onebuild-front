@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
@@ -17,6 +17,15 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { TipoFornecedorDescricoes } from 'src/app/login/tipoFornecedorDescricoes';
 import { CategoriaProjeto } from './categoriaProjeto.enum';
 import { CategoriaProjetoDescricoes } from './categoriaProjetoDescricoes';
+import { ModalCadastroService } from 'src/app/services/services/modal-cadastro.service';
+
+
+// modelo local
+type ArquivoComCategoria = {
+  file: File;
+  categoria: TipoFornecedor;
+};
+
 
 @Component({
   selector: 'app-cadastro-projeto',
@@ -24,6 +33,9 @@ import { CategoriaProjetoDescricoes } from './categoriaProjetoDescricoes';
   styleUrls: ['./cadastro-projeto.component.css']
 })
 export class CadastroProjetoComponent implements OnInit {
+  @ViewChild('templateConteudoModal') templateConteudoModal!: TemplateRef<any>;
+
+
   projetoForm = this.formBuilder.group({
     id: new FormControl<number | null>(null),
     cliente: new FormControl('', [Validators.required]),
@@ -40,7 +52,20 @@ export class CadastroProjetoComponent implements OnInit {
     status: new FormControl(StatusDoProjeto.NOVO_PROJETO, [Validators.required]),
   });
 
+
+  arquivosNovos: ArquivoComCategoria[] = [];
+
+
+  arquivoModalForm = this.formBuilder.group({
+    categoria: new FormControl<TipoFornecedor | null>(null, [Validators.required]),
+    arquivos: new FormControl<File[]>([])
+  })
+
+
+
+
   submited = false;
+  submitedModal = false;
   isEditMode = false;
   projetoId: number | null = null;
   isLoading: boolean = false;
@@ -48,6 +73,7 @@ export class CadastroProjetoComponent implements OnInit {
   arquivosProjeto: ArquivosProjetoDTO[] = [];
   // plantaBaixa: ArquivosProjetoDTO[] = [];
 
+  arquivosModal: File[] = [];
   arquivosRemoverIds: number[] = [];
   plantasRemoverIds: number[] = []; //não está sendo usado, mas mantido para estrutura
 
@@ -58,6 +84,9 @@ export class CadastroProjetoComponent implements OnInit {
     .values(CategoriaProjeto)
     .sort((a, b) => a.localeCompare(b));
 
+  tipoFornecedor: TipoFornecedor[] = Object.values(TipoFornecedor);
+
+  protected readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes
   protected readonly listaEstados = listaEstados;
   statusProjetoArr = Object.values(StatusDoProjeto) as StatusDoProjeto[];
   visibilidadeProjetoArr = Object.values(VisibilidadeProjeto) as VisibilidadeProjeto[];
@@ -67,6 +96,7 @@ export class CadastroProjetoComponent implements OnInit {
 
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  errorMessageModal: string | null = null;
   tipoAlerta = AlertType.Warning;
 
   private tiposPermitidos = [
@@ -82,7 +112,8 @@ export class CadastroProjetoComponent implements OnInit {
     private route: ActivatedRoute,
     private projetoService: ProjetoService,
     private cidadeService: CidadesService,
-    private dadosService: DadosService
+    private dadosService: DadosService,
+    private modalCadastroService: ModalCadastroService
   ) { }
 
   ngOnInit(): void {
@@ -170,9 +201,23 @@ export class CadastroProjetoComponent implements OnInit {
     if (arquivosValidos.length < arquivos.length) {
       this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
     }
-    this.projetoForm.get('arquivos')?.setValue(arquivosValidos);
+    this.arquivoModalForm.get('arquivos')?.setValue(arquivosValidos);
   }
 
+  abrirModalAdicionarArquivos(): void {
+    this.modalCadastroService.openModal(
+      {
+        title: 'Adicionar Arquivos',
+        confirmTextoBotao: 'Adicionar',
+        cancelTextoBotao: 'Cancelar',
+        size: 'md:max-w-3xl',
+        description: 'Selecione os arquivos que deseja adicionar ao projeto.',
+
+      },
+      () => this.onSubmitArquivosModal(),
+      this.templateConteudoModal
+    );
+  }
 
   // Função para validar os arquivos
   private validarArquivos(arquivos: File[]): File[] {
@@ -186,6 +231,56 @@ export class CadastroProjetoComponent implements OnInit {
     } else {
       // this.plantasRemoverIds.push(id);
     }
+  }
+
+  removerArquivoNovo(target: ArquivoComCategoria) {
+    this.arquivosNovos = this.arquivosNovos.filter(a => a !== target);
+  }
+
+  get arquivosNovosAgrupados() {
+    // agrupa por categoria
+    const grupos = new Map<TipoFornecedor, ArquivoComCategoria[]>();
+    for (const item of this.arquivosNovos) {
+      const arr = grupos.get(item.categoria) || [];
+      arr.push(item);
+      grupos.set(item.categoria, arr);
+    }
+
+    // ordena categorias pelo rótulo (ou pela ordem do enum, se preferir)
+    const categoriasOrdenadas = Array.from(grupos.keys()).sort((a, b) =>
+      this.TipoFornecedorDescricoes[a].localeCompare(this.TipoFornecedorDescricoes[b])
+    );
+
+    // retorna lista amigável para o template
+    return categoriasOrdenadas.map(cat => ({
+      categoria: cat,
+      descricao: this.TipoFornecedorDescricoes[cat],
+      arquivos: grupos.get(cat)!
+    }));
+  }
+
+
+  onSubmitArquivosModal(): boolean {
+    this.submitedModal = true;
+    this.arquivoModalForm.markAllAsTouched();
+
+    if (this.arquivoModalForm.invalid) {
+      this.errorMessageModal = 'Por favor, selecione uma categoria e ao menos um arquivo.';
+      return false; // <- impede o fechamento do modal
+    }
+
+    const categoria = this.arquivoModalForm.get('categoria')!.value!;
+    const novosArquivos = this.arquivoModalForm.get('arquivos')?.value || [];
+
+    // adiciona cada arquivo com sua categoria
+    novosArquivos.forEach(file => {
+      this.arquivosNovos.push({ file, categoria });
+    });
+
+    this.arquivoModalForm.reset();
+    this.submitedModal = false;
+    this.errorMessageModal = null;
+    return true; // <- permite o fechamento do modal
   }
 
   onSubmit(): void {
@@ -217,6 +312,19 @@ export class CadastroProjetoComponent implements OnInit {
       status: fv.status!
     };
 
+
+    // NOVO: converte arquivosNovos -> arrays paralelos (mesma ordem!)
+    const files: File[] = this.arquivosNovos.map(a => a.file);
+    const categorias: TipoFornecedor[] = this.arquivosNovos.map(a => a.categoria);
+
+    // (Opcional) Validação extra: tamanhos iguais
+    if (files.length !== categorias.length) {
+      this.errorMessage = 'Falha ao preparar anexos: divergência entre arquivos e categorias.';
+      this.isLoading = false;
+      return;
+    }
+
+    //isso aqui vai sair quando o atualizar projeto por mudado.
     const novosArquivos = fv.arquivos || [];
     const novasPlantas = fv.plantaBaixa || [];
 
@@ -258,8 +366,8 @@ export class CadastroProjetoComponent implements OnInit {
     } else {
       this.projetoService.novoProjeto(
         projetoDTO,
-        novosArquivos,
-        novasPlantas
+        files,
+        categorias
       ).subscribe({
         next: () => {
           this.isLoading = false;
@@ -270,8 +378,8 @@ export class CadastroProjetoComponent implements OnInit {
             status: StatusDoProjeto.NOVO_PROJETO
           });
 
+          this.arquivosNovos = [];
           this.arquivosProjeto = [];
-          // this.plantaBaixa = [];
           this.submited = false;
         },
         error: () => {

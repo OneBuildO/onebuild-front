@@ -10,6 +10,7 @@ import { ModalConfirmationComponent } from './components/modal-confirmation/moda
 import { SearchComponent } from './components/search/search.component';
 import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { ModalCadastroComponent } from './components/modal-cadastro/modal-cadastro.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ModalConfirmationComponent,
     SearchComponent,
     PaginationComponent,
+    ModalCadastroComponent,
     
   ]
 })

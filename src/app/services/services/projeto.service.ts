@@ -12,6 +12,7 @@ import { ProjetoResumoDTO } from 'src/app/sistema/servicos/cadastro-projeto/proj
 import { ProjetosDisponiveisDTO } from 'src/app/sistema/servicos/cadastro-projeto/projetos-disponiveis-dto';
 import { DetalheProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/detalhe-projeto-dto';
 import { ProjetoHistorico } from 'src/app/pages/projetos/models/ProjetoHistorico';
+import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +31,7 @@ export class ProjetoService {
   novoProjeto(
     novoProjetoDTO: ProjetoResumoDTO,
     arquivos: File[],
-    plantaBaixaArquivos: File[]
+    categorias: TipoFornecedor[]
   ): Observable<{ [key: string]: string }> {
     const formData = new FormData();
 
@@ -38,15 +39,18 @@ export class ProjetoService {
       formData.append('arquivos', arquivo);
     });
 
-    plantaBaixaArquivos.forEach((arquivo) => {
-      formData.append('plantaBaixaArquivos', arquivo);
-    });
 
     const jsonBlob = new Blob([JSON.stringify(novoProjetoDTO)], {
       type: 'application/json',
     });
 
     formData.append('novoProjetoDTO', jsonBlob);
+
+    const categoriasPayload = { categoriaArquivos: categorias };
+    const categoriasBlob = new Blob([JSON.stringify(categoriasPayload)], {
+      type: 'application/json',
+    });
+    formData.append('categoriaArquivoDTO', categoriasBlob);
 
     return this.httpCliente.post<{ [key: string]: string }>(
       `${this.apiUrl}/novo-projeto`,
