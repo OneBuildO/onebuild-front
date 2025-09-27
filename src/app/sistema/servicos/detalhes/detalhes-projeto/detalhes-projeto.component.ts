@@ -36,6 +36,23 @@ export class DetalhesProjetoComponent implements OnInit {
   detalheProjeto?: DetalheProjetoDTO;
   projetoResumo?: ProjetoResumoDTO;
 
+  private readonly TIPO_ORDEM: readonly TipoFornecedor[] = [
+    TipoFornecedor.VIDRACARIA,
+    TipoFornecedor.MARMORARIA,
+    TipoFornecedor.ESQUADRIA,
+    TipoFornecedor.AUTOMACAO,
+    TipoFornecedor.MARCENARIA,
+    TipoFornecedor.MADEREIRA,
+    TipoFornecedor.ELETRICA,
+    TipoFornecedor.CLIMATIZACAO,
+    TipoFornecedor.HIDRAULICA,
+    TipoFornecedor.GESSO,
+    TipoFornecedor.ILUMINACAO,
+    TipoFornecedor.REVESTIMENTOS,
+    TipoFornecedor.FERRAGEM,
+    TipoFornecedor.OUTROS,
+  ];
+
   arquivosNormais: ArquivosProjetoDTO[] = [];
   // plantasBaixas: ArquivosProjetoDTO[] = [];
 
@@ -236,6 +253,32 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
+
+
+  get arquivosPorFornecedor(): { tipo: TipoFornecedor; titulo: string; itens: ArquivosProjetoDTO[] }[] {
+    const grupos = new Map<TipoFornecedor, ArquivosProjetoDTO[]>();
+
+    for (const arq of this.arquivosNormais) {
+      const tipo = arq.tipoFornecedor ?? TipoFornecedor.OUTROS;
+      if (!grupos.has(tipo)) grupos.set(tipo, []);
+      grupos.get(tipo)!.push(arq);
+    }
+
+    // ordena itens dentro de cada grupo
+    for (const arr of grupos.values()) {
+      arr.sort((a, b) => (a.key ?? '').localeCompare(b.key ?? '', 'pt-BR', { sensitivity: 'base' }));
+    }
+
+    // retorna grupos na ordem do enum que definimos
+    return this.TIPO_ORDEM
+      .filter(t => grupos.has(t))
+      .map(t => ({
+        tipo: t,
+        titulo: TipoFornecedorDescricoes[t],
+        itens: grupos.get(t)!,
+      }));
+  }
+
   fetchPropostaProjeto(idProjeto: number) {
     this.propostasService.obterPropostasProjeto(idProjeto).subscribe({
       next: (data: PropostaFornecedorCard[]) => {
@@ -275,17 +318,6 @@ export class DetalhesProjetoComponent implements OnInit {
       error: () => alert('Erro ao baixar a planta baixa.'),
     });
   }
-  //----ERA USADO PARA COLOCAR O ICON DE ACORDO COM O TIPO DO ARQUIVO----
-  // getFileType(nome: string): string {
-  //   return nome.split('.').pop()?.toLowerCase() || '';
-  // }
-
-  // getFileIcon(nome: string): string {
-  //   const ext = this.getFileType(nome);
-  //   if (ext === 'pdf') return 'assets/icones/pdf-icon.svg';
-  //   if (['jpg','jpeg','png','gif'].includes(ext)) return 'assets/icones/image-icon.svg';
-  //   return 'assets/icones/file-icon.svg';
-  // }
 
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? 'Público' : 'Privado';
