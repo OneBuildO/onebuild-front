@@ -186,6 +186,7 @@ export class ProjetoService {
     id: number,
     projetoAtualizadoDTO: ProjetoResumoDTO,
     novosArquivos: File[],
+    categorias: TipoFornecedor[],              // <-- NOVO
     novasPlantasBaixas: File[],
     removerArquivoIds: number[],
     removerPlantaBaixaIds: number[]
@@ -218,6 +219,13 @@ export class ProjetoService {
       type: 'application/json',
     });
     formData.append('projetoAtualizadoDTO', jsonBlob);
+
+
+    const categoriasPayload = { categoriaArquivos: categorias };
+    const categoriasBlob = new Blob([JSON.stringify(categoriasPayload)], {
+      type: 'application/json',
+    });
+    formData.append('categoriaArquivoDTO', categoriasBlob);   // <-- NOVO
 
     return this.httpCliente.put<ApiResponse<{ [key: string]: string }>>(
       `${this.apiUrl}/${id}`,

@@ -324,15 +324,14 @@ export class CadastroProjetoComponent implements OnInit {
       return;
     }
 
-    //isso aqui vai sair quando o atualizar projeto por mudado.
-    const novosArquivos = fv.arquivos || [];
-    const novasPlantas = fv.plantaBaixa || [];
+    const novasPlantas = fv.plantaBaixa || []; //não está sendo usado, mas mantido para estrutura
 
     if (this.isEditMode && this.projetoId) {
       this.projetoService.atualizarProjeto(
         this.projetoId,
         projetoDTO,
-        novosArquivos,
+        files,
+        categorias,
         novasPlantas,
         this.arquivosRemoverIds,
         this.plantasRemoverIds //deixei so para manter a estrutura, mas não está sendo usado
@@ -342,20 +341,18 @@ export class CadastroProjetoComponent implements OnInit {
           this.successMessage = 'Projeto atualizado com sucesso!';
 
           this.arquivosRemoverIds = [];
+          this.arquivosNovos = [];
+          this.submited = false;
+          // this.plantasBaixas = [];
           // this.plantasRemoverIds = [];
           this.projetoForm.get('arquivos')?.reset([]);
           this.projetoForm.get('plantaBaixa')?.reset([]);
-
 
           this.dadosService.listarArquivosNormais(this.projetoId!).subscribe({
             next: res => this.arquivosProjeto = res.response,
             error: () => this.arquivosProjeto = []
           });
 
-          // this.dadosService.listarPlantasBaixas(this.projetoId!).subscribe({
-          //   next: res => this.plantaBaixa = res.response,
-          //   error: () => this.plantaBaixa = []
-          // });
         },
         error: () => {
           this.errorMessage = 'Erro ao atualizar projeto.';

@@ -260,6 +260,15 @@
   border: 1px solid #d7d7d7 ;
 }
 
+.categoria-header {
+  grid-column: 1 / -1;
+  margin: 16px 0 8px;
+  font-weight: 600;
+  opacity: 0.9;
+  border-left: 4px solid #28BFB6; /* sua cor primária */
+  padding-left: 8px;
+}
+
 .arquivo{
   display: flex;
   flex-direction: column;

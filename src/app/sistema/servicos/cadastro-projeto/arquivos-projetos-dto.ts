@@ -1,3 +1,5 @@
+import { TipoFornecedor } from "src/app/login/tipoFornecedor";
+
 export interface ArquivosProjetoDTO {
     id: number;
     key: string;
@@ -5,6 +7,7 @@ export interface ArquivosProjetoDTO {
     arquivos?: string; 
     plantaBaixaArquivos?: string; 
     urlDownload: string;
+    tipoFornecedor?: TipoFornecedor
 
     // novos campos opcionais para client-side(usado na listagem de arquivos do cliente)
     nomeProjeto?: string;
