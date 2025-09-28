@@ -13,6 +13,7 @@ import {
   ChartType
 } from 'ng-apexcharts';
 
+
 export type BarChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -47,6 +48,10 @@ import { PropostasFornecedorDTO } from 'src/app/pages/proposta-fornecedor/models
 import { PropostaFornecedorService } from 'src/app/services/services/proposta-forcecedor.service';
 import { StatusPropostaDescricao } from '../../servicos/visualizar-promocoes-geral/status-proposta-descricao';
 import { StatusProposta } from '../../servicos/visualizar-promocoes-geral/StatusProposta';
+import { DadosService } from 'src/app/services/services/dados.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ArquivosProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/arquivos-projetos-dto';
+import { map, of, Observable } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -67,7 +72,8 @@ interface FornecedorPorTipo {
   styleUrls: ['./painel-fornecedor.component.css']
 })
 export class PainelFornecedorComponent implements OnInit {
-
+  arquivosCompativeis: ArquivosProjetoDTO[] = [];
+  previewUrls = new Map<number, SafeResourceUrl>();
 
   noticias: Noticia[] = [];
   usuario: Usuario | null = null;
@@ -123,7 +129,9 @@ export class PainelFornecedorComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private projetoService: ProjetoService,
-    private propostaService: PropostaFornecedorService
+    private propostaService: PropostaFornecedorService,
+    private dadosService: DadosService,
+    private sanitizer: DomSanitizer
   ) { }
 
 
@@ -229,6 +237,7 @@ export class PainelFornecedorComponent implements OnInit {
     this.propostaFileName = '';
     this.isPropostaOpen = true;
 
+    this.carregarArquivosCompativeis(projeto.idProjeto);
   }
 
   closePropostaModal(event?: MouseEvent): void {
@@ -237,6 +246,67 @@ export class PainelFornecedorComponent implements OnInit {
       this.isPropostaOpen = false;
     }
   }
+
+
+  private carregarArquivosCompativeis(idProjeto: number): void {
+    this.dadosService
+      .obterArquivosMaterialCompativel(idProjeto)
+      .subscribe({
+        next: (res) => this.arquivosCompativeis = res.response ?? [],
+        error: (e) => {
+          console.error('Erro ao carregar arquivos compatíveis:', e);
+          this.arquivosCompativeis = [];
+        }
+      });
+  }
+
+
+    // preview com cache + blur (igual padrão de Detalhes do Projeto)
+  getPreviewUrl(a: ArquivosProjetoDTO): Observable<SafeResourceUrl> {
+    if (this.previewUrls.has(a.id)) {
+      return of(this.previewUrls.get(a.id)!);
+    }
+    return this.dadosService.downloadArquivo(a.id).pipe(
+      map((blob) => {
+        const url = URL.createObjectURL(blob);
+        const safe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.previewUrls.set(a.id, safe);
+        return safe;
+      })
+    );
+  }
+
+  visualizarArquivo(a: ArquivosProjetoDTO): void {
+    this.dadosService.downloadArquivo(a.id).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      },
+      error: () => alert('Erro ao carregar pré-visualização.')
+    });
+  }
+
+
+  baixarArquivo(id: number, nomeArquivo: string): void {
+    this.dadosService.downloadArquivo(id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nomeArquivo || 'arquivo';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => alert('Erro ao baixar o arquivo.')
+    });
+  }
+
+
+  // helpers de tipo do arquivo
+  isImage(a: ArquivosProjetoDTO) { return !!a.key?.match(/\.(jpe?g|png)$/i); }
+  isPdf(a: ArquivosProjetoDTO)   { return !!a.key?.match(/\.pdf$/i); }
+  isDoc(a: ArquivosProjetoDTO)   { return !!a.key?.match(/\.(docx?|DOCX?)$/i); }
 
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;

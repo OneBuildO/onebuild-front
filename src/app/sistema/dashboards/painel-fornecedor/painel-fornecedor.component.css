@@ -727,4 +727,87 @@ tr:hover {
   font-size: 2rem; 
 }
 
+.arquivos-section { margin-top: 12px; }
+.arquivos-section h4 { margin: 0 0 8px 0; }
+
+.arquivos-grid {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.arquivos-grid .arquivo {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border: 1px solid #d7d7d7;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  min-height: 200px; 
+}
+
+.preview-container {
+  width: 100%;
+  max-height: 100px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 86px;      
+  max-height: 86px;  
+}
+
+.preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.blurred { filter: blur(4px); }
+
+.arquivo-nome {
+  margin: 6px 10px 4px;  
+  font-size: 0.8rem;
+  line-height: 1.15;     
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;     
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.1rem;       
+}
+
+.arquivos-grid .acoes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 0 8px;
+  margin-top: auto;
+}
+
+.arquivos-grid .btn-acao {
+  width: 40px;
+  height: 40px;
+  background: #e4e4e4b5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.arquivos-grid .btn-acao.visualizar:hover { background: #3d4b123b; }
+.arquivos-grid .btn-acao.download:hover   { background: #007bff3b; }
+
+@media (max-width: 767px) {
+  .arquivos-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
 
