@@ -152,6 +152,43 @@
         <li><strong>Endereço:</strong> {{ selectedProjeto?.endereco }}</li>
       </ul>
 
+      <div class="arquivos-section" *ngIf="selectedProjeto">
+        <h4><strong>Arquivos do projeto</strong></h4>
+
+        <div class="arquivos-grid" *ngIf="arquivosCompativeis?.length; else semArquivosCompativeis">
+          <div class="arquivo" *ngFor="let arquivo of arquivosCompativeis">
+            <div class="preview-container">
+              <!-- Imagem -->
+              <img *ngIf="isImage(arquivo)" [src]="getPreviewUrl(arquivo) | async"
+                  class="preview blurred" alt="pré-visualização" />
+
+              <!-- PDF -->
+              <embed *ngIf="isPdf(arquivo)" [src]="getPreviewUrl(arquivo) | async"
+                    type="application/pdf" class="preview blurred" />
+
+              <!-- DOC/DOCX -->
+              <img *ngIf="isDoc(arquivo)" src="assets/icones/file-icon.svg"
+                  class="preview blurred" alt="pré-visualização doc" />
+            </div>
+
+            <p class="arquivo-nome">{{ arquivo.key }}</p>
+
+            <div class="acoes">
+              <button class="btn-acao visualizar" (click)="visualizarArquivo(arquivo)">
+                <img src="assets/icones/See.png" alt="Visualizar" />
+              </button>
+              <button class="btn-acao download" (click)="baixarArquivo(arquivo.id, arquivo.nomeArquivo)">
+                <img src="assets/icones/download-icon.svg" alt="Download" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #semArquivosCompativeis>
+          <p class="empty-msg">Nenhum arquivo compatível para este projeto.</p>
+        </ng-template>
+      </div>
+
       <div class="form-field">
         <label for="valor">Valor da proposta</label>
         <div class="valor-container">

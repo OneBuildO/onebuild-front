@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { ApiResponse } from './api-response-dto';
@@ -20,6 +20,16 @@ export class DadosService {
 
   listarPlantasBaixas(id: number): Observable<ApiResponse<ArquivosProjetoDTO[]>> {
     return this.http.get<ApiResponse<ArquivosProjetoDTO[]>>(`${this.apiUrl}/obter-planta-baixa/${id}`);
+  }
+
+  obterArquivosMaterialCompativel(idProjeto: number): Observable<ApiResponse<ArquivosProjetoDTO[]>> {
+    const url = `${this.apiUrl}/obter-arquivos-material-compativel/${idProjeto}`;
+    return this.http.get<ApiResponse<ArquivosProjetoDTO[]>>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar arquivos compatíveis:', error);
+        return throwError(() => new Error('Erro ao buscar arquivos compatíveis.'));
+      })
+    );
   }
 
   downloadArquivo(id: number): Observable<Blob> {
