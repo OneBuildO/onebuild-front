@@ -125,6 +125,22 @@ export class AuthService {
     return false;
   }
 
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/recuperar-senha?email=${email}`, {});
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    const body = { newPassword: newPassword };
+    return this.http.put(
+      `${this.apiUrl}/reset-password/${encodeURIComponent(token)}`,
+      body,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
   login(loginDTO: LoginDTO): Observable<any> {
     const params = new HttpParams()
       .set('username', loginDTO.email)

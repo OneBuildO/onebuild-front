@@ -42,7 +42,14 @@
                         </span>
                     </button>
                 </div>
-        
+                <div class="alerts">
+                    <div id="sucess-message" class="alerts-container alert-success" *ngIf="successMessage">
+                    {{ successMessage }}
+                    </div>
+                    <div class="alerts-container alert-danger" *ngIf="errorMessage">
+                    {{ errorMessage }}
+                    </div>
+                </div>
             </form>
         </div>
     </div>
