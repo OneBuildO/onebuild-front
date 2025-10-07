@@ -1,0 +1,73 @@
+<main class="container-recuperacao">
+  <div class="modal-recuperacao">
+    <div class="title-header">
+      <img src="/assets/imgs/logo-ob.svg" alt="Logo" class="logo-lm" />
+      <h1>Redefinir senha</h1>
+      <p>
+        Por favor, informe e confirme sua nova senha para concluir a redefinição
+        de acesso à sua conta.
+      </p>
+    </div>
+
+    <div class="alerts">
+      <div class="alert alert-success" *ngIf="mensagemSucesso">
+        {{ mensagemSucesso }}
+      </div>
+
+      <div class="alert alert-danger" *ngFor="let erro of errors">
+        {{ erro }}
+      </div>
+    </div>
+
+    <form (ngSubmit)="goToResetPassword()" autocomplete="off">
+      <div class="input-password">
+        <div class="form-group input-container">
+          <label class="small mb-1">Nova senha</label>
+          <div class="input-group">
+            <input
+              [type]="passwordFieldType"
+              name="newPassword"
+              autocomplete="off"
+              class="form-control"
+              placeholder="Insira sua nova senha"
+              [(ngModel)]="newPassword"
+              required
+            />
+            <button type="button" (click)="togglePasswordVisibility()" class="eye-icon-button">
+              <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group input-container">
+          <label class="small mb-1">Confirmar nova senha</label>
+          <div class="input-group">
+            <input
+              [type]="confirmPasswordFieldType"
+              name="confirmPassword"
+              autocomplete="off"
+              class="form-control"
+              placeholder="Confirme sua nova senha"
+              [(ngModel)]="confirmPassword"
+              required
+            />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()" class="eye-icon-button">
+              <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+            </button>
+          </div>
+          <!-- Linha fixa de requisitos -->
+          <small class="muted">Sua senha deve ter: <strong>8+ caracteres</strong>, <strong>1 maiúscula</strong>, <strong>1 minúscula</strong> e <strong>1 símbolo</strong>.</small>
+
+          <!-- Se o usuário digitou e ainda falta algo, mostra numa linha só -->
+          <small *ngIf="newPassword && !passwordValid" class="err">Falta: {{ unmet.join(', ') }}</small>
+          <!-- Se já está ok, dá um feedback simples -->
+          <small *ngIf="newPassword && passwordValid" class="ok">Tudo certo com a senha.</small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-envio">Salvar</button>
+      </div>
+    </form>
+  </div>
+</main>

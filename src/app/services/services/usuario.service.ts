@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from "src/environments/environment";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { first, Observable, catchError, throwError } from "rxjs";
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
 import { AuthService } from "./auth.service";
@@ -66,6 +66,26 @@ export class UsuarioService {
     return this.httpCliente.post<any>(url, requestDTO).pipe(
       catchError((error) => {
         let errorMessage = 'Erro ao enviar e-mail para o suporte.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+
+  enviarRecuperacaoSenha(email: string): Observable<any> {
+    const url = `${this.apiUrl}/recover-password?email=${encodeURIComponent(
+      email
+    )}`;
+    return this.httpClient.post(url, null).pipe(
+      map((response) => response),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Erro ao enviar e-mail de recuperação de senha.';
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
         } else if (error.status) {

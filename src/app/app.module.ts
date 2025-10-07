@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { TelaCadastroComponent } from './tela-cadastro/tela-cadastro.component';
-import { TelaRecuperarSenhaComponent } from './tela-recuperar-senha/tela-recuperar-senha.component';
 import { TemplateModule } from './template/template.module';
 import { SistemaModule } from './sistema/sistema.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,16 +21,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxMaskModule } from 'ngx-mask';
 import { BotTiComponent } from './sistema/suporte/bot-ti/bot-ti.component';
+import { TelaRedefinirSenhaComponent } from './redefinir-senha/tela-redefinir-senha/tela-redefinir-senha.component';
+import { TelaEsqueciSenhaComponent } from './redefinir-senha/tela-esqueci-senha/tela-esqueci-senha.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TelaCadastroComponent,
-    TelaRecuperarSenhaComponent,
     LayoutComponent,
     DetalhesProgressoProjetoComponent,
     BotTiComponent,
+    TelaRedefinirSenhaComponent,
+    TelaEsqueciSenhaComponent,
   ],
   imports: [
     BrowserModule,
