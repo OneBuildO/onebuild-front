@@ -458,6 +458,39 @@
   z-index: 1000;  
 }
 
+.modal-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin: 0;
+}
+
+.modal-header h4{
+  display: flex;
+  margin: 0;
+  font-weight: 600;
+}
+
+.close-btn{
+  display: flex;
+  background: none;
+  color: black;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  font-size: 24px;
+  line-height: 1
+}
+
+.close-btn button{
+  display: flex;
+  background: none;
+  color: black;
+  padding: 0px;
+  margin: 0px
+}
+
 .modal-content {
   position: relative;  
   z-index: 1001;
@@ -474,7 +507,7 @@
 .modal-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 16px;
 }
 .modal-body label {
