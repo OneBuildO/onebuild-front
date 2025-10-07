@@ -62,7 +62,7 @@ registerLocaleData(localePt);
     VisualizarPromocoesComponent,
     VisualizarPromocoesGeralComponent,
     DetalhesClienteComponent,
-    DetalhesProjetoComponent
+    DetalhesProjetoComponent,
   ],
   imports: [
     BrowserModule,    

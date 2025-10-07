@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { first, Observable } from "rxjs";
+import { first, Observable, catchError, throwError } from "rxjs";
 import { CadastroUsuarioDTO } from 'src/app/tela-cadastro/cadastroUsuarioDTO';
 import { AuthService } from "./auth.service";
 import { Usuario } from 'src/app/login/usuario';
@@ -21,6 +21,7 @@ export class UsuarioService {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly authService: AuthService,
+    private httpCliente: HttpClient
   ) { }
 
 
@@ -57,6 +58,23 @@ export class UsuarioService {
         // descarta tudo menos o campo .response
         map(data => data.response as AdminEstatisticaDTO),
       );
+  }
+
+  enviarEmailSuporte(mensagem: string): Observable<any> {
+    const url = `${this.apiUrl}/email/suporte`;
+    const requestDTO = { mensagem };
+    return this.httpCliente.post<any>(url, requestDTO).pipe(
+      catchError((error) => {
+        let errorMessage = 'Erro ao enviar e-mail para o suporte.';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
 }

@@ -1,0 +1,89 @@
+.container-rec-senha {
+  background-image: url("/assets/imgs/bg-one-b.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.card-login {
+  margin-bottom: 1rem;
+  height: 100%;
+  border-radius: 0.75rem;
+  background: var(--lm-branco);
+}
+
+.header-login {
+  background: var(--bg-color-dark);
+  width: 100%;
+  height: 80px;
+  padding: 0;
+  border-radius: 10px 10px 0 0; /* top-left, top-right, bottom-right, bottom-left */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-one-b {
+  width: 120px;
+  height: auto;
+}
+
+.content-card {
+  padding: 32px;
+  padding-bottom: 16px;
+  gap: 8px;
+}
+
+.forms-recuperar-senha {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.botoes-grid{
+    display: flex;
+    gap: 16px;
+}
+
+
+/* Garante que o botão seja um bloco e fique centralizado */
+.forms-recuperar-senha .button-primary, .button-goback {
+  display: block;
+  width: 100%;           /* ocupa 100% do form */
+  margin: 0.5rem 0;      /* só espaçamento vertical */
+  box-sizing: border-box;/* garante que padding + border também caibam na largura */
+}
+
+/* Se quiser manter o gradiente e bordas igual antes */
+.forms-recuperar-senha .button-goback {
+  background: var(--lm-accent-02);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.forms-recuperar-senha .button-goback:hover{
+    background: #c4c7ca;
+}
+
+/* Se quiser manter o gradiente e bordas igual antes */
+.forms-recuperar-senha .button-primary {
+  background: var(--gradient-primary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+.forms-recuperar-senha .button-primary:hover {
+  background: var(--gradient-secondary);
+}

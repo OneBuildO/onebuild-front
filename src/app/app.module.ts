@@ -21,6 +21,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxMaskModule } from 'ngx-mask';
+import { BotTiComponent } from './sistema/suporte/bot-ti/bot-ti.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { NgxMaskModule } from 'ngx-mask';
     TelaRecuperarSenhaComponent,
     LayoutComponent,
     DetalhesProgressoProjetoComponent,
-    
+    BotTiComponent,
   ],
   imports: [
     BrowserModule,
