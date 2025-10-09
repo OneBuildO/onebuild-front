@@ -34,7 +34,7 @@ export class MeuPerfilComponent implements OnInit {
   public listaCidades: any[] = [];
 
   cadastroForm = this.formBuilder.group({
-    nome: new FormControl({ value: '', disabled: true }, Validators.required ),
+    nome: new FormControl({ value: '', disabled: true } ),
     email: new FormControl({ value: '', disabled: true }, Validators.required),
     contato: new FormControl({ value: '', disabled: true }),
     estado: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -51,6 +51,10 @@ export class MeuPerfilComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.carregarUsuario();
+  }
+
+  carregarUsuario(){
     this.userService.getUserLogged().subscribe({
       next: (data: any) => {
         console.log('Dados do usuário:', data); // Adicione um log para verificar os dados retornados
@@ -149,6 +153,10 @@ export class MeuPerfilComponent implements OnInit {
     
     if (this.cadastroForm.invalid || !this.isSenhaValida()) {
       this.isLoading = false;
+      this.tipoAlerta = AlertType.Danger;
+      this.serverErrors.push('Por favor, preencha todos os campos corretamente.');
+      this.scrollTop();
+
       return;
     }
 
@@ -167,6 +175,9 @@ export class MeuPerfilComponent implements OnInit {
       estado: this.cadastroForm.controls.estado.value ?? '',
       endereco: ''
     };
+
+    console.log("Dados para atualização:", dadosCadastro);
+
 
     this.userService.updateUser(dadosCadastro).subscribe({
       next: (data: any) => {
