@@ -43,14 +43,14 @@ export class TelaCadastroComponent implements OnInit {
 
   cadastroForm = this.formBuilder.group(
     {
-      nome: new FormControl('', [Validators.required]),
+      nome: new FormControl(''),
       permissaoDoUsuario: new FormControl('', [Validators.required]),
       tipoFornecedor: new FormControl(''), 
       email: new FormControl('', [Validators.required]),
-      contato: new FormControl('', [Validators.required]),
-      cnpj: new FormControl('', [Validators.required]),
+      contato: new FormControl(''),
+      cnpj: new FormControl(''),
       senha: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      confirmPassword: new FormControl('', [Validators.required]),
+      confirmPassword: new FormControl(''),
       terms: new FormControl(false, [Validators.requiredTrue]),
       estado: new FormControl('', [Validators.required]),
       cidade: new FormControl('', [Validators.required]),
@@ -96,7 +96,7 @@ export class TelaCadastroComponent implements OnInit {
       contato: this.cadastroForm.get('contato')?.value ?? '',
       cnpj: this.cadastroForm.get('cnpj')?.value ?? '',
       senha: this.cadastroForm.get('senha')?.value ?? '',
-      confirmarSenha: this.cadastroForm.get('confirmPassword')?.value ?? '',
+      //confirmarSenha: this.cadastroForm.get('confirmPassword')?.value ?? null,
       estado: this.cadastroForm.get('estado')?.value ?? '',
       cidade: this.cadastroForm.get('cidade')?.value ?? '',
       endereco: this.cadastroForm.get('endereco')?.value ?? ''
@@ -108,7 +108,13 @@ export class TelaCadastroComponent implements OnInit {
         this.tipoAlerta = 'success';
         this.serverMessage = 'Usuário cadastrado com sucesso.';
         this.isLoading = false;
-        this.cadastroForm.reset();
+        this.cadastroForm.reset({
+          permissaoDoUsuario: "",
+          tipoFornecedor: null,
+          estado: '',
+          cidade: '',
+          endereco: ''
+        });
       },
       error: (err: any) => {
         this.tipoAlerta = 'danger';
