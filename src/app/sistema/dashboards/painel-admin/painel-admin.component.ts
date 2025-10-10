@@ -41,6 +41,7 @@ import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 import { Noticia } from './noticia';
 import { NoticiasService } from 'src/app/services/services/noticias.service';
 import { UsuarioService } from 'src/app/services/services/usuario.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -86,13 +87,17 @@ export class PainelAdminComponent implements OnInit {
   public Permissao = Permissao;
   cargoUsuario!: Permissao;
 
+  readonly conviteUrl = 'https://www.plataformaonebuild.com';
+
+
   constructor(
     private apiService: ClimaService,
     private noticiaService: NoticiasService,
     private motivationalMessagesService: MotivationalMessagesService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private snackBar: MatSnackBar
   ) { }
 
 
@@ -173,6 +178,14 @@ export class PainelAdminComponent implements OnInit {
   //   this.donutChartFornecedores.series = mock.map(item => item.quantidade);
   //   this.donutChartFornecedores.labels = mock.map(item => this.getDescricaoTipo(item.tipo));
   // }
+
+  onLinkCopiado(sucesso: boolean) {
+    this.snackBar.open(
+      sucesso ? 'Link copiado para a área de transferência.' : 'Não foi possível copiar o link.',
+      'OK',
+      { duration: 3000 }
+    );
+  }
 
   getDescricaoTipo(tipo: TipoFornecedor): string {
     const TipoFornecedorDescricoes: Record<TipoFornecedor, string> = {

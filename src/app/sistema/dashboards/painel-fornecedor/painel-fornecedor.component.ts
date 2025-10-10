@@ -12,7 +12,7 @@ import {
   ApexPlotOptions,
   ChartType
 } from 'ng-apexcharts';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export type BarChartOptions = {
   series: ApexAxisChartSeries;
@@ -85,6 +85,8 @@ export class PainelFornecedorComponent implements OnInit {
   windSpeed: number = 0;
   weatherData: any = {};
 
+  readonly conviteUrl = 'https://www.plataformaonebuild.com';
+
   estadoUsuario: string = localStorage.getItem('dadosUsuario')
     ? JSON.parse(localStorage.getItem('dadosUsuario')!).estado
     : null;
@@ -131,7 +133,8 @@ export class PainelFornecedorComponent implements OnInit {
     private projetoService: ProjetoService,
     private propostaService: PropostaFornecedorService,
     private dadosService: DadosService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar
   ) { }
 
 
@@ -177,6 +180,14 @@ export class PainelFornecedorComponent implements OnInit {
       (err) => {
         console.error('Erro ao carregar o perfil do usuário:', err);
       }
+    );
+  }
+
+  onLinkCopiado(sucesso: boolean) {
+    this.snackBar.open(
+      sucesso ? 'Link copiado para a área de transferência.' : 'Não foi possível copiar o link.',
+      'OK',
+      { duration: 3000 }
     );
   }
 

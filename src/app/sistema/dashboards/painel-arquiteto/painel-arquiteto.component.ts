@@ -37,6 +37,7 @@ import { AuthService } from 'src/app/services/services/auth.service';
 import { ClienteService } from 'src/app/services/services/cliente.service';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { DadosUsuario } from 'src/app/login/dadosUsuario';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -51,7 +52,7 @@ export type ChartOptions = {
   styleUrls: ['./painel-arquiteto.component.css']
 })
 export class PainelArquitetoComponent implements OnInit {
-
+  readonly conviteUrl = 'https://www.plataformaonebuild.com';
   usuario: Usuario | null = null;
   nomeUsuario: string = '';
   weatherDescription: string = 'Carregando...';
@@ -80,7 +81,8 @@ export class PainelArquitetoComponent implements OnInit {
     private usuarioService: AuthService,
     private authService: AuthService,
     private clienteService: ClienteService,
-    private projetoService: ProjetoService
+    private projetoService: ProjetoService,
+    private snackBar: MatSnackBar
   ) { }
 
 
@@ -104,6 +106,14 @@ export class PainelArquitetoComponent implements OnInit {
     this.carregarProjetosPorStatus();
     this.carregarProjetosPorMes();
     this.obterTotalClientes();
+  }
+
+  onLinkCopiado(sucesso: boolean) {
+    this.snackBar.open(
+      sucesso ? 'Link copiado para a área de transferência.' : 'Não foi possível copiar o link.',
+      'OK',
+      { duration: 3000 }
+    );
   }
 
   carregarClientesPorMes(): void {

@@ -71,7 +71,7 @@
   min-height: 172px; */
   background: rgba(0, 0, 0, 0.796);
   border-radius: 12px;
-  padding: 16px 0;
+  padding: 16px 5px;
   display: flex;
   flex-direction: column;
   align-items: center;

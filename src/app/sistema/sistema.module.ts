@@ -36,6 +36,8 @@ import { registerLocaleData } from '@angular/common';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -77,6 +79,8 @@ registerLocaleData(localePt);
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
+    ClipboardModule,
+    MatSnackBarModule
   ],
     providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
