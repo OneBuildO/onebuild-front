@@ -120,7 +120,7 @@ export class NavbarComponent implements OnInit {
       }
     );
     // Carrega notificações (aqui usando dados mockados)
-    this.notifications = this.mockNotifications;
+    //this.notifications = this.mockNotifications;
     this.updateUnreadCount();
   }
 
