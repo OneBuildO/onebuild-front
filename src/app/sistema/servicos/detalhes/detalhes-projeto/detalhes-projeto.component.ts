@@ -347,44 +347,44 @@ export class DetalhesProjetoComponent implements OnInit {
     return this.authService.getRoleUsuarioFromToken() === Permissao.ADMIN;
   }
 
-  onAdicionarNovidades(): void {
-    if (
-      !this.novidadesTitulo ||
-      !this.novidadesDescricao ||
-      !this.novidadesStatus
-    ) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
+  // onAdicionarNovidades(): void {
+  //   if (
+  //     !this.novidadesTitulo ||
+  //     !this.novidadesDescricao ||
+  //     !this.novidadesStatus
+  //   ) {
+  //     alert('Por favor, preencha todos os campos obrigatórios.');
+  //     return;
+  //   }
 
-    const clienteId = this.projetoResumo?.idCliente;
-    if (!clienteId) {
-      alert('Erro: cliente não autenticado');
-      return;
-    }
+  //   const clienteId = this.projetoResumo?.idCliente;
+  //   if (!clienteId) {
+  //     alert('Erro: cliente não autenticado');
+  //     return;
+  //   }
 
-    const dto: ProjetoNovidadeRequestDTO = {
-      clienteId,
-      projetoId: this.projetoId,
-      titulo: this.novidadesTitulo,
-      statusDaObra: this.novidadesStatus,
-      descricao: this.novidadesDescricao,
-      imagem: this.novidadesImagemFile,
-    };
+  //   const dto: ProjetoNovidadeRequestDTO = {
+  //     clienteId,
+  //     projetoId: this.projetoId,
+  //     titulo: this.novidadesTitulo,
+  //     statusDaObra: this.novidadesStatus,
+  //     descricao: this.novidadesDescricao,
+  //     imagem: this.novidadesImagemFile,
+  //   };
 
-    this.novidadesService.cadastrarNovidade(dto).subscribe({
-      next: (res) => {
-        // Supondo que o backend retorne a novidade criada
-        this.novidadesList.push(res);
-        this.fecharNovidadesModal();
-        this.showMessage('success', 'Novidade adicionada com sucesso!');
-      },
-      error: (err) => {
-        console.error('Erro ao cadastrar novidade:', err);
-        alert('Erro ao adicionar novidade.');
-      },
-    });
-  }
+  //   this.novidadesService.cadastrarNovidade(dto).subscribe({
+  //     next: (res) => {
+  //       // Supondo que o backend retorne a novidade criada
+  //       this.novidadesList.push(res);
+  //       this.fecharNovidadesModal();
+  //       this.showMessage('success', 'Novidade adicionada com sucesso!');
+  //     },
+  //     error: (err) => {
+  //       console.error('Erro ao cadastrar novidade:', err);
+  //       alert('Erro ao adicionar novidade.');
+  //     },
+  //   });
+  // }
 
   openNovidadesModal(): void {
     this.showNovidadesModal = true;
@@ -421,8 +421,6 @@ export class DetalhesProjetoComponent implements OnInit {
       return;
     }
 
-    const novidade = this.novidadesList;
-
     const dto: ProjetoNovidadeRequestDTO = {
       clienteId,
       projetoId: this.projetoId,
@@ -434,17 +432,19 @@ export class DetalhesProjetoComponent implements OnInit {
 
     this.novidadesService.cadastrarNovidade(dto).subscribe({
       next: (res) => {
-        this.novidadesList.push({
-          id: res.id,
-          titulo: res.titulo,
-          descricao: res.descricao,
-          status: res.statusDaObra,
-          nomeArquitetoObra: res.nomeArquitetoObra,
-          imagemUrl: res.imagemId ? `${this.apiURL}/novidade/dados/${res.imagemId}` : undefined,
-          data: new Date(),
-          comments: []
-        });
+        // this.novidadesList.push({
+        //   id: res.id,
+        //   titulo: res.titulo,
+        //   descricao: res.descricao,
+        //   status: res.statusDaObra,
+        //   nomeArquitetoObra: res.nomeArquitetoObra,
+        //   imagemUrl: res.imagemId ? `${this.apiURL}/novidade/dados/${res.imagemId}` : undefined,
+        //   data: new Date(),
+        //   comments: []
+        // });
 
+        // this.novidadesList = [...this.novidadesList, novo];
+        this.carregarNovidadesComRespostas();
         this.fecharNovidadesModal();
         this.showMessage('success', 'Novidade adicionada com sucesso!');
       },

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { RespostaNovidadeRequestDTO } from 'src/app/pages/novidades/models/RespostaNovidadeRequestDTO';
 import { RespostasNovidadeResponseDTO } from 'src/app/pages/novidades/models/RespostasNovidadeResponseDTO';
@@ -29,8 +29,11 @@ export class RespostasNovidadeService {
   ): Observable<RespostasNovidadeResponseDTO[]> {
     const url = `${this.apiURL}/novidade/${novidadeId}/cliente/${clienteId}`;
     return this.http
-      .get<RespostasNovidadeResponseDTO[]>(url)
-      .pipe(catchError(this.handleError('buscar respostas da novidade')));
+      .get<RespostasNovidadeResponseDTO[]>(url, { observe: 'response' })
+      .pipe(
+        map(resp => (resp.status === 204 || !resp.body ? [] : resp.body)),
+        catchError(this.handleError('buscar respostas da novidade'))
+      );
   }
 
   private handleError(operation: string) {

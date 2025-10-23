@@ -43,15 +43,21 @@ export class PropostaFornecedorService {
 
     obterPropostasFornecedor() {
         const url = `${this.apiURL}/fornecedor/`;
-        return this.http.get<{ data: PropostasFornecedorDTO[] }>(url).pipe(
-            map(response => response.data)
+        return this.http
+            .get<{ data: PropostasFornecedorDTO[] }>(url, { observe: 'response' })
+            .pipe(
+            map(resp => (resp.status === 204 || !resp.body ? [] : (resp.body.data ?? []))),
+            catchError(this.handleError('Obter propostas do fornecedor'))
         );
     }
 
     obterPropostasProjeto(idProjeto: number): Observable<PropostaFornecedorCard[]> {
         const url = `${this.apiURL}/projeto/${encodeURIComponent(idProjeto)}`;
-        return this.http.get<{ data: PropostaFornecedorCard[] }>(url).pipe(
-            map(response => response.data)
+        return this.http
+            .get<{ data: PropostaFornecedorCard[] }>(url, { observe: 'response' })
+            .pipe(
+            map(resp => (resp.status === 204 || !resp.body ? [] : (resp.body.data ?? []))),
+            catchError(this.handleError('Obter propostas do projeto'))
         );
     }
 
