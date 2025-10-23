@@ -243,7 +243,7 @@ export class PainelAdminComponent implements OnInit {
     if (this.weatherData) {
       this.weatherDescription = this.weatherData.weather[0].description;
       this.temperature = Math.round(this.weatherData.main.temp);
-      this.iconUrl = `http://openweathermap.org/img/wn/${this.weatherData.weather[0].icon}.png`;
+      this.iconUrl = `https://openweathermap.org/img/wn/${this.weatherData.weather[0].icon}.png`;
       this.windSpeed = this.weatherData.wind.speed;
       this.cdr.detectChanges();
     }

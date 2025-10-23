@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/services/auth.service';
 import { Permissao } from 'src/app/login/permissao';
 import { PermissaoDescricoes } from 'src/app/login/permissao-descricao';
+import { Notificacao } from 'src/app/sistema/servicos/notificacoes/Notificacao';
+import { NotificacaoService } from 'src/app/services/services/notificacao.service';
 
 @Component({
   selector: 'app-navbar',
@@ -38,7 +40,7 @@ export class NavbarComponent implements OnInit {
 
   // Variáveis para controle das notificações
   isNotificationOpen = false;
-  notifications: any[] = [];
+  notifications: Notificacao[] = [];
   unreadNotifications = 0;
 
   // Dados de exemplo (substitua pelos dados reais da sua aplicação)
@@ -73,7 +75,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private router: Router,
     private renderer: Renderer2,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificacaoService: NotificacaoService
   ) {}
 
 
@@ -119,9 +122,21 @@ export class NavbarComponent implements OnInit {
         console.error('Erro ao buscar perfil do usuário', err);
       }
     );
-    // Carrega notificações (aqui usando dados mockados)
-    //this.notifications = this.mockNotifications;
-    this.updateUnreadCount();
+
+    this.obterNotificacoes();
+  }
+
+  obterNotificacoes(){
+    this.notificacaoService.obterNotificacoes().subscribe(
+      (notificacao) => {
+        console.log(notificacao);
+        this.notifications = notificacao;
+        this.updateUnreadCount();
+      },
+      (err) => {
+        console.error('Erro ao buscar notificações', err);
+      }
+    );
   }
 
   // Método para alternar o dropdown de notificações
@@ -134,33 +149,40 @@ export class NavbarComponent implements OnInit {
     }
     
     // Marca notificações como lidas quando o dropdown é aberto
-    if (this.isNotificationOpen) {
-      this.markNotificationsAsRead();
-    }
+    // if (this.isNotificationOpen) {
+    //   this.markNotificationsAsRead();
+    // }
   }
 
   // Método para marcar notificações como lidas
   markNotificationsAsRead(): void {
-    this.notifications.forEach(notification => notification.read = true);
+    this.notifications.forEach(notification => notification.lida = true);
     this.updateUnreadCount();
   }
 
   markAllAsRead(): void {
     // Marca todas as notificações como lidas
     this.notifications.forEach(notification => {
-      notification.read = true;
+      notification.lida = true;
     });
     
     // Atualiza o contador de notificações não lidas
     this.updateUnreadCount();
     
     // Aqui você também pode adicionar uma chamada API se necessário
-    // this.notificationService.markAllAsRead().subscribe(...);
+    this.notificacaoService.marcarTodasComoLidas().subscribe(
+      response => {
+        console.log('Notificações marcadas como lidas:', response);
+      },
+      error => {
+        console.error('Erro ao marcar notificações como lidas:', error);
+      }
+    );
   }
 
   // Método para atualizar contador de não lidas
   updateUnreadCount(): void {
-    this.unreadNotifications = this.notifications.filter(n => !n.read).length;
+    this.unreadNotifications = this.notifications.filter(n => !n.lida).length;
   }
 
 

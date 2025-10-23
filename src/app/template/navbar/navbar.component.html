@@ -28,13 +28,14 @@
             <div class="notification-list">
               <div *ngFor="let notification of notifications" 
                   class="notification-item" 
-                  [class.unread]="!notification.read">
+                  [class.unread]="!notification.lida">
                 <!-- <div class="notification-icon">
-                  <img [src]="notification.icon" alt="{{notification.type}}" />
+                  <img src="assets/icones/icone-caderno.svg" alt="" />
                 </div> -->
                 <div class="notification-content">
-                  <p class="notification-message">{{notification.message}}</p>
-                  <span class="notification-time">{{notification.time}}</span>
+                  <p class="notification-title">{{notification.titulo}}</p>
+                  <p class="notification-message">{{notification.descricao}}</p>
+                  <span class="notification-time">{{notification.dataNotificacao}}</span>
                 </div>
               </div>
               
@@ -111,6 +112,8 @@
             <a routerLink="/usuario/notificacoes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/notificacoes')}">
               <img src="assets/icones/notificacao.svg" alt="home icon" />
               <span>Notificações</span>
+              <span *ngIf="unreadNotifications > 0" class="notification-badge">{{unreadNotifications}}</span>
+
             </a>
           </div>
         </div>
