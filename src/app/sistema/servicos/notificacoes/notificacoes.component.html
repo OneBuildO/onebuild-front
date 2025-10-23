@@ -15,8 +15,54 @@
       <div class="search-container">
         <!-- Campo de busca pode ficar aqui -->
       </div>
-      <!--<button class="btn-cadastrar" (click)="cadastrarCliente()">Cadastrar Cliente</button>
-        -->
+
     </div>
   </div>
+
+  <div class="table-container">
+    <div class="filtro-container">
+      <div class="select-container">
+        <select name="filtro-container" [value]="filtroSelecionado" id="filtro-container" (change)="onFiltroChange($event)">
+          <option value="todos">Todas</option>
+          <option value="lidas">Lidas</option>
+          <option value="nao-lidas">Não lidas</option>
+        </select>
+      </div>
+
+      <div class="btn-container">
+          <button class="btn btn-secondary" (click)="openModalConfirmacao()">Marcar todas como lidas</button>
+      </div>
+    </div>
+
+    <div class="progress-bar-container" *ngIf="isLoading">
+      <div class="progress-bar"></div>
+    </div>
+
+    <div class="notificacao-container" *ngIf="!isLoading">
+        <div class="notificacao-item" *ngFor="let notificacao of notificacoesPaginadas" (click)="markNotificationAsRead(notificacao)" 
+             [class.lida]="notificacao.lida" >
+          <div class="notificacao-mensagem">
+            <p class="notificacao-title">{{notificacao.titulo}}</p>
+            |
+            <p class="notificacao-descricao" >{{notificacao.descricao}}</p>
+          </div>
+          <div class="notificacao-new" *ngIf="!notificacao.lida"></div>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="notificacoesPaginadas.length === 0">
+        <h3>Nenhuma notificação encontrada</h3>
+    </div>
+    
+      <div class="paginacao">
+            <app-pagination
+            [paginaAtual]="paginaAtual"
+            [totalItens]="totalItens"
+            [itensPorPagina]="itensPorPagina"
+            (paginaMudou)="onPaginaMudou($event)">
+            </app-pagination>
+      </div>  
+  </div>
+
+
 </div>
