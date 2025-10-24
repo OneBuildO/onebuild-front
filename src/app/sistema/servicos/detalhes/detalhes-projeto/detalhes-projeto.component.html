@@ -91,12 +91,12 @@
           <div class="arquivo">
             <div class="preview-container">
               <!-- Imagem -->
-              <img *ngIf="isImage(arquivo)" [src]="getPreviewUrl(arquivo) | async" class="preview blurred"
-                alt="pré-visualização" />
-    
+              <img *ngIf="isImage(arquivo) && (getPreviewUrl(arquivo) | async) as safeUrl" 
+                  [src]="safeUrl" class="preview blurred" alt="pré-visualização" />
+
               <!-- PDF -->
-              <embed *ngIf="isPdf(arquivo)" [src]="getPreviewUrl(arquivo) | async" type="application/pdf"
-                class="preview blurred" />
+              <embed *ngIf="isPdf(arquivo) && (getPreviewUrl(arquivo) | async) as safeUrl" 
+                    [src]="safeUrl" type="application/pdf" class="preview blurred" />
     
               <!-- DOC/DOCX: ícone genérico -->
               <img *ngIf="isDoc(arquivo)" src="assets/icones/file-icon.svg" class="preview blurred"
@@ -168,6 +168,40 @@
             <span>Valor:</span>
             <span class="valor-total">R$ {{ proposta.valorProposta | number:'1.2-2' }}</span>
           </div>
+
+          <!-- Seção do arquivo da proposta -->
+          <div *ngIf="proposta.key" class="arquivo-proposta">
+            <div class="preview-container">
+              <!-- Imagem -->
+              <img *ngIf="isImageProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
+                  [src]="safeUrl" class="preview blurred" alt="pré-visualização" />
+              
+              <!-- PDF -->
+              <embed *ngIf="isPdfProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
+                    [src]="safeUrl" type="application/pdf" class="preview blurred" />
+              
+              <!-- DOC/DOCX: ícone genérico -->
+              <img *ngIf="isDocProposta(proposta)" src="assets/icones/file-icon.svg" 
+                  class="preview blurred" alt="pré-visualização doc" />
+              
+              <!-- Ícone genérico para outros tipos -->
+              <img *ngIf="!isImageProposta(proposta) && !isPdfProposta(proposta) && !isDocProposta(proposta)" 
+                   src="assets/icones/file-icon.svg" class="preview blurred" alt="pré-visualização arquivo" />
+            </div>
+            
+            <div class="arquivo-info">
+              <p class="nome-arquivo">{{ proposta.key }}</p>
+            </div>
+            
+            <div class="acoes-arquivo">
+              <button class="btn-acao visualizar" (click)="openModalVisualizarProposta(proposta)">
+                <img src="assets/icones/See.png" alt="Visualizar" />
+              </button>
+              <button class="btn-acao download" (click)="openModalDownloadProposta(proposta)">
+                <img src="assets/icones/download-icon.svg" alt="Download" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="acoes-proposta">
@@ -181,7 +215,6 @@
   <ng-template #semPropostas>
     <p style="margin-left: 1rem;">Nenhuma proposta encontrada.</p>
   </ng-template>
-
 </div>
 
 

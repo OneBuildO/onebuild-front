@@ -61,6 +61,11 @@ export class PropostaFornecedorService {
         );
     }
 
+
+    downloadArquivoProposta(id: number): Observable<Blob> {
+        return this.http.get(`${this.apiURL}/arquivo/${id}/download`, {responseType: 'blob'});
+    }
+
     aceitarProposta(acao: AcaoPropostaRequestDTO): Observable<any> {
         const url = `${this.apiURL}/${acao.id}/aceitar`;
         return this.http.post(url, acao);

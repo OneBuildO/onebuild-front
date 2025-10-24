@@ -5,4 +5,6 @@ export interface PropostaFornecedorCard {
     classificacao: number;
     descricaoFornecedor: string;
     valorProposta: number;
+    propostaUrl: string; 
+    key: string;
 }

@@ -1005,3 +1005,35 @@
 .btn-recusar:hover {
   background-color: #c82333;
 }
+
+
+.arquivo-proposta {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.arquivo-info {
+  margin: 0.5rem 0;
+}
+
+.nome-arquivo {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+  word-break: break-all;
+}
+
+.acoes-arquivo {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Ajustes para os botões de ação nos arquivos de proposta */
+.acoes-arquivo .btn-acao {
+  width: 35px;
+  height: 35px;
+}

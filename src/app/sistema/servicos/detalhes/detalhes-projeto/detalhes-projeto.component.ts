@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { ProjetoResumoDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-resumo-dto';
@@ -119,7 +119,8 @@ export class DetalhesProjetoComponent implements OnInit {
 
   //visualização dos arquivos
   previewUrls = new Map<number, SafeResourceUrl>();
-  apiURL: string = "http://localhost:8083";
+  // Cache para previews das propostas
+  previewUrlsPropostas = new Map<number, SafeResourceUrl>();
 
   constructor(
     private projetoService: ProjetoService,
@@ -160,6 +161,27 @@ export class DetalhesProjetoComponent implements OnInit {
     );
   }
 
+
+  ngOnDestroy(): void {
+    // Limpar todas as URLs de blob para evitar vazamentos de memória
+    this.previewUrls.forEach((url, id) => {
+      const unsafeUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url);
+      if (unsafeUrl) {
+        URL.revokeObjectURL(unsafeUrl);
+      }
+    });
+    
+    this.previewUrlsPropostas.forEach((url, id) => {
+      const unsafeUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url);
+      if (unsafeUrl) {
+        URL.revokeObjectURL(unsafeUrl);
+      }
+    });
+    
+    this.previewUrls.clear();
+    this.previewUrlsPropostas.clear();
+  }
+
   abrirModalObservacao(proposta: PropostaFornecedorCard, acao: 'aceitar' | 'recusar') {
     this.acaoModal = acao;
     this.showPropostasModal = true;
@@ -185,13 +207,11 @@ export class DetalhesProjetoComponent implements OnInit {
         this.propostasService.aceitarProposta(acaoRequest).subscribe({
           next: (response) => {
             console.log(response.message);
-            // Exibir mensagem de sucesso para o usuário
             this.fetchPropostaProjeto(this.projetoId);
             this.fecharModalObservacao();
           },
           error: (error) => {
             console.error(error);
-            // Exibir mensagem de erro para o usuário
           }
         });
       } else {
@@ -204,12 +224,12 @@ export class DetalhesProjetoComponent implements OnInit {
           },
           error: (error) => {
             console.error(error);
-            // Exibir mensagem de erro
           }
         });
       }
     }
   }
+
   carregarDetalhes(): void {
     this.carregando = true;
     this.projetoService.obterDetalheProjeto(this.projetoId).subscribe({
@@ -252,7 +272,6 @@ export class DetalhesProjetoComponent implements OnInit {
       },
     });
   }
-
 
 
   get arquivosPorFornecedor(): { tipo: TipoFornecedor; titulo: string; itens: ArquivosProjetoDTO[] }[] {
@@ -346,45 +365,6 @@ export class DetalhesProjetoComponent implements OnInit {
   isAdmin(): boolean {
     return this.authService.getRoleUsuarioFromToken() === Permissao.ADMIN;
   }
-
-  // onAdicionarNovidades(): void {
-  //   if (
-  //     !this.novidadesTitulo ||
-  //     !this.novidadesDescricao ||
-  //     !this.novidadesStatus
-  //   ) {
-  //     alert('Por favor, preencha todos os campos obrigatórios.');
-  //     return;
-  //   }
-
-  //   const clienteId = this.projetoResumo?.idCliente;
-  //   if (!clienteId) {
-  //     alert('Erro: cliente não autenticado');
-  //     return;
-  //   }
-
-  //   const dto: ProjetoNovidadeRequestDTO = {
-  //     clienteId,
-  //     projetoId: this.projetoId,
-  //     titulo: this.novidadesTitulo,
-  //     statusDaObra: this.novidadesStatus,
-  //     descricao: this.novidadesDescricao,
-  //     imagem: this.novidadesImagemFile,
-  //   };
-
-  //   this.novidadesService.cadastrarNovidade(dto).subscribe({
-  //     next: (res) => {
-  //       // Supondo que o backend retorne a novidade criada
-  //       this.novidadesList.push(res);
-  //       this.fecharNovidadesModal();
-  //       this.showMessage('success', 'Novidade adicionada com sucesso!');
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao cadastrar novidade:', err);
-  //       alert('Erro ao adicionar novidade.');
-  //     },
-  //   });
-  // }
 
   openNovidadesModal(): void {
     this.showNovidadesModal = true;
@@ -593,6 +573,20 @@ export class DetalhesProjetoComponent implements OnInit {
     );
   }
 
+  // Abrir modal de confirmação para visualizar proposta
+  openModalVisualizarProposta(proposta: PropostaFornecedorCard) {
+    this.modalConfirmationService.open(
+      {
+        title: 'Visualizar Proposta',
+        description: `Deseja visualizar <strong>${proposta.key || 'a proposta'}</strong>?`,
+        iconSrc: 'assets/icones/See.png',
+        confirmButtonText: 'Visualizar',
+        confirmButtonClass: 'btn-acao confirmar',
+      },
+      () => this.visualizarArquivoProposta(proposta)
+    );
+  }
+
   /** Chama o modal de confirmação antes de baixar */
   openModalDownload(arquivo: ArquivosProjetoDTO) {
     this.modalConfirmationService.open(
@@ -606,6 +600,37 @@ export class DetalhesProjetoComponent implements OnInit {
       () => this.baixarArquivo(arquivo.id, arquivo.nomeArquivo)
     );
   }
+
+
+    // Abrir modal de confirmação para baixar proposta
+  openModalDownloadProposta(proposta: PropostaFornecedorCard) {
+    this.modalConfirmationService.open(
+      {
+        title: 'Download da Proposta',
+        description: `Deseja realizar o download do arquivo <strong>${proposta.key || 'proposta'}</strong>?`,
+        iconSrc: 'assets/icones/download-icon.svg',
+        confirmButtonText: 'Download',
+        confirmButtonClass: 'btn-acao confirmar',
+      },
+      () => this.baixarArquivoProposta(proposta)
+    );
+  }
+
+
+  baixarArquivoProposta(proposta: PropostaFornecedorCard): void {
+    this.propostasService.downloadArquivoProposta(proposta.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = proposta.key || 'proposta';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => alert('Erro ao baixar o arquivo da proposta.'),
+    });
+  }
+
 
   private showMessage(type: 'success' | 'error', msg: string): void {
     this.clearMessage();
@@ -621,6 +646,20 @@ export class DetalhesProjetoComponent implements OnInit {
       clearTimeout(this.messageTimeout);
       this.messageTimeout = null;
     }
+  }
+
+  // Método para verificar se é imagem
+  isImageProposta(proposta: PropostaFornecedorCard) {
+    return proposta.key!.match(/\.(jpe?g|png)$/i);
+  }
+
+  // Método para verificar se é PDF
+  isPdfProposta(proposta: PropostaFornecedorCard) {
+    return proposta.key.match(/\.pdf$/i);
+  }
+
+  isDocProposta(proposta: PropostaFornecedorCard) {
+    return proposta.key.match(/\.(docx?|DOCX?)$/i);
   }
 
   // helper para saber extensão/MIME
@@ -654,6 +693,34 @@ export class DetalhesProjetoComponent implements OnInit {
         return safeUrl;
       })
     );
+  }
+
+  getPreviewUrlProposta(proposta: PropostaFornecedorCard): Observable<SafeResourceUrl> {
+    if (this.previewUrlsPropostas.has(proposta.id)) {
+      return of(this.previewUrlsPropostas.get(proposta.id)!);
+    }
+
+    return this.propostasService.downloadArquivoProposta(proposta.id).pipe(
+      map((blob) => {
+        const url = URL.createObjectURL(blob);
+        const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        this.previewUrlsPropostas.set(proposta.id, safeUrl);
+        return safeUrl;
+      })
+    );
+  }
+
+  visualizarArquivoProposta(proposta: PropostaFornecedorCard): void {
+    this.propostasService.downloadArquivoProposta(proposta.id).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      },
+      error: () => {
+        alert('Erro ao carregar pré-visualização.');
+      },
+    });
   }
 
   /* Abre o arquivo em nova aba para visualização */
