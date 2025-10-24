@@ -144,79 +144,85 @@
   </div>
 
   <ng-container *ngIf="propostasDoProjeto.length > 0; else semPropostas">
-    <div class="propostas-container">
-      <div class="card-proposta" *ngFor="let proposta of propostasDoProjeto">
-        <div class="header-proposta">
-          <div class="avatar">
-            <img [src]="proposta.urlFoto" alt="Foto do Proponente">
-          </div>
-          <div class="info-proponente">
-            <h4>{{ proposta.razaoSocial }}</h4>
-            <div class="rating">
-              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                <span class="star" [class.filled]="proposta.classificacao > 0 && proposta.classificacao >= star">
-                  ⭐
-                </span>
-              </ng-container>
+    <section class="propostas-agrupadas">
+
+      <ng-container *ngFor="let grupo of propostasPorCategoria">
+        <h4 class="categoria-header">{{ grupo.titulo }}</h4>
+        
+        <div class="propostas-container">
+          <div class="card-proposta" *ngFor="let proposta of grupo.itens">
+            <div class="header-proposta">
+              <div class="avatar">
+                <img [src]="proposta.urlFoto" alt="Foto do Proponente">
+              </div>
+              <div class="info-proponente">
+                <h4>{{ proposta.razaoSocial }}</h4>
+                <div class="rating">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <span class="star" [class.filled]="proposta.classificacao > 0 && proposta.classificacao >= star">
+                      ⭐
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+
+            <div class="body-proposta">
+              <p>{{ proposta.descricaoFornecedor }}</p>
+              <div class="valor">
+                <span>Valor:</span>
+                <span class="valor-total">R$ {{ proposta.valorProposta | number:'1.2-2' }}</span>
+              </div>
+
+              <div *ngIf="proposta.key" class="arquivo-proposta">
+                <div class="preview-container">
+                  <!-- Imagem -->
+                  <img *ngIf="isImageProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
+                      [src]="safeUrl" class="preview blurred" alt="pré-visualização" />
+                  
+                  <!-- PDF -->
+                  <embed *ngIf="isPdfProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
+                        [src]="safeUrl" type="application/pdf" class="preview blurred" />
+                  
+                  <!-- DOC/DOCX: ícone genérico -->
+                  <img *ngIf="isDocProposta(proposta)" src="assets/icones/file-icon.svg" 
+                      class="preview blurred" alt="pré-visualização doc" />
+                  
+                  <!-- Ícone genérico para outros tipos -->
+                  <img *ngIf="!isImageProposta(proposta) && !isPdfProposta(proposta) && !isDocProposta(proposta)" 
+                      src="assets/icones/file-icon.svg" class="preview blurred" alt="pré-visualização arquivo" />
+                </div>
+                
+                <div class="arquivo-info">
+                  <p class="nome-arquivo">{{ proposta.key }}</p>
+                </div>
+                
+                <div class="acoes-arquivo">
+                  <button class="btn-acao visualizar" (click)="openModalVisualizarProposta(proposta)">
+                    <img src="assets/icones/See.png" alt="Visualizar" />
+                  </button>
+                  <button class="btn-acao download" (click)="openModalDownloadProposta(proposta)">
+                    <img src="assets/icones/download-icon.svg" alt="Download" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="acoes-proposta">
+              <button class="btn-aceitar" (click)="abrirModalObservacao(proposta, 'aceitar')">Aceitar</button>
+              <button class="btn-recusar" (click)="abrirModalObservacao(proposta, 'recusar')">Recusar</button>
             </div>
           </div>
         </div>
+      </ng-container>
 
-        <div class="body-proposta">
-          <p>{{ proposta.descricaoFornecedor }}</p>
-          <div class="valor">
-            <span>Valor:</span>
-            <span class="valor-total">R$ {{ proposta.valorProposta | number:'1.2-2' }}</span>
-          </div>
-
-          <!-- Seção do arquivo da proposta -->
-          <div *ngIf="proposta.key" class="arquivo-proposta">
-            <div class="preview-container">
-              <!-- Imagem -->
-              <img *ngIf="isImageProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
-                  [src]="safeUrl" class="preview blurred" alt="pré-visualização" />
-              
-              <!-- PDF -->
-              <embed *ngIf="isPdfProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
-                    [src]="safeUrl" type="application/pdf" class="preview blurred" />
-              
-              <!-- DOC/DOCX: ícone genérico -->
-              <img *ngIf="isDocProposta(proposta)" src="assets/icones/file-icon.svg" 
-                  class="preview blurred" alt="pré-visualização doc" />
-              
-              <!-- Ícone genérico para outros tipos -->
-              <img *ngIf="!isImageProposta(proposta) && !isPdfProposta(proposta) && !isDocProposta(proposta)" 
-                   src="assets/icones/file-icon.svg" class="preview blurred" alt="pré-visualização arquivo" />
-            </div>
-            
-            <div class="arquivo-info">
-              <p class="nome-arquivo">{{ proposta.key }}</p>
-            </div>
-            
-            <div class="acoes-arquivo">
-              <button class="btn-acao visualizar" (click)="openModalVisualizarProposta(proposta)">
-                <img src="assets/icones/See.png" alt="Visualizar" />
-              </button>
-              <button class="btn-acao download" (click)="openModalDownloadProposta(proposta)">
-                <img src="assets/icones/download-icon.svg" alt="Download" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="acoes-proposta">
-          <button class="btn-aceitar" (click)="abrirModalObservacao(proposta, 'aceitar')">Aceitar</button>
-          <button class="btn-recusar" (click)="abrirModalObservacao(proposta, 'recusar')">Recusar</button>
-        </div>
-      </div>
-    </div>
+    </section>
   </ng-container>
 
   <ng-template #semPropostas>
     <p style="margin-left: 1rem;">Nenhuma proposta encontrada.</p>
   </ng-template>
 </div>
-
 
 <div class="subMain-container-novidades">
   <div class="divisao">

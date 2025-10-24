@@ -298,6 +298,29 @@ export class DetalhesProjetoComponent implements OnInit {
       }));
   }
 
+  get propostasPorCategoria(): { tipo: TipoFornecedor; titulo: string; itens: PropostaFornecedorCard[] }[] {
+    const grupos = new Map<TipoFornecedor, PropostaFornecedorCard[]>();
+
+    for (const proposta of this.propostasDoProjeto) {
+      const tipo = proposta.categoria ?? TipoFornecedor.OUTROS;
+      if (!grupos.has(tipo)) grupos.set(tipo, []);
+      grupos.get(tipo)!.push(proposta);
+    }
+
+    for (const arr of grupos.values()) {
+      arr.sort((a, b) => a.razaoSocial.localeCompare(b.razaoSocial, 'pt-BR', { sensitivity: 'base' }));
+    }
+
+    return this.TIPO_ORDEM
+      .filter(t => grupos.has(t))
+      .map(t => ({
+        tipo: t,
+        titulo: TipoFornecedorDescricoes[t],
+        itens: grupos.get(t)!,
+      }));
+  }
+
+
   fetchPropostaProjeto(idProjeto: number) {
     this.propostasService.obterPropostasProjeto(idProjeto).subscribe({
       next: (data: PropostaFornecedorCard[]) => {
