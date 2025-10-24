@@ -77,12 +77,15 @@
 <!-- Arquivos anexados -->
 <div class="subMain-container">
   <div class="divisao">
-    <p>Arquivos</p>
+    <div class="arquivo-header">
+      <p>Arquivos</p>
+      <button type="button" (click)="abrirModalAdicionarArquivos()">Adicionar +</button>
+    </div>
     <hr class="line" />
   </div>
 
   <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
-    <section class="data-grid-trio">
+    <section class="data-grid-arquivos">
 
       <ng-container *ngFor="let grupo of arquivosPorFornecedor">
         <h4 class="categoria-header">{{ grupo.titulo }}</h4>
@@ -357,3 +360,59 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Conteúdo do modal -->
+<ng-template #templateConteudoModal>
+  <div class="modal-body-arquivos">
+    <form [formGroup]="arquivoModalForm" (submit)="onSubmitArquivosModal()" autocomplete="off">
+      <div id="campo-valor">
+        <label class="form-label required" for="categoria">
+          Categoria
+        </label>
+        <select formControlName="categoria" id="categoria">
+          <option [value]="null" disabled hidden>
+            Selecione a categoria do arquivo
+          </option>
+          <option *ngFor="let categoria of tipoFornecedor" [value]="categoria">
+            {{ TipoFornecedorDescricoes[categoria] }}
+          </option>
+        </select>
+
+        <small
+          *ngIf="submitedModal && arquivoModalForm.get('categoria')?.hasError('required')"
+          class="text-red-500"
+        >
+          Categoria é obrigatória.
+        </small>
+
+
+      </div>
+
+      <div class="input-arquivo">
+        <label class="form-label required" for="arquivos">Arquivos</label>
+        <app-input-arquivos [isEditMode]="isEditMode" (arquivosSelecionados)="onArquivosSelecionados($event)"
+        formControlName="arquivos"
+        accept="application/pdf, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        [iconSrc]="'assets/icones/upload-file-icon.svg'"></app-input-arquivos>
+
+        <small
+          *ngIf="submitedModal && (arquivoModalForm.get('arquivos')?.value?.length || 0) === 0"
+          class="text-red-500"
+        >
+          Selecione pelo menos um arquivo.
+        </small>
+      </div>
+
+      <p class="modal-arquivo-info">Selecione arquivos (PNG, JPEG, PDF, DOC, DOCX)</p>
+
+      <div class="alerts">
+        <div class="alerts-container alert-danger" *ngIf="submitedModal && errorMessageModal">
+          {{ errorMessageModal }}
+        </div>
+      </div>
+
+    </form>
+  </div>
+</ng-template>

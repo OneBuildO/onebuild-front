@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { ApiResponse } from './api-response-dto';
 import { ArquivosProjetoDTO } from 'src/app/sistema/servicos/cadastro-projeto/arquivos-projetos-dto';
+import { TipoFornecedor } from 'src/app/login/tipoFornecedor';
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +48,29 @@ export class DadosService {
   excluirArquivo(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/deletar/${id}`);
   }
+
+  adicionarArquivos(
+    projetoId: number,
+    arquivos: { file: File; categoria: TipoFornecedor }[]
+  ): Observable<ApiResponse<string>> {
+    const formData = new FormData();
+
+    // múltiplos 'arquivos'
+    for (const a of arquivos) {
+      formData.append('arquivos', a.file);
+    }
+
+    // DTO com as categorias na mesma ordem dos arquivos
+    const categorias = arquivos.map(a => a.categoria);
+    formData.append(
+      'categoriaArquivoDTO',
+      new Blob([JSON.stringify({ categoriaArquivos: categorias })], { type: 'application/json' })
+    );
+
+    return this.http.post<ApiResponse<string>>(
+      `${this.apiUrl}/adicionar/${projetoId}`,
+      formData
+    );
+  }
+
 }
