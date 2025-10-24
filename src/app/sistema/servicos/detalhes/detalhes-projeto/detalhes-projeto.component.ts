@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SecurityContext } from '@angular/core';
+import { Component, Input, OnInit, SecurityContext, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjetoService } from 'src/app/services/services/projeto.service';
 import { ProjetoResumoDTO } from 'src/app/sistema/servicos/cadastro-projeto/projeto-resumo-dto';
@@ -24,6 +24,16 @@ import { PropostaFornecedorService } from 'src/app/services/services/proposta-fo
 import { PropostaFornecedorCard } from 'src/app/pages/proposta-fornecedor/models/propostaProjetoCardDTO';
 import { CategoriaProjetoDescricoes } from '../../cadastro-projeto/categoriaProjetoDescricoes';
 import { CategoriaProjeto } from '../../cadastro-projeto/categoriaProjeto.enum';
+import { ModalCadastroService } from 'src/app/services/services/modal-cadastro.service';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+
+// modelo local
+type ArquivoComCategoria = {
+  file: File;
+  categoria: TipoFornecedor;
+};
+
+
 
 @Component({
   selector: 'app-detalhes-projeto',
@@ -31,6 +41,7 @@ import { CategoriaProjeto } from '../../cadastro-projeto/categoriaProjeto.enum';
   styleUrls: ['./detalhes-projeto.component.css'],
 })
 export class DetalhesProjetoComponent implements OnInit {
+  @ViewChild('templateConteudoModal') templateConteudoModal!: TemplateRef<any>;
   @Input() projetoIdInput?: number;
 
   detalheProjeto?: DetalheProjetoDTO;
@@ -122,6 +133,29 @@ export class DetalhesProjetoComponent implements OnInit {
   // Cache para previews das propostas
   previewUrlsPropostas = new Map<number, SafeResourceUrl>();
 
+  //Para o modal de add arquivos
+  private tiposPermitidos = [
+    'image/png',
+    'image/jpeg',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
+  arquivoModalForm = this.formBuilder.group({
+    categoria: new FormControl<TipoFornecedor | null>(null, [Validators.required]),
+    arquivos: new FormControl<File[]>([])
+  });
+  submitedModal: boolean = false;
+  errorMessageModal: string| null = null;
+  isEditMode: boolean = false;
+
+  arquivosNovos: ArquivoComCategoria[] = [];
+
+  tipoFornecedor: TipoFornecedor[] = Object.values(TipoFornecedor);
+  protected readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes
+
+
   constructor(
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
@@ -133,7 +167,9 @@ export class DetalhesProjetoComponent implements OnInit {
     private modalConfirmationService: ModalConfirmationService,
     private novidadesService: NovidadesService,
     private respostasService: RespostasNovidadeService,
-    private propostasService: PropostaFornecedorService
+    private propostasService: PropostaFornecedorService,
+    private modalCadastroService: ModalCadastroService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -759,5 +795,76 @@ export class DetalhesProjetoComponent implements OnInit {
         alert('Erro ao carregar pré-visualização.');
       },
     });
+  }
+
+    // Função para validar os arquivos
+  private validarArquivos(arquivos: File[]): File[] {
+    return arquivos.filter(arquivo => this.tiposPermitidos.includes(arquivo.type));
+  }
+
+  onArquivosSelecionados(arquivos: File[]): void {
+    const arquivosValidos = this.validarArquivos(arquivos);
+    // if (arquivosValidos.length < arquivos.length) {
+    //   this.errorMessage = 'Alguns arquivos foram ignorados por não serem dos tipos permitidos (PNG, JPEG, PDF, DOC, DOCX).';
+    // }
+    this.arquivoModalForm.get('arquivos')?.setValue(arquivosValidos);
+  }
+
+  abrirModalAdicionarArquivos(): void {
+    this.modalCadastroService.openModal(
+      {
+        title: 'Adicionar Arquivos',
+        confirmTextoBotao: 'Adicionar',
+        cancelTextoBotao: 'Cancelar',
+        size: 'md:max-w-3xl',
+        description: 'Selecione os arquivos que deseja adicionar ao projeto.',
+
+      },
+      () => this.confirmarUploadArquivos(),
+      this.templateConteudoModal
+    );
+  }
+
+  private confirmarUploadArquivos(): boolean {
+    const ok = this.onSubmitArquivosModal();
+    if (!ok) return false; // mantém modal aberto se inválido
+
+    this.dadosService.adicionarArquivos(this.projetoId, this.arquivosNovos).subscribe({
+      next: () => {
+        this.showMessage('success', 'Arquivo(s) adicionado(s) com sucesso!');
+        this.arquivosNovos = [];          // limpa buffer local
+        this.previewUrls.clear();         // limpa cache de previews (evita “fantasmas”)
+        this.carregarArquivosProjeto();   // recarrega lista
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erro ao enviar arquivos.');
+      }
+    });
+
+    return true;
+  }
+
+  onSubmitArquivosModal(): boolean {
+    this.submitedModal = true;
+    this.arquivoModalForm.markAllAsTouched();
+
+    if (this.arquivoModalForm.invalid) {
+      this.errorMessageModal = 'Por favor, selecione uma categoria e ao menos um arquivo.';
+      return false; // <- impede o fechamento do modal
+    }
+
+    const categoria = this.arquivoModalForm.get('categoria')!.value!;
+    const novosArquivos = this.arquivoModalForm.get('arquivos')?.value || [];
+
+    // adiciona cada arquivo com sua categoria
+    novosArquivos.forEach(file => {
+      this.arquivosNovos.push({ file, categoria });
+    });
+
+    this.arquivoModalForm.reset();
+    this.submitedModal = false;
+    this.errorMessageModal = null;
+    return true; // <- permite o fechamento do modal
   }
 }

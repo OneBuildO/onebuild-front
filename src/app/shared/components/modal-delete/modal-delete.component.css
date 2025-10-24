@@ -194,6 +194,8 @@
   background: none;
   cursor: pointer;
   border-radius: 10px;
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: center;
