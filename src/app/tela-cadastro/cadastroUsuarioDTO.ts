@@ -5,7 +5,7 @@ export interface CadastroUsuarioDTO {
   nome: string | null;
   email: string | null;
   senha: string | null;
-  //confirmarSenha: string | null;
+  confirmarSenha: string | null;
   permissaoDoUsuario: Permissao | null;
   tipoFornecedor?: TipoFornecedor | null;
   contato: string | null;

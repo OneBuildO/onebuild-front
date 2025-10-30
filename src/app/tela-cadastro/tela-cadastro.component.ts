@@ -50,7 +50,7 @@ export class TelaCadastroComponent implements OnInit {
       contato: new FormControl(''),
       cnpj: new FormControl(''),
       senha: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      confirmPassword: new FormControl(''),
+      confirmPassword: new FormControl('', [Validators.required]),
       terms: new FormControl(false, [Validators.requiredTrue]),
       estado: new FormControl('', [Validators.required]),
       cidade: new FormControl('', [Validators.required]),
@@ -96,7 +96,7 @@ export class TelaCadastroComponent implements OnInit {
       contato: this.cadastroForm.get('contato')?.value ?? '',
       cnpj: this.cadastroForm.get('cnpj')?.value ?? '',
       senha: this.cadastroForm.get('senha')?.value ?? '',
-      //confirmarSenha: this.cadastroForm.get('confirmPassword')?.value ?? null,
+      confirmarSenha: this.cadastroForm.get('confirmPassword')?.value ?? null,
       estado: this.cadastroForm.get('estado')?.value ?? '',
       cidade: this.cadastroForm.get('cidade')?.value ?? '',
       endereco: this.cadastroForm.get('endereco')?.value ?? ''

@@ -65,9 +65,21 @@
               <i [class]="passwordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
             </button>
           </div>
+
+          <!-- Mensagens de erro para senha -->
+          <div *ngIf="cadastroForm.controls.senha.invalid && (cadastroForm.controls.senha.dirty || cadastroForm.controls.senha.touched || submited)" 
+              class="text-red-500 text-xs mt-1">
+            <div *ngIf="cadastroForm.controls.senha.errors?.['required']">
+              Senha é obrigatória
+            </div>
+            <div *ngIf="cadastroForm.controls.senha.errors?.['minlength']">
+              Senha deve ter no mínimo 8 caracteres
+            </div>
+          </div>
         </div>
 
-        <!-- CONFIRMAR SENHA
+
+        <!-- CONFIRMAR SENHA -->
         <div class="form-group">
           <label class="form-label required" for="confirmPassword">Confirmar Senha</label>
           <div class="password-container relative">
@@ -77,7 +89,20 @@
               <i [class]="confirmPasswordFieldType === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
             </button>
           </div>
-        </div> -->
+
+            <!-- Mensagem de erro para confirmação de senha -->
+          <div *ngIf="(cadastroForm.hasError('passwordMismatch') || cadastroForm.controls.confirmPassword.invalid) && 
+                      (cadastroForm.controls.confirmPassword.dirty || cadastroForm.controls.confirmPassword.touched || submited)" 
+              class="text-red-500 text-xs mt-1">
+            <div *ngIf="cadastroForm.hasError('passwordMismatch')">
+              As senhas não coincidem
+            </div>
+            <div *ngIf="cadastroForm.controls.confirmPassword.errors?.['required']">
+              Confirmação de senha é obrigatória
+            </div>
+          </div>
+
+        </div> 
 
         <!-- CONTATO
         <div class="form-group">
