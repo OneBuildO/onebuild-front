@@ -263,31 +263,32 @@
   
 .sidebar-link:hover {
   border-radius: 12px;  
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   background: var(--lm-sidebar-hover);
   color: var(--lm-primary);
+  margin-left: 0;
 }
 
   
-  .menu-icon {
-    width: 20px;
-    height: 20px;
-    transition: filter 0.3s ease;
-    text-decoration: none;
-    border: none;
-    fill: currentColor;
-    color: #000000;
-  }
-  
-  /* Show sidebar */
-  .show-sidebar {
-    left: 0;
-  }
+.menu-icon {
+  width: 20px;
+  height: 20px;
+  transition: filter 0.3s ease;
+  text-decoration: none;
+  border: none;
+  fill: currentColor;
+  color: #000000;
+}
+
+/* Show sidebar */
+.show-sidebar {
+  left: 0;
+}
 
   
 .active-link {
   border-radius: 12px;  
-  margin: 0 1rem;
+  /*margin: 0 0.5rem;*/
   background: var(--lm-sidebar-hover);
   color: var(--lm-primary);
 }
@@ -579,9 +580,31 @@
 /* Badge de contagem de notificações não lidas */
 .notification-badge {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc3545;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 50%;
+  min-width: 22px;
+  width: auto;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+}
+
+.notification-count{
+  position: absolute;
   top: 0;
   right: 0;
-  background-color: #ff4757;
+  background-color: #dc3545;
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -590,6 +613,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.show-sidebar .notification-badge {
+  top: -8px;
+  right: -8px;
+  transform: none;
 }
 
 /* Dropdown de notificações */

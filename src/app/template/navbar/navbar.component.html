@@ -16,7 +16,7 @@
           <button class="notification-toggle" (click)="toggleNotification()">
             <img src="assets/icones/notificacao.svg" alt="Notificações" />
             <!-- Indicador de notificações não lidas -->
-            <span *ngIf="unreadNotifications > 0" class="notification-badge">{{unreadNotifications}}</span>
+            <span *ngIf="unreadNotifications > 0" class="notification-count">{{unreadNotifications}}</span>
           </button>
 
           <!-- Dropdown de notificações -->
@@ -109,11 +109,15 @@
             <span>Dashboard</span>
             </a>
 
-            <a routerLink="/usuario/notificacoes" class="sidebar-link" [ngClass]="{'active-link': isActive('/usuario/notificacoes')}">
-              <img src="assets/icones/notificacao.svg" alt="home icon" />
+            <a
+              routerLink="/usuario/notificacoes"
+              class="sidebar-link"
+              [ngClass]="{ 'active-link': isActive('/usuario/notificacoes') }">
+              <img src="assets/icones/notificacao.svg" alt="notificação icon" />
               <span>Notificações</span>
-              <span *ngIf="unreadNotifications > 0" class="notification-badge">{{unreadNotifications}}</span>
-
+              <div class="notification-badge" *ngIf="unreadNotifications > 0">
+                {{ unreadNotifications > 99 ? '99+' : unreadNotifications }}
+              </div>
             </a>
           </div>
         </div>
