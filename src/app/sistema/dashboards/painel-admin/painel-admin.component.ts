@@ -87,7 +87,7 @@ export class PainelAdminComponent implements OnInit {
   public Permissao = Permissao;
   cargoUsuario!: Permissao;
 
-  readonly conviteUrl = 'https://www.plataformaonebuild.com';
+  readonly conviteUrl = 'https://www.plataformaonebuild.com/cadastro-de-usuario';
 
 
   constructor(

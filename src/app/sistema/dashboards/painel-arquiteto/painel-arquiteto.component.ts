@@ -52,7 +52,7 @@ export type ChartOptions = {
   styleUrls: ['./painel-arquiteto.component.css']
 })
 export class PainelArquitetoComponent implements OnInit {
-  readonly conviteUrl = 'https://www.plataformaonebuild.com';
+  readonly conviteUrl = 'https://www.plataformaonebuild.com/cadastro-de-usuario';
   usuario: Usuario | null = null;
   nomeUsuario: string = '';
   weatherDescription: string = 'Carregando...';

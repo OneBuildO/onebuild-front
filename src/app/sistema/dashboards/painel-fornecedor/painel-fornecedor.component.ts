@@ -85,7 +85,7 @@ export class PainelFornecedorComponent implements OnInit {
   windSpeed: number = 0;
   weatherData: any = {};
 
-  readonly conviteUrl = 'https://www.plataformaonebuild.com';
+  readonly conviteUrl = 'https://www.plataformaonebuild.com/cadastro-de-usuario';
 
   estadoUsuario: string = localStorage.getItem('dadosUsuario')
     ? JSON.parse(localStorage.getItem('dadosUsuario')!).estado
