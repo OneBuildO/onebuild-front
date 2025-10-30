@@ -69,9 +69,6 @@
           <!-- Mensagens de erro para senha -->
           <div *ngIf="cadastroForm.controls.senha.invalid && (cadastroForm.controls.senha.dirty || cadastroForm.controls.senha.touched || submited)" 
               class="text-red-500 text-xs mt-1">
-            <div *ngIf="cadastroForm.controls.senha.errors?.['required']">
-              Senha é obrigatória
-            </div>
             <div *ngIf="cadastroForm.controls.senha.errors?.['minlength']">
               Senha deve ter no mínimo 8 caracteres
             </div>
@@ -96,9 +93,6 @@
               class="text-red-500 text-xs mt-1">
             <div *ngIf="cadastroForm.hasError('passwordMismatch')">
               As senhas não coincidem
-            </div>
-            <div *ngIf="cadastroForm.controls.confirmPassword.errors?.['required']">
-              Confirmação de senha é obrigatória
             </div>
           </div>
 
