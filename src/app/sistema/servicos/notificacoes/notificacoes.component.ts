@@ -5,6 +5,7 @@ import { ClienteService } from 'src/app/services/services/cliente.service';
 import { Notificacao } from './Notificacao';
 import { ModalConfirmationService } from 'src/app/services/services/modal-confirmation.service';
 import { NotificacaoService } from 'src/app/services/services/notificacao.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notificacoes',
@@ -16,7 +17,6 @@ export class NotificacoesComponent implements OnInit {
   notificacoes: Notificacao[] = [];
   notificacoesPaginadas: Notificacao[] = [];
   notificacoesFiltradas: Notificacao[] = [];
-  unreadNotifications: number = 0;
 
   filtroSelecionado: string = 'todos'; 
 
@@ -25,7 +25,8 @@ export class NotificacoesComponent implements OnInit {
   totalItens: number = 0;
   totalPaginas: number = 0;
 
-
+  private subscriptions = new Subscription();
+  
   constructor(
       private router: Router,
       private clienteService: ClienteService,
@@ -89,13 +90,11 @@ export class NotificacoesComponent implements OnInit {
       next: () => {
         console.log('Notificação marcada como lida');
         this.aplicarFiltro(); // Reaplicar filtro após marcar como lida
-        this.updateUnreadCount();
       },
       error: (error) => {
         console.error('Erro ao marcar notificação como lida', error);
       }
     });
-    this.updateUnreadCount();
   }
 
   markAllAsRead(): void {
@@ -104,8 +103,6 @@ export class NotificacoesComponent implements OnInit {
       notification.lida = true;
     });
     
-    // Atualiza o contador de notificações não lidas
-    this.updateUnreadCount();
     this.aplicarFiltro(); // Reaplicar filtro após marcar todas
     
     // Aqui você também pode adicionar uma chamada API se necessário
@@ -119,11 +116,6 @@ export class NotificacoesComponent implements OnInit {
     );
   }
 
-  // Método para atualizar contador de não lidas
-  updateUnreadCount(): void {
-    this.unreadNotifications = this.notificacoes.filter(n => !n.lida).length;
-  }
-
   obterNotificacoes(){
     this.notificacaoService.obterNotificacoes().subscribe(
       (notificacao) => {
@@ -131,7 +123,6 @@ export class NotificacoesComponent implements OnInit {
         this.notificacoes = notificacao;
         this.notificacoesFiltradas = [...notificacao]; // Inicializa com todas as notificações
         this.atualizarPaginacao();
-        this.updateUnreadCount();
       },
       (err) => {
         console.error('Erro ao buscar notificações', err);

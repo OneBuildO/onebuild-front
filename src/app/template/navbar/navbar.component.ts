@@ -12,6 +12,7 @@ import { PermissaoDescricoes } from 'src/app/login/permissao-descricao';
 import { Notificacao } from 'src/app/sistema/servicos/notificacoes/Notificacao';
 import { NotificacaoService } from 'src/app/services/services/notificacao.service';
 import { NavigationService } from 'src/app/services/services/navigation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -44,6 +45,9 @@ export class NavbarComponent implements OnInit {
   notifications: Notificacao[] = [];
   unreadNotifications = 0;
 
+  //Subscription para gerar observables
+  private subscriptions = new Subscription();
+
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -65,7 +69,6 @@ export class NavbarComponent implements OnInit {
         this.cidadeUsuario = usuario.cidade;
         this.enderecoUsuario = usuario.endereco;
 
-        //console.log('Tipo de usuário recebido:', tipoUsuarioRole);
 
         switch (tipoUsuarioRole) {
           case 'ROLE_ADMIN':
@@ -96,15 +99,26 @@ export class NavbarComponent implements OnInit {
       }
     );
 
+    this.notificacaoService.unreadCount$.subscribe(count => {
+      this.unreadNotifications = count;
+    });
+
     this.obterNotificacoes();
 
-    //Para fechar notificações e dropdown qnd mudar de rota
-    this.navigationService.navigation$.subscribe(() => {
-      this.isNotificationOpen = false;
-      this.isDropdownOpen = false;
-      const dropdownToggle = document.getElementById('dropdown-toggle');
-      dropdownToggle?.classList.remove('active');
-    });
+
+    // Para fechar notificações e dropdown qnd mudar de rota
+    this.subscriptions.add(
+      this.navigationService.navigation$.subscribe(() => {
+        this.isNotificationOpen = false;
+        this.isDropdownOpen = false;
+        const dropdownToggle = document.getElementById('dropdown-toggle');
+        dropdownToggle?.classList.remove('active');
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe(); 
   }
 
   obterNotificacoes(){
