@@ -11,6 +11,7 @@ import { Permissao } from 'src/app/login/permissao';
 import { PermissaoDescricoes } from 'src/app/login/permissao-descricao';
 import { Notificacao } from 'src/app/sistema/servicos/notificacoes/Notificacao';
 import { NotificacaoService } from 'src/app/services/services/notificacao.service';
+import { NavigationService } from 'src/app/services/services/navigation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -43,40 +44,12 @@ export class NavbarComponent implements OnInit {
   notifications: Notificacao[] = [];
   unreadNotifications = 0;
 
-  // Dados de exemplo (substitua pelos dados reais da sua aplicação)
-  mockNotifications = [
-    {
-      id: 1,
-      message: 'Seu projeto CASA DA PRAIA do cliente GUILHERME SALES foi atualizado',
-      time: 'Há 10 minutos',
-      read: false,
-      type: 'project',
-      icon: 'assets/icones/icone-caderno.svg'
-    },
-    {
-      id: 2,
-      message: 'Seu projeto CASA DA PRAIA teve suas informações atualizadas.',
-      time: 'Há 1 hora',
-      read: false,
-      type: 'activity',
-      icon: 'assets/icones/ati.svg'
-    },
-    {
-      id: 3,
-      message: 'Reunião agendada para o dia 14/09/2025',
-      time: 'Há 2 horas',
-      read: true,
-      type: 'meeting',
-      icon: 'assets/icones/cale.svg'
-    }
-  ];
-
-
   constructor(
     private router: Router,
     private renderer: Renderer2,
     private authService: AuthService,
-    private notificacaoService: NotificacaoService
+    private notificacaoService: NotificacaoService,
+    private navigationService: NavigationService
   ) {}
 
 
@@ -124,6 +97,14 @@ export class NavbarComponent implements OnInit {
     );
 
     this.obterNotificacoes();
+
+    //Para fechar notificações e dropdown qnd mudar de rota
+    this.navigationService.navigation$.subscribe(() => {
+      this.isNotificationOpen = false;
+      this.isDropdownOpen = false;
+      const dropdownToggle = document.getElementById('dropdown-toggle');
+      dropdownToggle?.classList.remove('active');
+    });
   }
 
   obterNotificacoes(){
@@ -147,11 +128,6 @@ export class NavbarComponent implements OnInit {
     if (this.isNotificationOpen && this.isDropdownOpen) {
       this.isDropdownOpen = false;
     }
-    
-    // Marca notificações como lidas quando o dropdown é aberto
-    // if (this.isNotificationOpen) {
-    //   this.markNotificationsAsRead();
-    // }
   }
 
   // Método para marcar notificações como lidas
@@ -169,7 +145,6 @@ export class NavbarComponent implements OnInit {
     // Atualiza o contador de notificações não lidas
     this.updateUnreadCount();
     
-    // Aqui você também pode adicionar uma chamada API se necessário
     this.notificacaoService.marcarTodasComoLidas().subscribe(
       response => {
         console.log('Notificações marcadas como lidas:', response);
