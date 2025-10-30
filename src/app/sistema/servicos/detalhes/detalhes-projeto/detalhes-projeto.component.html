@@ -79,7 +79,7 @@
   <div class="divisao">
     <div class="arquivo-header">
       <p>Arquivos</p>
-      <button type="button" (click)="abrirModalAdicionarArquivos()">Adicionar +</button>
+      <button type="button" (click)="abrirModalAdicionarArquivos()" *ngIf="!isClient()">Adicionar +</button>
     </div>
     <hr class="line" />
   </div>
