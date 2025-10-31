@@ -630,10 +630,16 @@
   border-radius: 8px;
   position: relative;
 }
+
 .timeline-item .nov-img {
+  display: block;
   max-width: 100%;
-  margin: 12px 0;
+  margin: 12px auto;
+  width: 75%;
+  height: auto;
+  border-radius: 8px;
 }
+
 .timeline-item .btn-acao.comentar {
   margin-top: 25px;
   background-color: #cb8642;

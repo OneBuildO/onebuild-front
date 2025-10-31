@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
 export class NotificacaoService {
   private baseUrl = environment.apiURLBase + "/api/notificacao";
 
-  // 🔥 ALTERNATIVA: BehaviorSubject para o contador direto
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
   
