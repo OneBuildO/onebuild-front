@@ -223,7 +223,7 @@
           </label>
           <select formControlName="visibilidade" id="visibilidade">
             <option *ngFor="let vis of visibilidadeProjetoArr" [value]="vis">
-              {{ vis }}
+            {{ vis }} <small class="info-vis">({{ visibilidadeInfo[vis] }})</small>
             </option>
           </select>
           <small *ngIf="

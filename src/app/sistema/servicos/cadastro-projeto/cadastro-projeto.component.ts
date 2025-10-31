@@ -89,7 +89,13 @@ export class CadastroProjetoComponent implements OnInit {
   protected readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes
   protected readonly listaEstados = listaEstados;
   statusProjetoArr = Object.values(StatusDoProjeto) as StatusDoProjeto[];
+
   visibilidadeProjetoArr = Object.values(VisibilidadeProjeto) as VisibilidadeProjeto[];
+  visibilidadeInfo: Record<VisibilidadeProjeto, string> = {
+    [VisibilidadeProjeto.PUBLICO]: 'nesta opção todos os fornecedores da região terão acesso',
+    [VisibilidadeProjeto.PRIVADO]: 'nesta opção somente os fornecedores indicados'
+  };
+
   protected readonly StatusDoProjetoDescricoes = StatusDoProjetoDescricoes;
   protected readonly ERROR_MESSAGES = ERROR_MESSAGES;
   readonly CategoriaProjetoDescricoes = CategoriaProjetoDescricoes;
