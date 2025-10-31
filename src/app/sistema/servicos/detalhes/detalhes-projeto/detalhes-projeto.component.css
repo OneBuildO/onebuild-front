@@ -297,10 +297,9 @@
     margin: 0;
 }
 
-#acoes{
-  border-radius: 0px 0px 10px 10px;
-  padding: 5px;
-  gap: 30px;
+.acoes {
+  display: flex;
+  gap: 8px;
 }
 
 .btn-acao {
@@ -904,37 +903,25 @@
   font-size: 1rem;
 }
 
+/* Rating igual ao da outra página */
+.fornecedor-rating { display:flex; align-items:center; gap:4px; }
+.estrela { font-size:14px; color:#ccc; }
+.estrela.ativa { color:#ffc107; }
 
-/* Container para as propostas */
-.propostas-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem; /* Espaçamento entre os cartões */
-  margin-top: 1rem;
-  padding: 0 1rem;
-}
+.tabela-propostas .btn-acao img { width: 18px; height: 18px; }
 
-/* Estilo do Cartão de Proposta */
-.card-proposta {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 350px; /* Largura máxima para os cartões */
-}
+.tabela-propostas .btn-acao.visualizar { background: #e4e4e4b5; }   /* "olhinho" */
+.tabela-propostas .btn-acao.btn-aceitar { background: #28a74533; }  /* aceitar */
+.tabela-propostas .btn-acao.btn-recusar { background: #dc354533; }  /* recusar */
 
-/* Header do cartão (avatar e informações) */
-.header-proposta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
+/* Hovers (mesma lógica dos ícones já usados) */
+.tabela-propostas .btn-acao.visualizar:hover { background: #4f61163b; }   /* "olhinho" */
+.tabela-propostas .btn-acao.btn-aceitar:hover { background: #28a7466a; }  /* aceitar */
+.tabela-propostas .btn-acao.btn-recusar:hover { background: #dc3546ae; }  /* recusar */
+
+/* alinhamentos */
+.text-center { text-align: center; }
+
 
 .avatar img {
   width: 60px;
@@ -944,123 +931,117 @@
   border: 2px solid #ddd;
 }
 
-.info-proponente h4 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #333;
+
+/* tabela */
+.tabela-container {
+  width: 100%;
+  overflow-x: auto;
+  /* border: #b5b5b5 solid 1px; ANTERIOR */
+  border: #00000072 solid 1px;
+  /* box-shadow: 0 0 8px rgba(233, 218, 0, 0.319); */
+  border-radius: 16px;
 }
 
-.rating .star {
-  color: #dcdcdc; /* Cor da estrela vazia */
-  font-size: 1.2rem;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
 }
 
-.rating .star.filled {
-  color: #ffc107; /* Cor da estrela preenchida (amarelo) */
+th,
+td {
+  text-align: left;
+  padding: 12px 16px;
 }
 
-/* Corpo do cartão (descrição e valor) */
-.body-proposta {
-  margin-bottom: 1.5rem;
+th {
+  background: #cb8642;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
 }
 
-.body-proposta p {
-  color: #555;
-  margin: 0 0 1rem 0;
-  font-size: 0.95rem;
+td {
+  font-size: 16px;
+  color: #666;
+  padding: 16px;
 }
 
-.valor {
+tr:nth-child(even) {
+  background: #fafafa;
+}
+
+tr:hover {
+  background-color: #eaf1e5;
+}
+
+.perfil {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
-.valor span {
-  font-size: 1rem;
-  color: #777;
-}
-
-.valor-total {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #28a745; /* Cor verde para o valor */
-}
-
-/* Botões de Ação */
-.acoes-proposta {
+.avatar {
+  width: 30px;
+  height: 30px;
+  background: #ddd;
+  border-radius: 50%;
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.acoes-proposta button {
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  flex: 1;
-}
-
-.btn-detalhes {
-  background-color: #f0f0f0;
-  color: #555;
-}
-
-.btn-detalhes:hover {
-  background-color: #e0e0e0;
-}
-
-.btn-aceitar {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.btn-aceitar:hover {
-  background-color: #218838;
-}
-
-.btn-recusar {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.btn-recusar:hover {
-  background-color: #c82333;
-}
-
-
-.arquivo-proposta {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.arquivo-info {
-  margin: 0.5rem 0;
-}
-
-.nome-arquivo {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 0;
-  word-break: break-all;
-}
-
-.acoes-arquivo {
-  display: flex;
-  gap: 0.5rem;
+  text-align: center;
   justify-content: center;
+  align-items: center;
 }
 
-/* Ajustes para os botões de ação nos arquivos de proposta */
-.acoes-arquivo .btn-acao {
-  width: 35px;
-  height: 35px;
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar span {
+  font-size: 14px;
+  color: #202020;
+  font-weight: 500;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-acao {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* transforma em círculo */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e4e4b5;
+  transition: background 0.2s;
+}
+
+.btn-acao img {
+  width: 60%; /* escala a imagem dentro do círculo */
+  height: 60%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.visualizar:hover {
+  background: #3d4b123b;
+}
+
+/* Paginação */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+  gap: 15px;
 }
 
 .modal-body-arquivos form{

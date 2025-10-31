@@ -147,79 +147,79 @@
   </div>
 
   <ng-container *ngIf="propostasDoProjeto.length > 0; else semPropostas">
-    <section class="propostas-agrupadas">
+    <div class="tabela-container" *ngIf="propostasDoProjeto.length > 0; else semPropostas">
+      <table class="tabela-propostas">
+        <thead>
+          <tr>
+            <th>Fornecedor</th>
+            <th>Categoria</th>
+            <th>Avaliação</th>
+            <th>Valor</th>
+            <th>Arquivo</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
 
-      <ng-container *ngFor="let grupo of propostasPorCategoria">
-        <h4 class="categoria-header">{{ grupo.titulo }}</h4>
-        
-        <div class="propostas-container">
-          <div class="card-proposta" *ngFor="let proposta of grupo.itens">
-            <div class="header-proposta">
+        <tbody>
+          <tr *ngFor="let proposta of propostasPaginadas">
+            <!-- Fornecedor (avatar + nome) -->
+            <td class="perfil">
               <div class="avatar">
-                <img [src]="proposta.urlFoto" alt="Foto do Proponente">
+                <img [src]="proposta.urlFoto || 'assets/icones/user-placeholder.svg'" alt="Foto">
               </div>
-              <div class="info-proponente">
-                <h4>{{ proposta.razaoSocial }}</h4>
-                <div class="rating">
-                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                    <span class="star" [class.filled]="proposta.classificacao > 0 && proposta.classificacao >= star">
-                      ⭐
-                    </span>
-                  </ng-container>
-                </div>
+              <span>{{ proposta.razaoSocial }}</span>
+            </td>
+
+            <!-- Categoria -->
+            <td>{{ descricaoCategoria(proposta.categoria) }}</td>
+            <!-- Avaliação -->
+            <td>
+              <div class="fornecedor-rating">
+                <span>{{ "5.0"}}</span>
+                <ng-container *ngFor="let s of [1,2,3,4,5]">
+                  <i class="fa fa-star estrela" [class.ativa]="(5) >= s"></i>
+                </ng-container>
               </div>
-            </div>
+            </td>
 
-            <div class="body-proposta">
-              <p>{{ proposta.descricaoFornecedor }}</p>
-              <div class="valor">
-                <span>Valor:</span>
-                <span class="valor-total">R$ {{ proposta.valorProposta | number:'1.2-2' }}</span>
-              </div>
+            <!-- Valor -->
+            <td>R$ {{ proposta.valorProposta | number:'1.2-2' }}</td>
 
-              <div *ngIf="proposta.key" class="arquivo-proposta">
-                <div class="preview-container">
-                  <!-- Imagem -->
-                  <img *ngIf="isImageProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
-                      [src]="safeUrl" class="preview blurred" alt="pré-visualização" />
-                  
-                  <!-- PDF -->
-                  <embed *ngIf="isPdfProposta(proposta) && (getPreviewUrlProposta(proposta) | async) as safeUrl" 
-                        [src]="safeUrl" type="application/pdf" class="preview blurred" />
-                  
-                  <!-- DOC/DOCX: ícone genérico -->
-                  <img *ngIf="isDocProposta(proposta)" src="assets/icones/file-icon.svg" 
-                      class="preview blurred" alt="pré-visualização doc" />
-                  
-                  <!-- Ícone genérico para outros tipos -->
-                  <img *ngIf="!isImageProposta(proposta) && !isPdfProposta(proposta) && !isDocProposta(proposta)" 
-                      src="assets/icones/file-icon.svg" class="preview blurred" alt="pré-visualização arquivo" />
-                </div>
-                
-                <div class="arquivo-info">
-                  <p class="nome-arquivo">{{ proposta.key }}</p>
-                </div>
-                
-                <div class="acoes-arquivo">
-                  <button class="btn-acao visualizar" (click)="openModalVisualizarProposta(proposta)">
-                    <img src="assets/icones/See.png" alt="Visualizar" />
-                  </button>
-                  <button class="btn-acao download" (click)="openModalDownloadProposta(proposta)">
-                    <img src="assets/icones/download-icon.svg" alt="Download" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <!-- Arquivo (nome simples) -->
+            <td>{{ proposta.key || '—' }}</td>
 
-            <div class="acoes-proposta">
-              <button class="btn-aceitar" (click)="abrirModalObservacao(proposta, 'aceitar')">Aceitar</button>
-              <button class="btn-recusar" (click)="abrirModalObservacao(proposta, 'recusar')">Recusar</button>
-            </div>
-          </div>
-        </div>
-      </ng-container>
+            <!-- Ações -->
+            <td class="acoes text-center">
+              <button class="btn-acao visualizar" title="Visualizar arquivo"
+                      (click)="openModalVisualizarProposta(proposta)">
+                <img src="assets/icones/See.png" alt="Visualizar">
+              </button>
 
-    </section>
+              <button class="btn-acao btn-aceitar" title="Aceitar proposta"
+                      (click)="abrirModalObservacao(proposta,'aceitar')">
+                <img src="assets/icones/check-icon.svg" alt="Aceitar">
+              </button>
+
+              <button class="btn-acao btn-recusar" title="Recusar proposta"
+                      (click)="abrirModalObservacao(proposta,'recusar')">
+                <img src="assets/icones/x-icon.svg" alt="Recusar">
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="pagination">
+      <app-pagination
+        [paginaAtual]="paginaAtualPropostas"
+        [totalItens]="totalItensPropostas"
+        [itensPorPagina]="itensPorPaginaPropostas"
+        (paginaMudou)="onPaginaMudouPropostas($event)">
+      </app-pagination>
+    </div>
+
   </ng-container>
 
   <ng-template #semPropostas>

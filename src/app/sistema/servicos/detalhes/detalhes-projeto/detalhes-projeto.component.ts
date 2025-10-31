@@ -33,8 +33,6 @@ type ArquivoComCategoria = {
   categoria: TipoFornecedor;
 };
 
-
-
 @Component({
   selector: 'app-detalhes-projeto',
   templateUrl: './detalhes-projeto.component.html',
@@ -68,6 +66,11 @@ export class DetalhesProjetoComponent implements OnInit {
   // plantasBaixas: ArquivosProjetoDTO[] = [];
 
   propostasDoProjeto: PropostaFornecedorCard[] = []
+  propostasPaginadas: PropostaFornecedorCard[] = [];
+  itensPorPaginaPropostas = 6;
+  paginaAtualPropostas = 1;
+  totalPaginasPropostas = 0;
+  totalItensPropostas = 0;
 
 
   nomeUsuario!: string;
@@ -153,6 +156,7 @@ export class DetalhesProjetoComponent implements OnInit {
   arquivosNovos: ArquivoComCategoria[] = [];
 
   tipoFornecedor: TipoFornecedor[] = Object.values(TipoFornecedor);
+  public readonly TipoFornecedor = TipoFornecedor;
   protected readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes
 
 
@@ -360,7 +364,9 @@ export class DetalhesProjetoComponent implements OnInit {
   fetchPropostaProjeto(idProjeto: number) {
     this.propostasService.obterPropostasProjeto(idProjeto).subscribe({
       next: (data: PropostaFornecedorCard[]) => {
-        this.propostasDoProjeto = data;
+        this.propostasDoProjeto = data || [];
+        this.paginaAtualPropostas = 1;
+        this.atualizarPaginacaoPropostas();
         console.log('Propostas carregadas com sucesso:', this.propostasDoProjeto);
       },
       error: (error) => {
@@ -383,19 +389,6 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
-  baixarPlantaBaixa(id: number, nomeArquivo: string): void {
-    this.dadosService.downloadPlantaBaixa(id).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = nomeArquivo;
-        link.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: () => alert('Erro ao baixar a planta baixa.'),
-    });
-  }
 
   traduzirVisibilidade(statusVisibilidade: boolean): string {
     return statusVisibilidade ? 'Público' : 'Privado';
@@ -690,6 +683,29 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
+  // NOVO: aplica a paginação sobre a lista ordenada
+  atualizarPaginacaoPropostas(): void {
+    const base = this.propostasOrdenadas;
+    this.totalItensPropostas = base.length;
+    this.totalPaginasPropostas = Math.ceil(base.length / this.itensPorPaginaPropostas) || 1;
+
+    const inicio = (this.paginaAtualPropostas - 1) * this.itensPorPaginaPropostas;
+    const fim = inicio + this.itensPorPaginaPropostas;
+    this.propostasPaginadas = base.slice(inicio, fim);
+  }
+
+  // NOVO: handler do componente <app-pagination>
+  onPaginaMudouPropostas(novaPagina: number): void {
+    this.paginaAtualPropostas = novaPagina;
+    this.atualizarPaginacaoPropostas();
+  }
+
+  // NOVO: helper para evitar erro de indexação no template
+  descricaoCategoria(categoria?: TipoFornecedor | null): string {
+    const key = (categoria ?? this.TipoFornecedor.OUTROS) as TipoFornecedor;
+    return this.TipoFornecedorDescricoes[key];
+  }
+
 
   private showMessage(type: 'success' | 'error', msg: string): void {
     this.clearMessage();
@@ -707,19 +723,6 @@ export class DetalhesProjetoComponent implements OnInit {
     }
   }
 
-  // Método para verificar se é imagem
-  isImageProposta(proposta: PropostaFornecedorCard) {
-    return proposta.key!.match(/\.(jpe?g|png)$/i);
-  }
-
-  // Método para verificar se é PDF
-  isPdfProposta(proposta: PropostaFornecedorCard) {
-    return proposta.key.match(/\.pdf$/i);
-  }
-
-  isDocProposta(proposta: PropostaFornecedorCard) {
-    return proposta.key.match(/\.(docx?|DOCX?)$/i);
-  }
 
   // helper para saber extensão/MIME
   isImage(arquivo: ArquivosProjetoDTO) {
@@ -866,5 +869,18 @@ export class DetalhesProjetoComponent implements OnInit {
     this.submitedModal = false;
     this.errorMessageModal = null;
     return true; // <- permite o fechamento do modal
+  }
+
+  // ordena por Categoria (usando a ordem TIPO_ORDEM) e depois por Razão Social
+  get propostasOrdenadas(): PropostaFornecedorCard[] {
+    const ordemIndex = (cat?: TipoFornecedor) =>
+      this.TIPO_ORDEM.findIndex(t => t === (cat ?? TipoFornecedor.OUTROS));
+
+    return [...this.propostasDoProjeto].sort((a, b) => {
+      const ia = ordemIndex(a.categoria);
+      const ib = ordemIndex(b.categoria);
+      if (ia !== ib) return ia - ib;
+      return (a.razaoSocial || '').localeCompare(b.razaoSocial || '', 'pt-BR', { sensitivity: 'base' });
+    });
   }
 }
