@@ -26,18 +26,18 @@
 <div class="subMain-container-novidades">
 
     <!-- BARRA DE PROGRESSO DO PROJETO -->
-    <mat-horizontal-stepper>
+    <mat-horizontal-stepper class="custom-stepper no-gap-steps">
         <mat-step *ngFor="let etapa of etapas">
             <ng-template matStepLabel>
                 <div class="etapa-label">
                     <img [src]="etapa.img" class="etapa-icon" alt="Etapa" />
-                    {{ etapa.label }}
+                    <p>{{ etapa.label }}</p>
                 </div>
             </ng-template>
-
             <p>{{ etapa.descricao }}</p>
         </mat-step>
     </mat-horizontal-stepper>
+
 
 
     <!-- LINHA DO TEMPO DO PROJETO -->

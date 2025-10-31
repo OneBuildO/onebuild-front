@@ -555,8 +555,12 @@
   position: relative;
 }
 .timeline-item .nov-img {
+  display: block;
   max-width: 100%;
-  margin: 12px 0;
+  margin: 12px auto;
+  width: 75%;
+  height: auto;
+  border-radius: 8px;
 }
 .timeline-item .btn-acao.comentar {
   margin-top: 25px;
@@ -845,10 +849,19 @@
   gap: 8px;
 }
 
+.etapa-label p{
+  margin: 0;
+}
+
 .etapa-icon {
   width: 100px;
   height: 100px;
   object-fit: contain; 
+}
+
+.mat-horizontal-stepper-header .mat-step-icon {
+  margin-right:0;
+  flex:none
 }
 
 .header-info {
@@ -881,3 +894,41 @@
 .info-box p.count {
   font-size: 2rem;
 }
+
+/* Zera QUALQUER espaço entre número (bolinha), imagem e texto */
+:host ::ng-deep .no-gap-steps .mat-step-header {
+  padding: 0 !important;
+  column-gap: 0 !important;         /* versões novas usam column-gap */
+}
+
+:host ::ng-deep .no-gap-steps .mat-step-header .mat-step-icon {
+  margin: 0 !important;             /* remove margem da bolinha */
+}
+
+
+:host ::ng-deep .no-gap-steps .mat-step-header .mat-step-icon + .mat-step-label {
+  margin-left: 0 !important;        /* remove o espaço entre bolinha e label */
+  padding-left: 0 !important;
+}
+
+:host ::ng-deep .no-gap-steps .mat-step-header .mat-step-label {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ícone + texto coladinhos (sem mexer no tamanho da imagem) */
+:host ::ng-deep .no-gap-steps .etapa-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0 !important;
+}
+
+
+
+/* Espaço entre cada header e a linha conectora */
+:host ::ng-deep .custom-stepper .mat-horizontal-stepper-header-container {
+  column-gap: 10px;   /* ajuste fino: 6–12px */
+  gap: 24px;          /* fallback */
+}
+
+
