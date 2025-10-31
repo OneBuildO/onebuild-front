@@ -6,10 +6,12 @@
   padding: 40px 64px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  background-image: url("/assets/imgs/bg-one-b.png");
 }
 
 .banner {
-  background-image: url("/assets/imgs/bg-one-b.png");
+  /* background-image: url("/assets/imgs/bg-one-b.png"); */
+  background-color: #20202050;
   background-size: cover;
   background-position: center;
   padding: 32px;
