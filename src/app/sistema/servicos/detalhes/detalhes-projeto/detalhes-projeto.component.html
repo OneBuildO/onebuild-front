@@ -79,15 +79,23 @@
   <div class="divisao">
     <div class="arquivo-header">
       <p>Arquivos</p>
+
+      <select class="select-categorias" [(ngModel)]="filtroCategoriaArquivos" (change)="onFiltroArquivosChange()">
+        <option [ngValue]="null">Todas as categorias</option>
+        <option *ngFor="let categoria of tipoFornecedor" [ngValue]="categoria">
+          {{ TipoFornecedorDescricoes[categoria] }}
+        </option>
+      </select>
+
       <button type="button" (click)="abrirModalAdicionarArquivos()" *ngIf="!isClient()">Adicionar +</button>
     </div>
     <hr class="line" />
   </div>
 
-  <ng-container *ngIf="arquivosNormais.length > 0; else semArquivos">
+  <ng-container *ngIf="arquivosPorFornecedorFiltrado.length > 0; else semArquivos">
     <section class="data-grid-arquivos">
 
-      <ng-container *ngFor="let grupo of arquivosPorFornecedor">
+      <ng-container *ngFor="let grupo of arquivosPorFornecedorFiltrado">
         <h4 class="categoria-header">{{ grupo.titulo }}</h4>
 
         <div *ngFor="let arquivo of grupo.itens">
@@ -142,7 +150,17 @@
 
 <div class="subMain-container" *ngIf="isArquiteto() || isAdmin()">
   <div class="divisao">
-    <p>Propostas Recebidas</p>
+    <div class="arquivo-header">
+      <p>Propostas Recebidas</p>
+
+    <select class="select-categorias" [(ngModel)]="filtroCategoriaPropostas" (change)="onFiltroPropostasChange()">
+      <option [ngValue]="null">Todas</option>
+      <option *ngFor="let cat of tipoFornecedor" [ngValue]="cat">
+        {{ TipoFornecedorDescricoes[cat] }}
+      </option>
+    </select>
+
+    </div>
     <hr class="line" />
   </div>
 

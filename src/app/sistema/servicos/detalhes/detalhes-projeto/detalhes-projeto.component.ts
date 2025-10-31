@@ -157,6 +157,8 @@ export class DetalhesProjetoComponent implements OnInit {
 
   tipoFornecedor: TipoFornecedor[] = Object.values(TipoFornecedor);
   public readonly TipoFornecedor = TipoFornecedor;
+  filtroCategoriaArquivos: TipoFornecedor | null = null;
+  filtroCategoriaPropostas: TipoFornecedor | null = null;
   protected readonly TipoFornecedorDescricoes = TipoFornecedorDescricoes
 
 
@@ -337,6 +339,35 @@ export class DetalhesProjetoComponent implements OnInit {
         itens: grupos.get(t)!,
       }));
   }
+
+
+  get arquivosPorFornecedorFiltrado(): { tipo: TipoFornecedor; titulo: string; itens: ArquivosProjetoDTO[] }[] {
+    const filtro = this.filtroCategoriaArquivos;
+    const listaBase = filtro
+      ? this.arquivosNormais.filter(a => (a.tipoFornecedor ?? TipoFornecedor.OUTROS) === filtro)
+      : this.arquivosNormais;
+
+    const grupos = new Map<TipoFornecedor, ArquivosProjetoDTO[]>();
+
+    for (const arq of listaBase) {
+      const tipo = arq.tipoFornecedor ?? TipoFornecedor.OUTROS;
+      if (!grupos.has(tipo)) grupos.set(tipo, []);
+      grupos.get(tipo)!.push(arq);
+    }
+
+    for (const arr of grupos.values()) {
+      arr.sort((a, b) => (a.key ?? '').localeCompare(b.key ?? '', 'pt-BR', { sensitivity: 'base' }));
+    }
+
+    return this.TIPO_ORDEM
+      .filter(t => grupos.has(t))
+      .map(t => ({
+        tipo: t,
+        titulo: this.TipoFornecedorDescricoes[t],
+        itens: grupos.get(t)!,
+      }));
+  }
+
 
   get propostasPorCategoria(): { tipo: TipoFornecedor; titulo: string; itens: PropostaFornecedorCard[] }[] {
     const grupos = new Map<TipoFornecedor, PropostaFornecedorCard[]>();
@@ -683,9 +714,12 @@ export class DetalhesProjetoComponent implements OnInit {
     });
   }
 
-  // NOVO: aplica a paginação sobre a lista ordenada
   atualizarPaginacaoPropostas(): void {
-    const base = this.propostasOrdenadas;
+    const todasOrdenadas = this.propostasOrdenadas;
+    const base = this.filtroCategoriaPropostas
+      ? todasOrdenadas.filter(p => (p.categoria ?? TipoFornecedor.OUTROS) === this.filtroCategoriaPropostas)
+      : todasOrdenadas;
+
     this.totalItensPropostas = base.length;
     this.totalPaginasPropostas = Math.ceil(base.length / this.itensPorPaginaPropostas) || 1;
 
@@ -694,18 +728,25 @@ export class DetalhesProjetoComponent implements OnInit {
     this.propostasPaginadas = base.slice(inicio, fim);
   }
 
-  // NOVO: handler do componente <app-pagination>
+
   onPaginaMudouPropostas(novaPagina: number): void {
     this.paginaAtualPropostas = novaPagina;
     this.atualizarPaginacaoPropostas();
   }
 
-  // NOVO: helper para evitar erro de indexação no template
   descricaoCategoria(categoria?: TipoFornecedor | null): string {
     const key = (categoria ?? this.TipoFornecedor.OUTROS) as TipoFornecedor;
     return this.TipoFornecedorDescricoes[key];
   }
 
+  onFiltroArquivosChange(): void {
+    // apenas reflete no getter; se quiser, pode disparar analytics, etc.
+  }
+
+  onFiltroPropostasChange(): void {
+    this.paginaAtualPropostas = 1;
+    this.atualizarPaginacaoPropostas();
+  }
 
   private showMessage(type: 'success' | 'error', msg: string): void {
     this.clearMessage();
