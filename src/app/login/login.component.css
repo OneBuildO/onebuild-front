@@ -113,6 +113,13 @@
   text-align: center;
 }
 
+.danger{
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+  padding: 0;
+}
+
 .esqueci-senha a {
   color: var(--color-info);
   cursor: pointer;

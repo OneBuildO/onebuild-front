@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   tipoAlerta = AlertType.Warning;
   serverMessages: string[] = [];
+  errorMessage: string | null = null;
   submited: boolean = false;
 
 
@@ -110,10 +111,17 @@ export class LoginComponent implements OnInit {
 
       this.isLoading = false;
     },
-    error: (err) => {
-      this.tipoAlerta = AlertType.Danger;
-      this.serverMessages.push(err.error);
-      this.isLoading = false;
+    error: (error) => {
+        this.isLoading = false;
+        const errorDesc = error?.error?.error_description || error?.error?.message;
+
+        if (error.status === 400 && error?.error?.error === 'invalid_grant') {
+          this.errorMessage = 'E-mail e/ou senha inválidos.';
+        } else if (error.status === 401) {
+          this.errorMessage = 'Não autorizado. Verifique suas credenciais.';
+        } else {
+          this.errorMessage = errorDesc || 'Não foi possível entrar. Tente novamente.';
+        }
     }
   });
 
@@ -123,6 +131,7 @@ export class LoginComponent implements OnInit {
 
   protected onAlertCloseHandler = (e: any) => {
     this.serverMessages = [];
+    this.errorMessage = null;
   };
 
   scrollTop() {
