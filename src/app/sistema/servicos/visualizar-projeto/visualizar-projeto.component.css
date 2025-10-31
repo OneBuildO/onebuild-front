@@ -100,7 +100,8 @@
 .tabela-container {
   width: 100%;
   overflow-x: auto;
-  border: #b5b5b5 solid 1px;
+  /* border: #b5b5b5 solid 1px; */
+  border: #00000072 solid 1px;
   border-radius: 16px;
 }
 
